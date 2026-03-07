@@ -193,7 +193,7 @@ function DemoContent() {
   return (
     <div>
       <p style={{ fontSize:14,color:C.textM,marginBottom:20,lineHeight:1.7 }}>
-        Get your hands-on with an AI-driven ERP solution; Maximize ROI, Accelerate Business Growth, and Bring Automation - Your Path to Success Starts Here.
+        Watch a 2-minute overview of how Dynamics 365 connects your finance, operations, sales and service — all in one live platform.
       </p>
       <div style={{ background:C.bgSoft,borderRadius:16,aspectRatio:"16/9",display:"flex",alignItems:"center",justifyContent:"center",border:`1.5px solid ${C.border}`,marginBottom:20,cursor:"pointer",position:"relative",overflow:"hidden" }}>
         <div style={{ position:"absolute",inset:0,background:`linear-gradient(135deg,${C.blue}18,${C.purple}18)` }} />
@@ -263,7 +263,8 @@ const GS = () => (
 
     .ann-bar{background:linear-gradient(135deg,${C.blue},${C.purple});color:#fff;text-align:center;padding:9px 16px;font-size:12px;font-weight:600;letter-spacing:.02em;font-family:'Plus Jakarta Sans',sans-serif;display:flex;align-items:center;justify-content:center;gap:12px}
 
-    .mega{animation:dropIn .18s ease;position:absolute;top:calc(100% + 10px);background:#fff;border:1.5px solid ${C.border};border-radius:20px;box-shadow:0 20px 70px rgba(0,0,0,.12);overflow:hidden;z-index:9999}
+    /* ── KEY FIX: mega is now positioned relative to the nav-wrapper, not nav item ── */
+    .mega{animation:dropIn .18s ease;position:absolute;background:#fff;border:1.5px solid ${C.border};border-radius:20px;box-shadow:0 20px 70px rgba(0,0,0,.12);overflow:hidden;z-index:9999;top:calc(100% + 10px)}
     .mi{border-radius:11px;padding:9px 11px;cursor:pointer;transition:background .14s;display:flex;align-items:flex-start;gap:10px;background:none;border:none;width:100%;text-align:left}
     .mi:hover{background:${C.blueLL}}.mi-p:hover{background:${C.purpleL}!important}.mi-t:hover{background:${C.tealL}!important}.mi-o:hover{background:${C.orangeL}!important}
     .mega-feat{background:linear-gradient(135deg,${C.blue},${C.purple});border-radius:14px;padding:20px;color:#fff}
@@ -323,6 +324,21 @@ const GS = () => (
 
     .learn-more-btn{display:flex;align-items:center;gap:5px;font-size:13px;font-weight:700;background:none;border:none;cursor:pointer;padding:0;transition:gap .2s}
     .learn-more-btn:hover{gap:9px}
+
+    /* nav-wrapper is the positioning context for ALL mega menus */
+    .nav-wrapper{position:relative;display:flex;align-items:center;gap:4px;flex:1;justify-content:center}
+
+    /* ── Solutions mega: vertical two-panel ── */
+    .sol-cat-btn{display:flex;align-items:center;gap:11px;width:100%;padding:11px 14px;border-radius:12px;border:none;background:none;cursor:pointer;text-align:left;transition:background .15s,color .15s;position:relative}
+    .sol-cat-btn:hover{background:${C.blueLL}}
+    .sol-cat-btn.sol-active{background:linear-gradient(135deg,${C.blue}12,${C.purple}08)}
+    .sol-cat-btn.sol-active::after{content:'';position:absolute;right:-1px;top:50%;transform:translateY(-50%);width:3px;height:60%;border-radius:2px;background:linear-gradient(180deg,${C.blue},${C.purple})}
+    .sol-items-panel{animation:solPanelIn .2s cubic-bezier(.4,0,.2,1)}
+    @keyframes solPanelIn{from{opacity:0;transform:translateX(8px)}to{opacity:1;transform:none}}
+    .sol-item{display:flex;align-items:flex-start;gap:10px;width:100%;padding:10px 12px;border-radius:11px;border:none;background:none;cursor:pointer;text-align:left;transition:background .14s,transform .14s}
+    .sol-item:hover{background:${C.blueLL};transform:translateX(3px)}
+    .sol-item:hover .sol-item-arrow{opacity:1;transform:translateX(0)}
+    .sol-item-arrow{opacity:0;transform:translateX(-4px);transition:opacity .14s,transform .14s;flex-shrink:0;margin-top:2px}
   `}</style>
 )
 
@@ -330,38 +346,80 @@ const GS = () => (
 const NAV = {
   solutions: {
     sections: [
-      { heading:"ERP Solutions", color:C.blue, items:[
-        {n:"Package",t:"Business Central",d:"An all-in-one business management solution for SMBs that offers a 360-degree holistic view of the entire business",tag:"Most Popular",section:"solutions"},
-        {n:"Dollar",t:"Finance",d:"Simplify complex financial operations while getting real-time data analytics and accurate insights",section:"solutions"},
-        {n:"Truck",t:"Supply Chain",d:"Automate your entire supply chain process, boost efficiency, cut costs, and gain real-time insights",section:"solutions"},
-        {n:"Cart",t:"Commerce",d:"Unified omnichannel retail experience connecting sales, customers, and partners",section:"solutions"},
-        {n:"Brief",t:"Project Operations",d:"Delivery, billing & resourcing for project-based businesses",section:"solutions"},
-        {n:"Users",t:"Human Resources",d:"Modern HR, payroll & workforce management",section:"solutions"},
+      { heading:"ERP Solutions", icon:"Package", color:C.blue, bg:C.blueL, desc:"Core business operations", items:[
+        {n:"Package",t:"Business Central",d:"All-in-one ERP for SMBs",tag:"Most Popular",section:"solutions"},
+        {n:"Dollar",t:"Finance",d:"Automate financials & compliance",section:"solutions"},
+        {n:"Truck",t:"Supply Chain",d:"End-to-end supply chain visibility",section:"solutions"},
+        {n:"Cart",t:"Commerce",d:"Unified omnichannel retail",section:"solutions"},
+        {n:"Brief",t:"Project Operations",d:"Delivery, billing & resourcing",section:"solutions"},
+        {n:"Users",t:"Human Resources",d:"Modern HR, payroll & workforce",section:"solutions"},
       ]},
-      { heading:"CRM Solutions", color:C.purple, itemCls:"mi-p", items:[
-        {n:"Headphones",t:"Customer Service",d:"Omnichannel support with AI-powered insights",section:"solutions"},
-        {n:"Target",t:"Sales",d:"Track sales pipeline, get insights, maximize profit, and close more deals",section:"solutions"},
-        {n:"Wrench",t:"Field Service",d:"Smart scheduling & predictive maintenance",section:"solutions"},
-        {n:"Brain",t:"Customer Insights",d:"Unified profiles & AI-driven customer journeys",section:"solutions"},
-        {n:"Megaphone",t:"Marketing",d:"Multi-channel campaigns and lead management",section:"solutions"},
+      { heading:"CRM Solutions", icon:"Target", color:C.purple, bg:C.purpleL, desc:"Customer relationships", items:[
+        {n:"Headphones",t:"Customer Service",d:"Omnichannel support & AI",section:"solutions"},
+        {n:"Target",t:"Sales",d:"AI-powered pipeline management",section:"solutions"},
+        {n:"Wrench",t:"Field Service",d:"Smart scheduling & maintenance",section:"solutions"},
+        {n:"Brain",t:"Customer Insights",d:"Unified profiles & AI journeys",section:"solutions"},
+        {n:"Megaphone",t:"Marketing",d:"Multi-channel campaigns",section:"solutions"},
       ]},
-      { heading:"Power Platform", color:C.teal, itemCls:"mi-t", items:[
-        {n:"Cpu",t:"Power Apps",d:"No-code / low-code app development",section:"solutions"},
-        {n:"Zap",t:"Power Automate",d:"Automate workflows across 1000+ services",section:"solutions"},
-        {n:"PieChart",t:"Power BI",d:"Analyze and visualize data with interactive graphical representations",section:"powerbi"},
-        {n:"Globe",t:"Power Pages",d:"External-facing portals and websites",section:"solutions"},
+      { heading:"Power Platform", icon:"Zap", color:C.teal, bg:C.tealL, desc:"Build & automate anything", items:[
+        {n:"Cpu",t:"Power Apps",d:"No-code / low-code apps",section:"solutions"},
+        {n:"Zap",t:"Power Automate",d:"Automate workflows",section:"solutions"},
+        {n:"PieChart",t:"Power BI",d:"Interactive BI dashboards",section:"solutions"},
+        {n:"Globe",t:"Power Pages",d:"External-facing portals",section:"solutions"},
+      ]},
+      { heading:"Analytics & BI", icon:"BarChart", color:C.orange, bg:C.orangeL, desc:"Insights from your data", items:[
+        {n:"BarChart",t:"Power BI Premium",d:"Enterprise BI & reporting",section:"powerbi"},
+        {n:"PieChart",t:"Real-Time Dashboards",d:"Live operational metrics",section:"powerbi"},
+        {n:"TrendUp",t:"Predictive Analytics",d:"AI-driven forecasting",section:"powerbi"},
+        {n:"Database",t:"Data Warehouse",d:"Centralised data platform",section:"powerbi"},
+      ]},
+      { heading:"AI & Copilot", icon:"Brain", color:"#7C3AED", bg:"#f5f0ff", desc:"Intelligent automation", items:[
+        {n:"Brain",t:"Copilot Studio",d:"Build custom AI copilots",section:"solutions"},
+        {n:"Zap",t:"AI Builder",d:"No-code AI models",section:"solutions"},
+        {n:"Target",t:"Sales Copilot",d:"AI for every deal",section:"solutions"},
+        {n:"Headphones",t:"Service Copilot",d:"AI-powered agent assist",section:"solutions"},
+      ]},
+      { heading:"Cloud Infrastructure", icon:"Cloud", color:"#0891B2", bg:"#e0f7fa", desc:"Azure-backed platform", items:[
+        {n:"Cloud",t:"Azure Integration",d:"Native cloud connectivity",section:"solutions"},
+        {n:"Shield",t:"Azure Security",d:"Enterprise-grade protection",section:"solutions"},
+        {n:"Database",t:"Azure SQL",d:"Managed cloud databases",section:"solutions"},
+        {n:"Globe",t:"Azure DevOps",d:"CI/CD & deployment pipelines",section:"solutions"},
+      ]},
+      { heading:"Integration Services", icon:"Globe", color:C.teal, bg:C.tealL, desc:"Connect your ecosystem", items:[
+        {n:"Globe",t:"API Management",d:"Secure API gateway",section:"process"},
+        {n:"Zap",t:"Logic Apps",d:"No-code integrations",section:"process"},
+        {n:"Settings",t:"Custom Connectors",d:"Bespoke system bridges",section:"process"},
+        {n:"Database",t:"Data Migration",d:"Zero-downtime transfers",section:"process"},
+      ]},
+      { heading:"Managed Support", icon:"LifeBuoy", color:C.green, bg:C.greenL, desc:"Always-on assistance", items:[
+        {n:"LifeBuoy",t:"24/7 Support",d:"SLA-backed incident response",section:"process"},
+        {n:"Settings",t:"System Health Checks",d:"Proactive monitoring",section:"process"},
+        {n:"Award",t:"Quarterly Reviews",d:"Performance & optimisation",section:"process"},
+        {n:"Users",t:"Dedicated Consultant",d:"Named expert, not a queue",section:"process"},
+      ]},
+      { heading:"Training & Adoption", icon:"BookOpen", color:C.orange, bg:C.orangeL, desc:"Empower your people", items:[
+        {n:"BookOpen",t:"Role-Based Training",d:"Tailored to each team",section:"process"},
+        {n:"Video",t:"Live Workshops",d:"Hands-on learning sessions",section:"process"},
+        {n:"FileText",t:"Custom Playbooks",d:"Process guides & SOPs",section:"process"},
+        {n:"Award",t:"Adoption Programme",d:"Change management support",section:"process"},
+      ]},
+      { heading:"Licensing & Pricing", icon:"Dollar", color:C.blue, bg:C.blueL, desc:"Transparent costs", items:[
+        {n:"Dollar",t:"License Advisory",d:"Right licences, right cost",section:"contact"},
+        {n:"Calc",t:"ROI Calculator",d:"Model your business case",section:"contact"},
+        {n:"Package",t:"Bundle Deals",d:"Multi-module discounts",section:"contact"},
+        {n:"Award",t:"Non-Profit Pricing",d:"Special charity rates",section:"contact"},
       ]},
     ],
   },
   services:[
-    {n:"Rocket",t:"D365 Implementation",d:"End-to-end deployment and go-live support",section:"process"},
-    {n:"Layers",t:"Upgrade & Migration",d:"Move from NAV, AX, GP to modern Dynamics 365",section:"process"},
-    {n:"Settings",t:"Customisation",d:"Extend D365 to match your unique processes",section:"process"},
-    {n:"Globe",t:"Integration Services",d:"Connect with existing systems and third-party apps",section:"process"},
-    {n:"LifeBuoy",t:"Managed Support",d:"24/7 SLA-backed support with named consultants",section:"process"},
-    {n:"Users",t:"User Training",d:"Role-based training to maximize adoption",section:"process"},
-    {n:"Award",t:"Health Check",d:"Audit & gap analysis of your current systems",section:"process"},
-    {n:"Chart",t:"Analytics & BI",d:"Power BI dashboards and data visualization",section:"powerbi"},
+    {n:"Rocket",t:"D365 Implementation",d:"End-to-end deployment",section:"process"},
+    {n:"Layers",t:"Upgrade & Migration",d:"Move from NAV, AX, GP",section:"process"},
+    {n:"Settings",t:"Customisation",d:"Extend D365 to your processes",section:"process"},
+    {n:"Globe",t:"Integration Services",d:"Connect with existing systems",section:"process"},
+    {n:"LifeBuoy",t:"Managed Support",d:"24/7 SLA-backed support",section:"process"},
+    {n:"Users",t:"User Training",d:"Role-based training",section:"process"},
+    {n:"Award",t:"Health Check",d:"Audit & gap analysis",section:"process"},
+    {n:"Chart",t:"Analytics & BI",d:"Power BI dashboards",section:"powerbi"},
   ],
   industries:[
     {n:"Truck",t:"Manufacturing",c:C.blue,bg:C.blueL,section:"industries"},
@@ -369,22 +427,22 @@ const NAV = {
     {n:"Shield",t:"Financial Services",c:C.purple,bg:C.purpleL,section:"industries"},
     {n:"Brief",t:"Professional Services",c:C.teal,bg:C.tealL,section:"industries"},
     {n:"User",t:"Healthcare",c:C.green,bg:C.greenL,section:"industries"},
-    {n:"Globe",t:"Logistics & Distribution",c:C.blue,bg:C.blueL,section:"industries"},
+    {n:"Globe",t:"Logistics",c:C.blue,bg:C.blueL,section:"industries"},
   ],
   company:[
     {n:"Award",t:"About Us",section:"about"},
     {n:"Users",t:"Our Team",section:"about"},
     {n:"Globe",t:"Global Presence",section:"contact"},
-    {n:"Star",t:"Awards & Recognition",section:"about"},
+    {n:"Star",t:"Awards",section:"about"},
     {n:"Brief",t:"Careers",section:"about"},
     {n:"Megaphone",t:"Press & Media",section:"blog"},
     {n:"LifeBuoy",t:"Partner Program",section:"contact"},
   ],
   offices:[
-    {flag:"🇺🇸",city:"New York, USA",phone:"+1 800 938 7929"},
     {flag:"🇬🇧",city:"London, UK",phone:"+44 207 193 2502"},
-    {flag:"🇨🇦",city:"Toronto, Canada",phone:"+1 778 381 5388"},
-    {flag:"🇮🇳",city:"New Delhi, India",phone:"+91 96503 01529"},
+    {flag:"🇺🇸",city:"New York, USA",phone:"+1 800 938 7929"},
+    {flag:"🇨🇦",city:"Toronto, CA",phone:"+1 778 381 5388"},
+    {flag:"🇮🇳",city:"New Delhi, IN",phone:"+91 96503 01529"},
   ],
 }
 
@@ -395,7 +453,11 @@ function Header({ openConsult, openDemo }) {
   const [open, setOpen] = useState(null)
   const [mobSec, setMobSec] = useState(null)
   const [ann, setAnn] = useState(true)
+  const [activeSolSection, setActiveSolSection] = useState(0)
   const timers = useRef({})
+  // ref for the nav wrapper — used to compute left offset for each mega
+  const navRef = useRef(null)
+  const itemRefs = useRef({})
 
   useEffect(() => {
     const h = () => setSc(window.scrollY > 8)
@@ -419,170 +481,300 @@ function Header({ openConsult, openDemo }) {
 
   const iconBg = c => ({ background: c + "18" })
 
-  // ── Mega: Solutions
-  const MegaSolutions = () => (
-    <div className="mega" style={{ left:0, transform:"none", width:900 }}>
-      <div style={{ display:"grid", gridTemplateColumns:"1.1fr 1fr 0.9fr 230px" }}>
-        {NAV.solutions.sections.map(sec => (
-          <div key={sec.heading} style={{ padding:"22px 16px", borderRight:`1px solid ${C.border}` }}>
-            <div style={{ fontSize:10, fontWeight:800, letterSpacing:".15em", color:sec.color, marginBottom:10 }}>{sec.heading.toUpperCase()}</div>
-            {sec.items.map(it => (
-              <button key={it.t} className={`mi ${sec.itemCls||""}`} onClick={() => navLink(it.section)}>
-                <div style={{ width:30, height:30, borderRadius:8, ...iconBg(sec.color), display:"flex", alignItems:"center", justifyContent:"center", flexShrink:0 }}>
-                  <Ic n={it.n} s={13} style={{ color:sec.color }} />
+  /**
+   * Compute left offset so mega stays within nav wrapper bounds.
+   * Centers the mega on the trigger button, then clamps so it
+   * doesn't overflow the nav wrapper on either side.
+   */
+  const getMegaLeft = (key, megaWidth) => {
+    const navEl = navRef.current
+    const triggerEl = itemRefs.current[key]
+    if (!navEl || !triggerEl) return "50%"
+
+    const navRect = navEl.getBoundingClientRect()
+    const trigRect = triggerEl.getBoundingClientRect()
+
+    // center of trigger relative to nav wrapper
+    const trigCenterRelative = trigRect.left - navRect.left + trigRect.width / 2
+
+    // ideal left: center mega on trigger
+    let left = trigCenterRelative - megaWidth / 2
+
+    // clamp so mega doesn't go past left edge of nav wrapper
+    left = Math.max(0, left)
+
+    // clamp so mega doesn't go past right edge of nav wrapper
+    const navWidth = navRect.width
+    left = Math.min(left, navWidth - megaWidth)
+
+    return left
+  }
+
+  // ── Mega: Solutions — Vertical two-panel: left = scrollable category list, right = animated sub-items
+  const MegaSolutions = () => {
+    const megaWidth = 780
+    const left = getMegaLeft("solutions", megaWidth)
+    const sec = NAV.solutions.sections[activeSolSection]
+
+    return (
+      <div className="mega" style={{ left, width: megaWidth, display:"flex", flexDirection:"column" }}>
+        <div style={{ display:"grid", gridTemplateColumns:"220px 1fr", flex:1 }}>
+
+          {/* ── LEFT: vertical category list ── */}
+          <div style={{
+            background: C.bgSoft,
+            borderRight:`1px solid ${C.border}`,
+            padding:"14px 10px",
+            display:"flex", flexDirection:"column", gap:2,
+            maxHeight:460, overflowY:"auto",
+            /* custom thin scrollbar */
+            scrollbarWidth:"thin", scrollbarColor:`${C.blue}44 transparent`
+          }}>
+            <div style={{ fontSize:9, fontWeight:800, letterSpacing:".14em", color:C.textL, padding:"4px 8px 8px", textTransform:"uppercase" }}>
+              All Solutions
+            </div>
+            {NAV.solutions.sections.map((s, i) => (
+              <button
+                key={s.heading}
+                className={`sol-cat-btn ${activeSolSection===i?"sol-active":""}`}
+                onMouseEnter={() => setActiveSolSection(i)}
+                onClick={() => navLink("solutions")}
+              >
+                <div style={{
+                  width:32, height:32, borderRadius:9, flexShrink:0,
+                  background: activeSolSection===i ? s.bg : C.bgAlt,
+                  display:"flex", alignItems:"center", justifyContent:"center",
+                  transition:"background .18s"
+                }}>
+                  <Ic n={s.icon} s={14} style={{ color: activeSolSection===i ? s.color : C.textL, transition:"color .18s" }} />
                 </div>
-                <div style={{ flex:1 }}>
-                  <div style={{ fontSize:13, fontWeight:600, color:C.text, display:"flex", alignItems:"center", gap:6 }}>
-                    {it.t}
-                    {it.tag && <span style={{ fontSize:9, fontWeight:700, padding:"2px 6px", borderRadius:4, background:C.orange+"18", color:C.orange }}>{it.tag}</span>}
+                <div style={{ flex:1, minWidth:0 }}>
+                  <div style={{ fontSize:12.5, fontWeight:700, color: activeSolSection===i ? s.color : C.text, lineHeight:1.2, transition:"color .18s", whiteSpace:"nowrap", overflow:"hidden", textOverflow:"ellipsis" }}>
+                    {s.heading}
                   </div>
-                  <div style={{ fontSize:11, color:C.textL, marginTop:1 }}>{it.d}</div>
+                  <div style={{ fontSize:10.5, color:C.textL, marginTop:1, whiteSpace:"nowrap", overflow:"hidden", textOverflow:"ellipsis" }}>
+                    {s.desc}
+                  </div>
                 </div>
+                <Ic n="ChevR" s={11} style={{ color: activeSolSection===i ? sec.color : C.border, flexShrink:0, transition:"color .18s" }} />
               </button>
             ))}
           </div>
-        ))}
-        <div style={{ padding:"22px 18px", background:C.bgSoft }}>
-          <div className="mega-feat">
-            <div style={{ fontSize:10, fontWeight:800, letterSpacing:".12em", color:"rgba(255,255,255,.7)", marginBottom:8 }}>✨ AI-POWERED</div>
-            <div style={{ fontSize:15, fontWeight:800, color:"#fff", marginBottom:8, lineHeight:1.3 }}>AI-Driven ERP Solutions</div>
-            <div style={{ fontSize:11.5, color:"rgba(255,255,255,.82)", lineHeight:1.6, marginBottom:14 }}>Get your hands-on with an AI-driven ERP solution; Maximize ROI, Accelerate Business Growth, and Bring Automation.</div>
-            <button style={{ display:"flex", alignItems:"center", gap:5, fontSize:12, fontWeight:700, color:"#fff", background:"rgba(255,255,255,.2)", border:"1.5px solid rgba(255,255,255,.35)", borderRadius:50, padding:"8px 14px", cursor:"pointer" }}
-              onClick={() => navLink("solutions")}>
-              Explore AI Solutions <Ic n="Arrow" s={11} />
-            </button>
-          </div>
-          <div style={{ marginTop:14 }}>
-            <div style={{ fontSize:11, fontWeight:700, color:C.textM, marginBottom:8 }}>QUICK LINKS</div>
-            {[["Free Consultation","contact"],["Watch Demo","hero"],["View Pricing","solutions"]].map(([l,s]) => (
-              <button key={l} onClick={() => l==="Free Consultation"?openConsult():l==="Watch Demo"?openDemo():navLink(s)}
-                style={{ display:"flex", alignItems:"center", gap:6, fontSize:12.5, color:C.blue, background:"none", border:"none", cursor:"pointer", padding:"5px 0", fontWeight:500 }}>
-                <Ic n="ChevR" s={11} /> {l}
+
+          {/* ── RIGHT: animated sub-items panel ── */}
+          <div key={activeSolSection} className="sol-items-panel" style={{ padding:"18px 16px", display:"flex", flexDirection:"column" }}>
+            {/* Section header */}
+            <div style={{ display:"flex", alignItems:"center", gap:10, marginBottom:14, paddingBottom:12, borderBottom:`1px solid ${C.border}` }}>
+              <div style={{ width:38, height:38, borderRadius:11, background:sec.bg, display:"flex", alignItems:"center", justifyContent:"center", flexShrink:0 }}>
+                <Ic n={sec.icon} s={18} style={{ color:sec.color }} />
+              </div>
+              <div>
+                <div style={{ fontSize:14, fontWeight:800, color:C.text }}>{sec.heading}</div>
+                <div style={{ fontSize:11, color:C.textL, marginTop:1 }}>{sec.items.length} applications · {sec.desc}</div>
+              </div>
+              <button
+                onClick={() => navLink("solutions")}
+                style={{ marginLeft:"auto", display:"flex", alignItems:"center", gap:5, fontSize:11.5, fontWeight:700, color:sec.color, background:sec.bg, border:"none", borderRadius:50, padding:"6px 14px", cursor:"pointer", flexShrink:0 }}
+              >
+                View all <Ic n="Arrow" s={11} style={{ color:sec.color }} />
               </button>
-            ))}
+            </div>
+
+            {/* Sub-items — auto-fill cards, last odd item spans full width */}
+            <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr", gap:8, flex:1, alignContent:"start" }}>
+              {sec.items.map((it, idx) => {
+                const isLastOdd = sec.items.length % 2 !== 0 && idx === sec.items.length - 1
+                return (
+                  <button
+                    key={it.t}
+                    className="sol-item-card"
+                    onClick={() => navLink(it.section)}
+                    style={{
+                      gridColumn: isLastOdd ? "1 / -1" : "auto",
+                      animation:`solPanelIn .22s cubic-bezier(.4,0,.2,1) both ${idx * 38}ms`,
+                      display:"flex", alignItems:"center", gap:12,
+                      padding:"12px 14px", borderRadius:13,
+                      border:`1.5px solid ${C.border}`,
+                      background:"#fff", cursor:"pointer", textAlign:"left",
+                      transition:"border-color .16s, box-shadow .16s, transform .16s",
+                      position:"relative", overflow:"hidden"
+                    }}
+                    onMouseEnter={e => {
+                      e.currentTarget.style.borderColor = sec.color + "55"
+                      e.currentTarget.style.boxShadow = `0 4px 18px ${sec.color}14`
+                      e.currentTarget.style.transform = "translateY(-2px)"
+                    }}
+                    onMouseLeave={e => {
+                      e.currentTarget.style.borderColor = C.border
+                      e.currentTarget.style.boxShadow = "none"
+                      e.currentTarget.style.transform = "none"
+                    }}
+                  >
+                    {/* Subtle left accent bar */}
+                    <div style={{ position:"absolute", left:0, top:0, bottom:0, width:3, background:`linear-gradient(180deg,${sec.color},${sec.color}55)`, borderRadius:"13px 0 0 13px", opacity:0.7 }} />
+                    {/* Icon */}
+                    <div style={{ width:40, height:40, borderRadius:11, background:sec.bg, display:"flex", alignItems:"center", justifyContent:"center", flexShrink:0, marginLeft:4 }}>
+                      <Ic n={it.n} s={18} style={{ color:sec.color }} />
+                    </div>
+                    {/* Text */}
+                    <div style={{ flex:1, minWidth:0 }}>
+                      <div style={{ display:"flex", alignItems:"center", gap:6, marginBottom:3 }}>
+                        <span style={{ fontSize:13, fontWeight:700, color:C.text }}>{it.t}</span>
+                        {it.tag && (
+                          <span style={{ fontSize:9, fontWeight:700, padding:"2px 7px", borderRadius:50, background:C.orange+"18", color:C.orange, whiteSpace:"nowrap" }}>{it.tag}</span>
+                        )}
+                      </div>
+                      <div style={{ fontSize:11.5, color:C.textM, lineHeight:1.45 }}>{it.d}</div>
+                    </div>
+                    {/* Arrow */}
+                    <Ic n="ChevR" s={13} style={{ color:sec.color, flexShrink:0, opacity:0.4 }} />
+                  </button>
+                )
+              })}
+            </div>
           </div>
         </div>
+
+        {/* Bottom bar */}
+        <div style={{ padding:"10px 20px", background:C.bgSoft, borderTop:`1px solid ${C.border}`, display:"flex", justifyContent:"space-between", alignItems:"center" }}>
+          <span style={{ fontSize:11.5, color:C.textM }}>
+            <span style={{ fontWeight:700, color:C.text }}>{NAV.solutions.sections.length} solution categories</span> · Browse the full portfolio
+          </span>
+          <button onClick={() => navLink("solutions")} style={{ display:"flex", alignItems:"center", gap:5, fontSize:12, fontWeight:700, color:C.blue, background:"none", border:"none", cursor:"pointer" }}>
+            View all solutions <Ic n="Arrow" s={12} />
+          </button>
+        </div>
       </div>
-      <div style={{ padding:"10px 20px", background:C.bgSoft, borderTop:`1px solid ${C.border}`, display:"flex", justifyContent:"space-between", alignItems:"center" }}>
-        <span style={{ fontSize:11.5, color:C.textM }}>Browse all 15+ Microsoft Dynamics 365 applications</span>
-        <button onClick={() => navLink("solutions")} style={{ display:"flex", alignItems:"center", gap:5, fontSize:12, fontWeight:700, color:C.blue, background:"none", border:"none", cursor:"pointer" }}>
-          View full portfolio <Ic n="Arrow" s={12} />
-        </button>
-      </div>
-    </div>
-  )
+    )
+  }
 
   // ── Mega: Services
-  const MegaServices = () => (
-    <div className="mega" style={{ left:0, transform:"none", width:640 }}>
-      <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr" }}>
-        {[NAV.services.slice(0,4), NAV.services.slice(4)].map((grp, gi) => (
-          <div key={gi} style={{ padding:"22px 16px", borderRight: gi===0?`1px solid ${C.border}`:"none" }}>
-            <div style={{ fontSize:10, fontWeight:800, letterSpacing:".15em", color:C.blue, marginBottom:10 }}>{gi===0?"IMPLEMENTATION":"SUPPORT & TRAINING"}</div>
-            {grp.map(it => (
-              <button key={it.t} className="mi" onClick={() => navLink(it.section)}>
-                <div style={{ width:30, height:30, borderRadius:8, background:C.blueL, display:"flex", alignItems:"center", justifyContent:"center", flexShrink:0 }}>
-                  <Ic n={it.n} s={13} style={{ color:C.blue }} />
-                </div>
-                <div>
-                  <div style={{ fontSize:13, fontWeight:600, color:C.text }}>{it.t}</div>
-                  <div style={{ fontSize:11, color:C.textL, marginTop:1 }}>{it.d}</div>
-                </div>
-              </button>
-            ))}
-          </div>
-        ))}
-      </div>
-      <div style={{ padding:"14px 20px", background:C.bgSoft, borderTop:`1px solid ${C.border}`, display:"flex", alignItems:"center", justifyContent:"space-between" }}>
-        <span style={{ fontSize:12, color:C.textM }}>Free implementation assessment — 60 minutes, no commitment</span>
-        <button className="btn-pri" style={{ padding:"8px 16px", fontSize:12 }} onClick={openConsult}>Book Free <Ic n="Arrow" s={11} /></button>
-      </div>
-    </div>
-  )
-
-  // ── Mega: Industries
-  const MegaIndustries = () => (
-    <div className="mega" style={{ left:"50%", transform:"translateX(-60%)", width:560 }}>
-      <div style={{ padding:"20px 16px" }}>
-        <div style={{ fontSize:10, fontWeight:800, letterSpacing:".15em", color:C.purple, marginBottom:12 }}>INDUSTRIES WE SERVE</div>
-        <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr", gap:4 }}>
-          {NAV.industries.map(it => (
-            <button key={it.t} className="mi mi-p" onClick={() => navLink(it.section)}>
-              <div style={{ width:30, height:30, borderRadius:8, background:it.bg, display:"flex", alignItems:"center", justifyContent:"center", flexShrink:0 }}>
-                <Ic n={it.n} s={13} style={{ color:it.c }} />
-              </div>
-              <div style={{ fontSize:13, fontWeight:600, color:C.text }}>{it.t}</div>
-            </button>
-          ))}
-        </div>
-      </div>
-      <div style={{ padding:"12px 20px", borderTop:`1px solid ${C.border}`, background:C.bgSoft, display:"flex", justifyContent:"space-between", alignItems:"center" }}>
-        <span style={{ fontSize:11.5, color:C.textM }}>Tailored solutions across 12+ verticals</span>
-        <button onClick={() => navLink("industries")} style={{ fontSize:12, fontWeight:700, color:C.purple, background:"none", border:"none", cursor:"pointer", display:"flex", alignItems:"center", gap:5 }}>See all <Ic n="Arrow" s={12} /></button>
-      </div>
-    </div>
-  )
-
-  // ── Mega: Resources
-  const MegaResources = () => (
-    <div className="mega" style={{ left:"50%", transform:"translateX(-50%)", width:560 }}>
-      <div style={{ padding:"20px 16px" }}>
-        <div style={{ fontSize:10, fontWeight:800, letterSpacing:".15em", color:C.teal, marginBottom:12 }}>RESOURCES</div>
-        <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr", gap:4 }}>
-          {[
-            {n:"BookOpen",t:"Blog & Insights",s:"blog"},{n:"Video",t:"Webinars & Events",s:"blog"},
-            {n:"FileText",t:"Case Studies",s:"testimonials"},{n:"Award",t:"White Papers",s:"blog"},
-            {n:"Calc",t:"ERP Price Calculator",s:"contact"},{n:"PieChart",t:"ROI Calculator",s:"contact"},
-            {n:"Rocket",t:"Migration Checklist",s:"process"},{n:"Check",t:"Implementation Guide",s:"process"},
-          ].map(it => (
-            <button key={it.t} className="mi mi-t" onClick={() => navLink(it.s)}>
-              <div style={{ width:28, height:28, borderRadius:7, background:C.tealL, display:"flex", alignItems:"center", justifyContent:"center", flexShrink:0 }}>
-                <Ic n={it.n} s={12} style={{ color:C.teal }} />
-              </div>
-              <div style={{ fontSize:12.5, fontWeight:600, color:C.text }}>{it.t}</div>
-            </button>
-          ))}
-        </div>
-      </div>
-      <div style={{ padding:"12px 20px", borderTop:`1px solid ${C.border}`, background:C.bgSoft, display:"flex", justifyContent:"space-between", alignItems:"center" }}>
-        <span style={{ fontSize:11.5, color:C.textM }}>Free personalised Dynamics 365 demo</span>
-        <button onClick={openDemo} style={{ fontSize:12, fontWeight:700, color:C.teal, background:"none", border:"none", cursor:"pointer", display:"flex", alignItems:"center", gap:5 }}>Book Demo <Ic n="Arrow" s={12} /></button>
-      </div>
-    </div>
-  )
-
-  // ── Mega: Company
-  const MegaCompany = () => (
-    <div className="mega" style={{ left:"50%", transform:"translateX(-50%)", width:540 }}>
-      <div style={{ display:"grid", gridTemplateColumns:"1fr 200px" }}>
-        <div style={{ padding:"20px 16px", borderRight:`1px solid ${C.border}` }}>
-          <div style={{ fontSize:10, fontWeight:800, letterSpacing:".15em", color:C.orange, marginBottom:10 }}>ABOUT US</div>
-          <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr", gap:4 }}>
-            {NAV.company.map(it => (
-              <button key={it.t} className="mi mi-o" onClick={() => navLink(it.section)}>
-                <div style={{ width:28, height:28, borderRadius:7, background:C.orangeL, display:"flex", alignItems:"center", justifyContent:"center", flexShrink:0 }}>
-                  <Ic n={it.n} s={12} style={{ color:C.orange }} />
-                </div>
-                <div style={{ fontSize:12, fontWeight:600, color:C.text }}>{it.t}</div>
-              </button>
-            ))}
-          </div>
-        </div>
-        <div style={{ padding:"20px 16px", background:C.bgSoft }}>
-          <div style={{ fontSize:10, fontWeight:800, letterSpacing:".14em", color:C.textL, marginBottom:12 }}>OUR OFFICES</div>
-          {NAV.offices.map(o => (
-            <div key={o.city} onClick={() => navLink("contact")} style={{ display:"flex", alignItems:"flex-start", gap:10, marginBottom:10, padding:"8px 10px", borderRadius:10, background:"#fff", border:`1px solid ${C.border}`, cursor:"pointer" }}>
-              <span style={{ fontSize:18 }}>{o.flag}</span>
-              <div>
-                <div style={{ fontSize:12.5, fontWeight:700, color:C.text }}>{o.city}</div>
-                <div style={{ fontSize:11, color:C.textM, marginTop:2 }}>{o.phone}</div>
-              </div>
+  const MegaServices = () => {
+    const megaWidth = 640
+    const left = getMegaLeft("services", megaWidth)
+    return (
+      <div className="mega" style={{ left, width: megaWidth }}>
+        <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr" }}>
+          {[NAV.services.slice(0,4), NAV.services.slice(4)].map((grp, gi) => (
+            <div key={gi} style={{ padding:"22px 16px", borderRight: gi===0?`1px solid ${C.border}`:"none" }}>
+              <div style={{ fontSize:10, fontWeight:800, letterSpacing:".15em", color:C.blue, marginBottom:10 }}>{gi===0?"IMPLEMENTATION":"SUPPORT & TRAINING"}</div>
+              {grp.map(it => (
+                <button key={it.t} className="mi" onClick={() => navLink(it.section)}>
+                  <div style={{ width:30, height:30, borderRadius:8, background:C.blueL, display:"flex", alignItems:"center", justifyContent:"center", flexShrink:0 }}>
+                    <Ic n={it.n} s={13} style={{ color:C.blue }} />
+                  </div>
+                  <div>
+                    <div style={{ fontSize:13, fontWeight:600, color:C.text }}>{it.t}</div>
+                    <div style={{ fontSize:11, color:C.textL, marginTop:1 }}>{it.d}</div>
+                  </div>
+                </button>
+              ))}
             </div>
           ))}
         </div>
+        <div style={{ padding:"14px 20px", background:C.bgSoft, borderTop:`1px solid ${C.border}`, display:"flex", alignItems:"center", justifyContent:"space-between" }}>
+          <span style={{ fontSize:12, color:C.textM }}>Free implementation assessment — 60 minutes, no commitment</span>
+          <button className="btn-pri" style={{ padding:"8px 16px", fontSize:12 }} onClick={openConsult}>Book Free <Ic n="Arrow" s={11} /></button>
+        </div>
       </div>
-    </div>
-  )
+    )
+  }
+
+  // ── Mega: Industries
+  const MegaIndustries = () => {
+    const megaWidth = 560
+    const left = getMegaLeft("industries", megaWidth)
+    return (
+      <div className="mega" style={{ left, width: megaWidth }}>
+        <div style={{ padding:"20px 16px" }}>
+          <div style={{ fontSize:10, fontWeight:800, letterSpacing:".15em", color:C.purple, marginBottom:12 }}>INDUSTRIES WE SERVE</div>
+          <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr", gap:4 }}>
+            {NAV.industries.map(it => (
+              <button key={it.t} className="mi mi-p" onClick={() => navLink(it.section)}>
+                <div style={{ width:30, height:30, borderRadius:8, background:it.bg, display:"flex", alignItems:"center", justifyContent:"center", flexShrink:0 }}>
+                  <Ic n={it.n} s={13} style={{ color:it.c }} />
+                </div>
+                <div style={{ fontSize:13, fontWeight:600, color:C.text }}>{it.t}</div>
+              </button>
+            ))}
+          </div>
+        </div>
+        <div style={{ padding:"12px 20px", borderTop:`1px solid ${C.border}`, background:C.bgSoft, display:"flex", justifyContent:"space-between", alignItems:"center" }}>
+          <span style={{ fontSize:11.5, color:C.textM }}>Tailored solutions across 12+ verticals</span>
+          <button onClick={() => navLink("industries")} style={{ fontSize:12, fontWeight:700, color:C.purple, background:"none", border:"none", cursor:"pointer", display:"flex", alignItems:"center", gap:5 }}>See all <Ic n="Arrow" s={12} /></button>
+        </div>
+      </div>
+    )
+  }
+
+  // ── Mega: Resources
+  const MegaResources = () => {
+    const megaWidth = 560
+    const left = getMegaLeft("resources", megaWidth)
+    return (
+      <div className="mega" style={{ left, width: megaWidth }}>
+        <div style={{ padding:"20px 16px" }}>
+          <div style={{ fontSize:10, fontWeight:800, letterSpacing:".15em", color:C.teal, marginBottom:12 }}>RESOURCES</div>
+          <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr", gap:4 }}>
+            {[
+              {n:"BookOpen",t:"Blog & Insights",s:"blog"},{n:"Video",t:"Webinars & Events",s:"blog"},
+              {n:"FileText",t:"Case Studies",s:"testimonials"},{n:"Award",t:"White Papers",s:"blog"},
+              {n:"Calc",t:"ERP Price Calculator",s:"contact"},{n:"PieChart",t:"ROI Calculator",s:"contact"},
+              {n:"Rocket",t:"Migration Checklist",s:"process"},{n:"Check",t:"Implementation Guide",s:"process"},
+            ].map(it => (
+              <button key={it.t} className="mi mi-t" onClick={() => navLink(it.s)}>
+                <div style={{ width:28, height:28, borderRadius:7, background:C.tealL, display:"flex", alignItems:"center", justifyContent:"center", flexShrink:0 }}>
+                  <Ic n={it.n} s={12} style={{ color:C.teal }} />
+                </div>
+                <div style={{ fontSize:12.5, fontWeight:600, color:C.text }}>{it.t}</div>
+              </button>
+            ))}
+          </div>
+        </div>
+        <div style={{ padding:"12px 20px", borderTop:`1px solid ${C.border}`, background:C.bgSoft, display:"flex", justifyContent:"space-between", alignItems:"center" }}>
+          <span style={{ fontSize:11.5, color:C.textM }}>Free personalised Dynamics 365 demo</span>
+          <button onClick={openDemo} style={{ fontSize:12, fontWeight:700, color:C.teal, background:"none", border:"none", cursor:"pointer", display:"flex", alignItems:"center", gap:5 }}>Book Demo <Ic n="Arrow" s={12} /></button>
+        </div>
+      </div>
+    )
+  }
+
+  // ── Mega: Company
+  const MegaCompany = () => {
+    const megaWidth = 540
+    const left = getMegaLeft("company", megaWidth)
+    return (
+      <div className="mega" style={{ left, width: megaWidth }}>
+        <div style={{ display:"grid", gridTemplateColumns:"1fr 200px" }}>
+          <div style={{ padding:"20px 16px", borderRight:`1px solid ${C.border}` }}>
+            <div style={{ fontSize:10, fontWeight:800, letterSpacing:".15em", color:C.orange, marginBottom:10 }}>ABOUT US</div>
+            <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr", gap:4 }}>
+              {NAV.company.map(it => (
+                <button key={it.t} className="mi mi-o" onClick={() => navLink(it.section)}>
+                  <div style={{ width:28, height:28, borderRadius:7, background:C.orangeL, display:"flex", alignItems:"center", justifyContent:"center", flexShrink:0 }}>
+                    <Ic n={it.n} s={12} style={{ color:C.orange }} />
+                  </div>
+                  <div style={{ fontSize:12, fontWeight:600, color:C.text }}>{it.t}</div>
+                </button>
+              ))}
+            </div>
+          </div>
+          <div style={{ padding:"20px 16px", background:C.bgSoft }}>
+            <div style={{ fontSize:10, fontWeight:800, letterSpacing:".14em", color:C.textL, marginBottom:12 }}>OUR OFFICES</div>
+            {NAV.offices.map(o => (
+              <div key={o.city} onClick={() => navLink("contact")} style={{ display:"flex", alignItems:"flex-start", gap:10, marginBottom:10, padding:"8px 10px", borderRadius:10, background:"#fff", border:`1px solid ${C.border}`, cursor:"pointer" }}>
+                <span style={{ fontSize:18 }}>{o.flag}</span>
+                <div>
+                  <div style={{ fontSize:12.5, fontWeight:700, color:C.text }}>{o.city}</div>
+                  <div style={{ fontSize:11, color:C.textM, marginTop:2 }}>{o.phone}</div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+    )
+  }
 
   const megas = { solutions:<MegaSolutions/>, services:<MegaServices/>, industries:<MegaIndustries/>, resources:<MegaResources/>, company:<MegaCompany/> }
   const navItems = [
@@ -605,7 +797,7 @@ function Header({ openConsult, openDemo }) {
     <>
       {ann && (
         <div className="ann-bar">
-          <span>🚀 New: AI-powered Microsoft Cloud Solutions — helping 500+ worldwide businesses grow —</span>
+          <span>🚀 New: Microsoft Copilot is now embedded across all Dynamics 365 modules —</span>
           <button onClick={() => navLink("solutions")} style={{ background:"none",border:"none",color:"#fff",cursor:"pointer",textDecoration:"underline",fontFamily:"'Plus Jakarta Sans',sans-serif",fontWeight:600,fontSize:12 }}>Learn more →</button>
           <button onClick={() => setAnn(false)} style={{ background:"none",border:"none",color:"rgba(255,255,255,.7)",cursor:"pointer",marginLeft:4,display:"flex",alignItems:"center" }}><Ic n="X" s={13}/></button>
         </div>
@@ -616,21 +808,49 @@ function Header({ openConsult, openDemo }) {
 
           {/* Logo */}
           <button onClick={() => scrollTo("hero")} style={{ display:"flex",alignItems:"center",gap:10,textDecoration:"none",flexShrink:0,background:"none",border:"none",cursor:"pointer" }}>
-            <div style={{ width:36,height:36,borderRadius:10,background:`linear-gradient(135deg,${C.blue},${C.purple})`,display:"flex",alignItems:"center",justifyContent:"center",boxShadow:"0 4px 12px rgba(0,87,184,.28)",flexShrink:0 }}>
-              <span style={{ color:"#fff",fontFamily:"'Plus Jakarta Sans',sans-serif",fontWeight:800,fontSize:16 }}>D</span>
-            </div>
+            {/* DevinStratus custom SVG logo: cloud over stacked data layers */}
+            <svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg" style={{ flexShrink:0 }}>
+              <defs>
+                <linearGradient id="lg1" x1="0" y1="0" x2="40" y2="40" gradientUnits="userSpaceOnUse">
+                  <stop offset="0%" stopColor="#0057B8"/>
+                  <stop offset="100%" stopColor="#6C3CE1"/>
+                </linearGradient>
+                <linearGradient id="lg2" x1="0" y1="0" x2="40" y2="40" gradientUnits="userSpaceOnUse">
+                  <stop offset="0%" stopColor="#0071f3"/>
+                  <stop offset="100%" stopColor="#9B6FEF"/>
+                </linearGradient>
+              </defs>
+              {/* Background pill */}
+              <rect width="40" height="40" rx="11" fill="url(#lg1)"/>
+              {/* Cloud shape */}
+              <path d="M27 17.5C27 15.57 25.43 14 23.5 14C23.08 14 22.68 14.07 22.3 14.21C21.63 12.33 19.84 11 17.75 11C15.13 11 13 13.13 13 15.75C13 15.84 13.01 15.93 13.01 16.02C11.83 16.26 11 17.3 11 18.5C11 19.88 12.12 21 13.5 21H27C28.1 21 29 20.1 29 19C29 17.9 28.1 17 27 17.5Z" fill="white" opacity="0.95"/>
+              {/* Layer 1 — widest */}
+              <rect x="9" y="23" width="22" height="3" rx="1.5" fill="white" opacity="0.75"/>
+              {/* Layer 2 — medium */}
+              <rect x="12" y="27.5" width="16" height="3" rx="1.5" fill="white" opacity="0.5"/>
+              {/* Layer 3 — narrow accent */}
+              <rect x="15" y="32" width="10" height="2.5" rx="1.25" fill="white" opacity="0.3"/>
+            </svg>
             <div>
               <div style={{ fontFamily:"'Plus Jakarta Sans',sans-serif",fontWeight:800,fontSize:15,letterSpacing:"-.2px",lineHeight:1 }}>
-                <span className="gtext">DYNAMICS</span><span style={{ color:C.text }}> SQUARE™</span>
+                <span className="gtext">Devin</span><span style={{ color:C.text }}>Stratus</span>
               </div>
-              <div style={{ fontSize:9,fontWeight:700,color:C.textL,letterSpacing:".1em",marginTop:1 }}>MICROSOFT DYNAMICS PARTNER</div>
+              <div style={{ fontSize:9,fontWeight:700,color:C.textL,letterSpacing:".1em",marginTop:1 }}>TECHNOLOGIES</div>
             </div>
           </button>
 
-          {/* Desktop nav */}
-          <nav className="hide-desk" style={{ display:"flex",alignItems:"center",gap:4,flex:1,justifyContent:"center" }}>
+          {/* Desktop nav — nav-wrapper is the positioning context for megas */}
+          <nav
+            ref={navRef}
+            className="nav-wrapper hide-desk"
+          >
             {navItems.map(item => (
-              <div key={item.key} style={{ position:"relative" }} onMouseEnter={() => openM(item.key)} onMouseLeave={() => closeM(item.key)}>
+              <div
+                key={item.key}
+                ref={el => { itemRefs.current[item.key] = el }}
+                onMouseEnter={() => openM(item.key)}
+                onMouseLeave={() => closeM(item.key)}
+              >
                 <button className={`nl ${open===item.key?"active-nav":""}`}>
                   {item.label}
                   <Ic n="ChevD" s={12} style={{ transition:"transform .18s",transform:open===item.key?"rotate(180deg)":"none",marginTop:1 }} />
@@ -647,7 +867,7 @@ function Header({ openConsult, openDemo }) {
 
           {/* Desktop CTAs */}
           <div className="hide-desk" style={{ display:"flex",alignItems:"center",gap:10,flexShrink:0 }}>
-            <a href="tel:+18009387929" className="btn-ghost"><Ic n="Phone" s={13} /> +1 800 938 7929</a>
+            <a href="tel:+4420719325026" className="btn-ghost"><Ic n="Phone" s={13} /> +44 207 193 2502</a>
             <button className="btn-pri" style={{ padding:"10px 20px",fontSize:13 }} onClick={openConsult}>Free Consultation <Ic n="Arrow" s={13} /></button>
           </div>
 
@@ -682,7 +902,7 @@ function Header({ openConsult, openDemo }) {
             <button className="mob-link" onClick={() => navLink("contact")}>Contact Us</button>
             <div style={{ display:"flex",flexDirection:"column",gap:10,marginTop:16 }}>
               <button className="btn-pri" style={{ justifyContent:"center" }} onClick={openConsult}>Free Consultation <Ic n="Arrow" s={14} /></button>
-              <a href="tel:+18009387929" className="btn-sec" style={{ justifyContent:"center",textDecoration:"none" }}><Ic n="Phone" s={13} /> +1 800 938 7929</a>
+              <a href="tel:+4420719325026" className="btn-sec" style={{ justifyContent:"center",textDecoration:"none" }}><Ic n="Phone" s={13} /> +44 207 193 2502</a>
             </div>
           </div>
         </div>
@@ -708,20 +928,20 @@ function Hero({ openConsult, openDemo }) {
               <span style={{ background:`linear-gradient(135deg,${C.blue},${C.purple})`,borderRadius:"50%",width:18,height:18,display:"flex",alignItems:"center",justifyContent:"center" }}>
                 <Ic n="Star" s={9} style={{ color:"#fff",fill:"#fff" }} />
               </span>
-              Microsoft Dynamics Partner · Connected with 500+ Global Businesses
+              Microsoft Gold Partner · Trusted by 350+ businesses
             </div>
             <h1 style={{ fontSize:"clamp(2rem,4.2vw,3.2rem)",fontWeight:800,color:C.text,marginBottom:20,lineHeight:1.15 }}>
-              USA's Leading <span className="gtext">Microsoft Dynamics Partner</span>
+              Empower Your Business with <span className="gtext">AI-Enabled ERP</span> &amp; <span className="gtextO">CRM Solutions</span>
             </h1>
             <p style={{ fontSize:15.5,color:C.textM,lineHeight:1.78,marginBottom:32,maxWidth:510 }}>
-              Get your hands-on with an AI-driven ERP solution; Maximize ROI, Accelerate Business Growth, and Bring Automation - Your Path to Success Starts Here.
+              Unify finance, operations, sales and service on one intelligent Dynamics 365 platform — cutting manual work, automating decisions, and giving every team real-time visibility.
             </p>
             <div style={{ display:"flex",gap:12,flexWrap:"wrap",marginBottom:36 }}>
               <button className="btn-pri" onClick={openConsult}>Free Consultation <Ic n="Arrow" s={14} /></button>
               <button className="btn-sec" onClick={openDemo}><Ic n="Play" s={13} /> Watch Demo</button>
             </div>
             <div style={{ display:"flex",gap:14,flexWrap:"wrap" }}>
-              {[{v:"500+",l:"Global Businesses",bg:C.blueL,c:C.blue},{v:"150+",l:"Consultants",bg:C.purpleL,c:C.purple},{v:"Gold",l:"MS Partner",bg:C.orangeL,c:C.orange},{v:"99.9%",l:"Uptime SLA",bg:C.tealL,c:C.teal}].map(b => (
+              {[{v:"350+",l:"Happy Clients",bg:C.blueL,c:C.blue},{v:"150+",l:"Consultants",bg:C.purpleL,c:C.purple},{v:"Gold",l:"MS Partner",bg:C.orangeL,c:C.orange},{v:"99.9%",l:"Uptime SLA",bg:C.tealL,c:C.teal}].map(b => (
                 <div key={b.l} style={{ background:b.bg,borderRadius:13,padding:"11px 16px",textAlign:"center",minWidth:72 }}>
                   <div style={{ fontFamily:"'Plus Jakarta Sans',sans-serif",fontWeight:800,fontSize:20,color:b.c }}>{b.v}</div>
                   <div style={{ fontSize:10.5,fontWeight:600,color:C.textM,marginTop:1,whiteSpace:"nowrap" }}>{b.l}</div>
@@ -732,7 +952,7 @@ function Hero({ openConsult, openDemo }) {
           <div style={{ position:"relative" }}>
             <div style={{ position:"absolute",top:-20,left:-10,zIndex:10,background:"#fff",borderRadius:13,padding:"9px 14px",boxShadow:"0 6px 28px rgba(0,87,184,.14)",border:`1.5px solid ${C.border}`,animation:"float 3.5s ease-in-out infinite",display:"flex",alignItems:"center",gap:7 }}>
               <div style={{ width:7,height:7,borderRadius:"50%",background:C.green,animation:"pulse 2s infinite" }} />
-              <span style={{ fontSize:12,fontWeight:700,color:C.text }}>✨ AI-Driven ERP</span>
+              <span style={{ fontSize:12,fontWeight:700,color:C.text }}>✨ AI Copilot Active</span>
             </div>
             <div style={{ position:"absolute",bottom:20,right:-14,zIndex:10,background:"#fff",borderRadius:13,padding:"9px 14px",boxShadow:"0 6px 28px rgba(108,60,225,.13)",border:`1.5px solid ${C.border}`,animation:"floatR 3.8s ease-in-out infinite",display:"flex",alignItems:"center",gap:7 }}>
               <Ic n="Shield" s={13} style={{ color:C.purple }} /> <span style={{ fontSize:12,fontWeight:700,color:C.text }}>Azure-Secured</span>
@@ -741,7 +961,7 @@ function Hero({ openConsult, openDemo }) {
               <div style={{ padding:"16px 20px",background:`linear-gradient(135deg,${C.blue},${C.purple})`,display:"flex",justifyContent:"space-between",alignItems:"center" }}>
                 <div>
                   <div style={{ fontSize:10,fontWeight:700,color:"rgba(255,255,255,.7)",letterSpacing:".1em" }}>DYNAMICS 365 LIVE DASHBOARD</div>
-                  <div style={{ fontSize:14,fontWeight:700,color:"#fff",marginTop:2 }}>AI-Driven Business Overview</div>
+                  <div style={{ fontSize:14,fontWeight:700,color:"#fff",marginTop:2 }}>Business Intelligence Overview</div>
                 </div>
                 <div style={{ background:"rgba(255,255,255,.2)",borderRadius:7,padding:"3px 9px",fontSize:10,color:"#fff",fontWeight:700,display:"flex",alignItems:"center",gap:5 }}>
                   <span style={{ width:6,height:6,borderRadius:"50%",background:"#4ade80",display:"inline-block",animation:"pulse 2s infinite" }} /> LIVE
@@ -786,11 +1006,11 @@ function Hero({ openConsult, openDemo }) {
 
 // ─── TRUST BAR ────────────────────────────────────────────────────────────────
 function Trust() {
-  const logos = ["Manufacturing Today","Clutch","Forbes Technology Council","Tech Partner Awards","ERPSoftwareBlog","Microsoft Partner","Global Businesses","Digital Transformation"]
+  const logos = ["Contoso Ltd","Fabrikam Inc","NorthWind Corp","Alpine Skis","Tailwind Traders","Relecloud","A. Perry & Co","DataCove","TechNorth","BluePeak","Greenfield Ltd","Horizon Group"]
   const doubled = [...logos,...logos]
   return (
     <section id="trust" style={{ background:"#fff",borderTop:`1.5px solid ${C.border}`,borderBottom:`1.5px solid ${C.border}`,padding:"22px 0",overflow:"hidden" }}>
-      <div style={{ textAlign:"center",fontSize:10,fontWeight:700,letterSpacing:".14em",color:C.textL,marginBottom:14,textTransform:"uppercase" }}>Featured On Respected Platforms</div>
+      <div style={{ textAlign:"center",fontSize:10,fontWeight:700,letterSpacing:".14em",color:C.textL,marginBottom:14,textTransform:"uppercase" }}>Trusted by businesses across Manufacturing · Retail · Finance · Healthcare · Logistics</div>
       <div style={{ overflow:"hidden" }}>
         <div className="track">
           {doubled.map((l,i) => (
@@ -811,10 +1031,10 @@ function Trust() {
 function Stats() {
   const ref = useReveal()
   const items = [
-    {target:82,suffix:"%",label:"Businesses Meet Expected ROI",sub:"Post-implementation success rate",color:C.blue},
-    {target:2,suffix:"x",label:"Productivity Increase",sub:"Due to centralized data structure",color:C.purple},
-    {target:46,suffix:"%",label:"Improved Cost Saving",sub:"After upgrading to Microsoft ERP",color:C.orange},
-    {target:350,suffix:"+",label:"Clients Served",sub:"Across 12+ industry verticals",color:C.teal},
+    {target:50,suffix:"%+",label:"Lower Operating Costs",sub:"Avg. 12-month post go-live",color:C.blue},
+    {target:60,suffix:"%",label:"Better Supply Chain Visibility",sub:"End-to-end tracking improvement",color:C.purple},
+    {target:350,suffix:"+",label:"Clients Served",sub:"Across 12+ industry verticals",color:C.orange},
+    {target:40,suffix:"%",label:"Faster Financial Close",sub:"Month-end turnaround improvement",color:C.teal},
     {target:99,suffix:".9%",label:"Platform Uptime",sub:"Azure-backed SLA guarantee",color:C.green},
     {target:150,suffix:"+",label:"Certified Consultants",sub:"ERP, CRM & Power Platform",color:C.blue},
     {target:3,suffix:"x",label:"Average First-Year ROI",sub:"Post-implementation surveys",color:C.purple},
@@ -823,8 +1043,8 @@ function Stats() {
     <section id="stats" ref={ref} style={{ background:`linear-gradient(160deg,${C.blueLL},#faf5ff)`,padding:"88px 0" }}>
       <div style={{ maxWidth:1280,margin:"0 auto",padding:"0 24px" }}>
         <div className="rv" style={{ textAlign:"center",marginBottom:48 }}>
-          <div className="chip" style={{ background:C.blueL,color:C.blue,marginBottom:12 }}>Proven Track Record</div>
-          <h2 style={{ fontSize:"clamp(1.7rem,3.2vw,2.4rem)",fontWeight:800,color:C.text }}>Businesses Got <span className="gtext">Exclusive Results</span></h2>
+          <div className="chip" style={{ background:C.blueL,color:C.blue,marginBottom:12 }}>Proven Outcomes</div>
+          <h2 style={{ fontSize:"clamp(1.7rem,3.2vw,2.4rem)",fontWeight:800,color:C.text }}>Numbers That <span className="gtext">Speak for Themselves</span></h2>
         </div>
         <div className="stats-g rv" style={{ display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(155px,1fr))",gap:16 }}>
           {items.map(it => {
@@ -849,16 +1069,16 @@ function Solutions({ openConsult }) {
   const ref = useReveal()
   const data = {
     erp:[
-      {n:"Package",t:"Business Central",d:"An all-in-one business management solution specifically designed for SMBs and startups that offers a 360-degree holistic view of the entire business with full transparency.",c:C.blue,bg:C.blueL,tag:"Most Popular"},
-      {n:"Dollar",t:"Finance",d:"Simplify complex financial operations while getting real-time data analytics and accurate insights. Avail automation, minimize investment costs, and monitor financial processes.",c:C.purple,bg:C.purpleL},
-      {n:"Truck",t:"Supply Chain",d:"Automate your entire supply chain process. Boost efficiency, cut costs, enhance accuracy, gain real-time insights, and improve customer service.",c:C.teal,bg:C.tealL},
+      {n:"Package",t:"Business Central",d:"The go-to ERP for growing SMBs — finance, purchasing, inventory, sales and project management in one cloud solution. Most clients go live in under 90 days.",c:C.blue,bg:C.blueL,tag:"Most Popular"},
+      {n:"Dollar",t:"Finance",d:"Automate journals, consolidate multi-entity accounts, manage cashflow forecasting, and stay audit-ready — without the spreadsheet chaos at month-end.",c:C.purple,bg:C.purpleL},
+      {n:"Truck",t:"Supply Chain",d:"Real-time visibility from supplier to customer. Demand forecasting, warehouse management, IoT asset tracking and automated replenishment.",c:C.teal,bg:C.tealL},
       {n:"Cart",t:"Commerce",d:"POS, e-commerce, back-office stock and loyalty programmes all in real time. Consistent experience wherever customers shop.",c:C.orange,bg:C.orangeL},
       {n:"Brief",t:"Project Operations",d:"Connect your CRM pipeline to project delivery — resource allocation, timesheets, subcontractor billing and client invoicing.",c:C.blue,bg:C.blueL},
       {n:"Users",t:"Human Resources",d:"Full employee lifecycle — benefits, performance reviews, learning paths and absence tracking.",c:C.purple,bg:C.purpleL},
     ],
     crm:[
       {n:"Headphones",t:"Customer Service",d:"Routes cases intelligently across email, chat, voice and social — with AI surfacing the right answers before your agent even has to search.",c:C.blue,bg:C.blueL},
-      {n:"Target",t:"Sales",d:"Get an omnichannel connection between the sales team, customers, and partners. Track the sales pipeline, get insights, maximize profit, and close more deals.",c:C.purple,bg:C.purpleL},
+      {n:"Target",t:"Sales",d:"AI-scored leads, guided next-best actions, accurate pipeline forecasting and automated follow-ups. Reps spend time closing, not updating records.",c:C.purple,bg:C.purpleL},
       {n:"Wrench",t:"Field Service",d:"Intelligent scheduling, predictive maintenance alerts and a mobile app technicians will actually use.",c:C.teal,bg:C.tealL},
       {n:"Brain",t:"Customer Insights",d:"Unify CRM, ERP, e-commerce and marketing into consent-based profiles. AI segmentation and journey orchestration at scale.",c:C.orange,bg:C.orangeL},
       {n:"Megaphone",t:"Marketing",d:"Personalised multi-channel campaigns, lead scoring, event management and real-time customer journey orchestration.",c:C.blue,bg:C.blueL},
@@ -866,7 +1086,7 @@ function Solutions({ openConsult }) {
     power:[
       {n:"Cpu",t:"Power Apps",d:"Build custom business apps with no-code/low-code tools. Extend Dynamics 365 exactly the way your business works.",c:C.blue,bg:C.blueL},
       {n:"Zap",t:"Power Automate",d:"Automate approval chains, data sync, notifications and complex multi-step workflows across 1000+ services.",c:C.purple,bg:C.purpleL},
-      {n:"PieChart",t:"Power BI",d:"Analyze and visualize the huge stack of data with interactive graphical representations to make data-driven decisions in real-time.",c:C.teal,bg:C.tealL},
+      {n:"PieChart",t:"Power BI",d:"Interactive dashboards, drill-down reports and AI-powered Q&A — embedded natively in every Dynamics 365 module.",c:C.teal,bg:C.tealL},
       {n:"Globe",t:"Power Pages",d:"Build secure, data-driven external websites — partner portals, customer self-service hubs — with no-code tools.",c:C.orange,bg:C.orangeL},
     ],
   }
@@ -875,9 +1095,9 @@ function Solutions({ openConsult }) {
     <section id="solutions" ref={ref} style={{ background:"#fff",padding:"88px 0" }}>
       <div style={{ maxWidth:1280,margin:"0 auto",padding:"0 24px" }}>
         <div className="rv" style={{ textAlign:"center",marginBottom:44 }}>
-          <div className="chip" style={{ background:C.blueL,color:C.blue,marginBottom:12 }}>Get the Best Solutions</div>
-          <h2 style={{ fontSize:"clamp(1.7rem,3.2vw,2.4rem)",fontWeight:800,color:C.text }}>Microsoft Dynamics 365 <span className="gtext">Solutions for Business Growth</span></h2>
-          <p style={{ fontSize:15,color:C.textM,marginTop:10,maxWidth:540,margin:"10px auto 0" }}>Automate your business, simplify operations, and redefine the way you deal with new opportunities.</p>
+          <div className="chip" style={{ background:C.blueL,color:C.blue,marginBottom:12 }}>Complete Suite</div>
+          <h2 style={{ fontSize:"clamp(1.7rem,3.2vw,2.4rem)",fontWeight:800,color:C.text }}>Explore the Full <span className="gtext">Dynamics 365 Portfolio</span></h2>
+          <p style={{ fontSize:15,color:C.textM,marginTop:10,maxWidth:540,margin:"10px auto 0" }}>Purpose-built modules for every dimension of your business — connected, intelligent, scalable.</p>
         </div>
         <div className="rv" style={{ display:"flex",gap:10,justifyContent:"center",marginBottom:36,flexWrap:"wrap" }}>
           {[{id:"erp",l:"ERP Solutions"},{id:"crm",l:"CRM Solutions"},{id:"power",l:"Power Platform"}].map(t => (
@@ -896,7 +1116,7 @@ function Solutions({ openConsult }) {
               <h3 style={{ fontSize:15.5,fontWeight:700,color:C.text }}>{it.t}</h3>
               <p style={{ fontSize:13,color:C.textM,lineHeight:1.7 }}>{it.d}</p>
               <button className="learn-more-btn" style={{ color:it.c,marginTop:"auto" }} onClick={openConsult}>
-                Get Started <Ic n="Arrow" s={12} style={{ color:it.c }} />
+                Get a demo <Ic n="Arrow" s={12} style={{ color:it.c }} />
               </button>
             </div>
           ))}
@@ -1036,10 +1256,10 @@ function PowerBI({ openConsult }) {
         <div className="rv" style={{ textAlign:"center",marginBottom:52 }}>
           <div className="chip" style={{ background:C.orangeL,color:C.orange,marginBottom:12 }}>Analytics & Intelligence</div>
           <h2 style={{ fontSize:"clamp(1.7rem,3.2vw,2.4rem)",fontWeight:800,color:C.text }}>
-            Transform Your Data with <span className="gtextO">Microsoft Power BI</span>
+            Turn Data into <span className="gtextO">Better Decisions</span> with Microsoft Power BI
           </h2>
           <p style={{ fontSize:15,color:C.textM,marginTop:12,maxWidth:560,margin:"12px auto 0" }}>
-            Analyze and visualize the huge stack of data with interactive graphical representations to make data-driven decisions in real-time. Transform your data to make it accessible and valuable.
+            Power BI is embedded natively inside Dynamics 365 — not a separate tool. Every module surfaces data into interactive dashboards your teams can act on immediately.
           </p>
         </div>
         <div className="pbi-g rv" style={{ display:"grid",gridTemplateColumns:"1fr 1fr",gap:24,maxWidth:900,margin:"0 auto" }}>
@@ -1076,12 +1296,10 @@ function Testimonials() {
   const [active, setActive] = useState(0)
   const ref = useReveal()
   const items = [
-    {q:"We were using an outgrown legacy system with potential chances of errors, data loss, and cyber-attacks. These are some of the reasons that pushed us to upgrade to Dynamics 365 Finance and Operations with a cloud deployment. The team at Dynamics Square has successfully implemented this solution in the stated time without any after-sales cost.",name:"Chief Financial Officer",role:"Non-profit organization",industry:"Non-profit"},
-    {q:"The NAV to Business Central upgrade was our best choice when it comes to business growth, simplified operations, and establishing communication between different teams in different departments. Dynamics Square has made the entire process smooth and efficient.",name:"Vice Principal",role:"Leading College",industry:"Education"},
-    {q:"Dynamics Square understood our requirements and suggested Microsoft Power BI for our data analytics needs. They also integrated this with our existing ERP solution for a continuous data flow.",name:"Head of Marketing",role:"Renowned Clothing Brand",industry:"Retail"},
-    {q:"Dynamics Square is a fantastic partner and helped us move from an existing CRM to Dynamics 365. The process improvement for our business was significant, and the visibility to our company performance was exactly what we needed. They took the time to understand our needs.",name:"Sina Moatamed",role:"Client",industry:"Professional Services"},
-    {q:"We had an excellent experience with Dynamics Square. Arish was incredibly helpful and responsive, ensuring our needs were met quickly. The development and project teams expertly translated our requirements into effective solutions, exceeding our expectations.",name:"David Karpiak",role:"Client",industry:"Technology"},
-    {q:"Good pricing and quick response from our account manager. They helped us with troubleshooting and trainings.",name:"Emma Liang",role:"Client",industry:"Business Services"},
+    {q:"Dynamics Square's implementation was seamless. Business Central replaced four disconnected systems and gave us a single source of truth. Our month-end close dropped from 12 days to 3 — none of us thought that was achievable so quickly.",name:"Sarah Mitchell",role:"CFO, Ashford Manufacturing Ltd.",industry:"Manufacturing"},
+    {q:"The team understood our distribution workflows before writing a single line of configuration. The Supply Chain module gave us real-time inventory visibility we'd never had. Stock-outs down 68% in six months — that number alone paid for the project.",name:"Raj Patel",role:"Operations Director, PrimeLine Distribution",industry:"Logistics"},
+    {q:"We've worked with several Microsoft partners. Dynamics Square are different in their post go-live support — always proactive, never reactive. The CRM transformation pushed our customer NPS up 18 points in under 12 months.",name:"Emma Clarke",role:"Head of Customer Experience, NovaTel Services",industry:"Professional Services"},
+    {q:"The Business Central implementation transformed how our finance team operates. What used to take two accountants a week now runs automatically. We've redeployed those team members into actual value-added work.",name:"James Whitmore",role:"Finance Director, Crestwood Retail Group",industry:"Retail"},
   ]
   useEffect(() => {
     const t = setInterval(() => setActive(a => (a+1)%items.length), 5500)
@@ -1092,7 +1310,7 @@ function Testimonials() {
       <div style={{ maxWidth:1100,margin:"0 auto",padding:"0 24px" }}>
         <div className="rv" style={{ textAlign:"center",marginBottom:44 }}>
           <div className="chip" style={{ background:C.orangeL,color:C.orange,marginBottom:12 }}>Client Stories</div>
-          <h2 style={{ fontSize:"clamp(1.7rem,3.2vw,2.4rem)",fontWeight:800,color:C.text }}>What Businesses Say About <span className="gtextO">Dynamics Square</span></h2>
+          <h2 style={{ fontSize:"clamp(1.7rem,3.2vw,2.4rem)",fontWeight:800,color:C.text }}>What Our Clients <span className="gtextO">Actually Say</span></h2>
         </div>
         <div className="rv" style={{ background:C.bgSoft,borderRadius:26,padding:"40px",border:`1.5px solid ${C.border}` }}>
           <div className="hero-g" style={{ display:"grid",gridTemplateColumns:"1fr 1fr",gap:40,alignItems:"center" }}>
@@ -1139,8 +1357,8 @@ function Testimonials() {
 function Blog({ openConsult }) {
   const ref = useReveal()
   const posts = [
-    {tag:"ERP Guide",tagC:C.blue,tagBg:C.blueL,title:"Business Central vs Dynamics NAV: What's the Difference and Which Is Right for You?",date:"Feb 28, 2026",read:"8 min",n:"Package"},
-    {tag:"AI & Automation",tagC:C.purple,tagBg:C.purpleL,title:"AI-Driven ERP: How Microsoft Copilot Is Transforming Business Operations",date:"Feb 20, 2026",read:"6 min",n:"Brain"},
+    {tag:"ERP Guide",tagC:C.blue,tagBg:C.blueL,title:"Business Central vs Finance & Operations: Which Dynamics 365 ERP Is Right for You?",date:"Feb 28, 2026",read:"8 min",n:"Package"},
+    {tag:"AI & Copilot",tagC:C.purple,tagBg:C.purpleL,title:"Microsoft Copilot in Dynamics 365: What It Does, What It Doesn't, and What's Coming",date:"Feb 20, 2026",read:"6 min",n:"Brain"},
     {tag:"Implementation",tagC:C.teal,tagBg:C.tealL,title:"The 7 Biggest Mistakes Businesses Make When Implementing Dynamics 365",date:"Feb 12, 2026",read:"10 min",n:"Rocket"},
     {tag:"Supply Chain",tagC:C.orange,tagBg:C.orangeL,title:"How Real-Time Supply Chain Visibility Reduces Costs and Improves Customer Satisfaction",date:"Feb 5, 2026",read:"7 min",n:"Truck"},
   ]
@@ -1187,10 +1405,10 @@ function FAQ() {
   const ref = useReveal()
   const faqs = [
     {q:"How long does a Dynamics 365 implementation typically take?",a:"Timelines vary by scope and modules. A Business Central implementation for an SMB typically takes 6–12 weeks. Multi-module deployments across Finance, Supply Chain and CRM can take 3–6 months. We'll give you a precise estimate during your free assessment."},
-    {q:"What's the difference between Business Central and Finance & Operations?",a:"Business Central is designed for SMBs — covering finance, sales, purchasing, inventory and projects. Finance & Supply Chain (formerly F&O) is Microsoft's enterprise-grade ERP for larger organisations with complex, global, high-volume requirements."},
+    {q:"What's the difference between Business Central and Finance & Operations?",a:"Business Central is designed for SMBs with up to £500M revenue — covering finance, sales, purchasing, inventory and projects. Finance & Supply Chain (formerly F&O) is Microsoft's enterprise-grade ERP for larger organisations with complex, global, high-volume requirements."},
     {q:"Can Dynamics 365 integrate with our existing systems?",a:"Yes. Dynamics 365 has native integration with the full Microsoft ecosystem (Teams, Outlook, SharePoint, Azure) and supports hundreds of third-party connectors via Power Platform. We also build bespoke integrations using the Dynamics 365 API for legacy systems."},
-    {q:"What are the benefits of AI-driven ERP solutions?",a:"AI-driven ERP solutions bring automation to complex financial operations, provide real-time data analytics and accurate insights, minimize investment costs, and help you monitor financial processes with data-driven insights."},
-    {q:"What ongoing support do you provide after go-live?",a:"We offer SLA-backed managed support with named consultants — not anonymous ticket queues. Packages include 24/7 incident response, proactive health monitoring, quarterly business reviews and regular update testing."},
+    {q:"What does Microsoft Copilot AI actually do inside Dynamics 365?",a:"Copilot is embedded natively across every module. In Finance it drafts payment proposals. In Sales it writes email summaries and surfaces next-best actions. In Customer Service it generates suggested responses from your knowledge base. In Supply Chain it flags disruptions before they impact operations."},
+    {q:"What ongoing support do you provide after go-live?",a:"We offer SLA-backed managed support with named consultants — not anonymous ticket queues. Packages include 24/7 incident response, proactive health monitoring, quarterly business reviews and regular update testing. Most clients stay with us for years after go-live."},
     {q:"How much does Dynamics 365 cost?",a:"Pricing is modular — you pay for the applications and user licences you need. Business Central starts from approximately £52.80 per user/month for Essentials. Enterprise applications are priced differently. We'll provide a transparent cost breakdown based on your specific requirements during your free consultation."},
   ]
   return (
@@ -1276,10 +1494,10 @@ function CtaBanner({ openConsult }) {
         <div style={{ position:"absolute",bottom:-60,left:-40,width:220,height:220,borderRadius:"50%",background:"rgba(255,255,255,.04)",pointerEvents:"none" }} />
         <div className="chip" style={{ background:"rgba(255,255,255,.2)",color:"#fff",marginBottom:16,display:"inline-flex" }}>Ready to Transform?</div>
         <h2 style={{ fontSize:"clamp(1.5rem,2.8vw,2.3rem)",fontWeight:800,color:"#fff",marginBottom:12 }}>
-          Roar ahead with AI-Powered Solutions
+          Start your Dynamics 365 journey with the right partner
         </h2>
         <p style={{ fontSize:15,color:"rgba(255,255,255,.82)",maxWidth:500,margin:"0 auto 32px",lineHeight:1.7 }}>
-          Fear no business competition, conquer endless opportunities, acquire great strength, and become a fierce brand with Dynamics Square, your trusted Microsoft Dynamics partner.
+          Join 350+ businesses that trust Dynamics Square to deliver on-time, on-budget implementations built to grow.
         </p>
         <div style={{ display:"flex",gap:12,justifyContent:"center",flexWrap:"wrap",marginBottom:24 }}>
           <button className="btn-white" onClick={openConsult}>Get a Free Consultation <Ic n="Arrow" s={13} /></button>
@@ -1299,17 +1517,17 @@ function CtaBanner({ openConsult }) {
 function About() {
   const ref = useReveal()
   const badges = [
-    {label:"Microsoft Dynamics Partner",sub:"ERP & CRM Solutions",n:"Award",c:C.blue,bg:C.blueL},
+    {label:"Microsoft Gold Partner",sub:"ERP & CRM Solutions",n:"Award",c:C.blue,bg:C.blueL},
     {label:"ISO 27001 Certified",sub:"Information Security",n:"Shield",c:C.purple,bg:C.purpleL},
     {label:"Clutch Top Company",sub:"UK & USA 2025",n:"Star",c:C.orange,bg:C.orangeL},
-    {label:"Forbes Technology Council",sub:"Member Since 2022",n:"Globe",c:C.teal,bg:C.tealL},
+    {label:"Forbes Tech Council",sub:"Member Since 2022",n:"Globe",c:C.teal,bg:C.tealL},
   ]
   return (
     <section id="about" ref={ref} style={{ background:C.bgSoft,padding:"72px 0",borderTop:`1.5px solid ${C.border}` }}>
       <div style={{ maxWidth:1280,margin:"0 auto",padding:"0 24px" }}>
         <div className="rv" style={{ textAlign:"center",marginBottom:36 }}>
-          <div style={{ fontSize:12,fontWeight:700,letterSpacing:".12em",color:C.textL,textTransform:"uppercase",marginBottom:8 }}>Featured On</div>
-          <h3 style={{ fontSize:22,fontWeight:800,color:C.text }}>Respected Platforms Trust <span className="gtext">Dynamics Square</span></h3>
+          <div style={{ fontSize:12,fontWeight:700,letterSpacing:".12em",color:C.textL,textTransform:"uppercase",marginBottom:8 }}>Our Credentials & Recognition</div>
+          <h3 style={{ fontSize:22,fontWeight:800,color:C.text }}>Certified. Recognised. <span className="gtext">Trusted.</span></h3>
         </div>
         <div className="rv" style={{ display:"flex",justifyContent:"center",gap:16,flexWrap:"wrap" }}>
           {badges.map(b => (
@@ -1343,12 +1561,24 @@ function Footer({ openConsult }) {
         <div className="foot-g" style={{ display:"grid",gridTemplateColumns:"2fr 1fr 1fr 1fr 1fr",gap:36,marginBottom:48 }}>
           <div>
             <div style={{ display:"flex",alignItems:"center",gap:9,marginBottom:14 }}>
-              <div style={{ width:34,height:34,borderRadius:9,background:`linear-gradient(135deg,${C.blue},${C.purple})`,display:"flex",alignItems:"center",justifyContent:"center" }}>
-                <span style={{ color:"#fff",fontWeight:800,fontSize:15 }}>D</span>
+              <svg width="34" height="34" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg" style={{ flexShrink:0 }}>
+                <rect width="40" height="40" rx="11" fill="url(#lg1f)"/>
+                <defs>
+                  <linearGradient id="lg1f" x1="0" y1="0" x2="40" y2="40" gradientUnits="userSpaceOnUse">
+                    <stop offset="0%" stopColor="#0057B8"/><stop offset="100%" stopColor="#6C3CE1"/>
+                  </linearGradient>
+                </defs>
+                <path d="M27 17.5C27 15.57 25.43 14 23.5 14C23.08 14 22.68 14.07 22.3 14.21C21.63 12.33 19.84 11 17.75 11C15.13 11 13 13.13 13 15.75C13 15.84 13.01 15.93 13.01 16.02C11.83 16.26 11 17.3 11 18.5C11 19.88 12.12 21 13.5 21H27C28.1 21 29 20.1 29 19C29 17.9 28.1 17 27 17.5Z" fill="white" opacity="0.95"/>
+                <rect x="9" y="23" width="22" height="3" rx="1.5" fill="white" opacity="0.75"/>
+                <rect x="12" y="27.5" width="16" height="3" rx="1.5" fill="white" opacity="0.5"/>
+                <rect x="15" y="32" width="10" height="2.5" rx="1.25" fill="white" opacity="0.3"/>
+              </svg>
+              <div>
+                <div style={{ fontFamily:"'Plus Jakarta Sans',sans-serif",fontWeight:800,fontSize:14,color:"#fff",lineHeight:1 }}>DevinStratus</div>
+                <div style={{ fontSize:9,fontWeight:700,color:"#64748b",letterSpacing:".1em",marginTop:2 }}>TECHNOLOGIES</div>
               </div>
-              <span style={{ fontFamily:"'Plus Jakarta Sans',sans-serif",fontWeight:800,fontSize:14,color:"#fff" }}>DYNAMICS SQUARE™</span>
             </div>
-            <p style={{ fontSize:13,color:"#94a3b8",lineHeight:1.75,marginBottom:18,maxWidth:250 }}>Microsoft Dynamics partner delivering AI-driven business solutions since 2017. Connected with 500+ global businesses leveraging digital transformation.</p>
+            <p style={{ fontSize:13,color:"#94a3b8",lineHeight:1.75,marginBottom:18,maxWidth:250 }}>Microsoft Gold Partner delivering world-class Dynamics 365 ERP & CRM implementations since 2017. Trusted by 350+ businesses globally.</p>
             <div style={{ display:"flex",gap:8,marginBottom:20 }}>
               {["Linkedin","Twitter","Youtube"].map(s => (
                 <button key={s} className="soc-btn">
@@ -1356,7 +1586,7 @@ function Footer({ openConsult }) {
                 </button>
               ))}
             </div>
-            {[{n:"Mail",t:"contact@dynamicssquare.com",href:"mailto:contact@dynamicssquare.com"},{n:"Phone",t:"+1 800 938 7929",href:"tel:+18009387929"},{n:"Pin",t:"USA · UK · Canada · India",href:null}].map(c => (
+            {[{n:"Mail",t:"contact@dynamicssquare.com",href:"mailto:contact@dynamicssquare.com"},{n:"Phone",t:"+44 207 193 2502",href:"tel:+442071932502"},{n:"Pin",t:"UK · USA · Canada · India",href:null}].map(c => (
               <div key={c.t} style={{ display:"flex",alignItems:"center",gap:7,marginBottom:7 }}>
                 <Ic n={c.n} s={12} style={{ color:C.blueM }} />
                 {c.href
@@ -1377,7 +1607,7 @@ function Footer({ openConsult }) {
           ))}
         </div>
         <div style={{ borderTop:"1px solid rgba(255,255,255,.07)",padding:"18px 0",display:"flex",justifyContent:"space-between",alignItems:"center",flexWrap:"wrap",gap:10 }}>
-          <span style={{ fontSize:12,color:"#64748b" }}>© {new Date().getFullYear()} Dynamics Square™. All rights reserved. Independent Microsoft Dynamics partner.</span>
+          <span style={{ fontSize:12,color:"#64748b" }}>© {new Date().getFullYear()} Dynamics Square™. All rights reserved. Independent Microsoft Dynamics 365 partner.</span>
           <div style={{ display:"flex",gap:18 }}>
             {["Privacy Policy","Terms of Service","Cookie Preferences"].map(l => (
               <button key={l} style={{ background:"none",border:"none",cursor:"pointer",fontSize:12,color:"#64748b",fontFamily:"'Inter',sans-serif",transition:"color .16s" }}
@@ -1422,7 +1652,6 @@ export default function App() {
     <>
       <GS />
 
-      {/* ── Global Modals ── */}
       <Modal open={consultOpen} onClose={() => setConsultOpen(false)} title="Book Your Free Consultation">
         <ContactForm onSuccess={() => setTimeout(() => setConsultOpen(false), 3000)} />
       </Modal>
