@@ -142,6 +142,7 @@ export default function App() {
         {page}
       </main>
 
+
       <Footer navigate={navigate} openConsult={openConsult} />
       <ScrollTop />
     </>
