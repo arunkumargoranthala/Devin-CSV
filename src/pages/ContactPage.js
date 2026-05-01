@@ -1,6 +1,5 @@
 import { useState, useEffect, useRef } from 'react'
 import { C, Ic } from '../components/ui'
-import emailjs from '@emailjs/browser'
 
 // ─── EmailJS Setup Guide (free 200 emails/month) ─────────────────────────────
 // 1. Sign up at https://www.emailjs.com (no credit card)
@@ -9,9 +8,9 @@ import emailjs from '@emailjs/browser'
 // 4. Account → API Keys → copy PUBLIC_KEY
 // 5. npm install @emailjs/browser
 // 6. Replace the 3 values below, uncomment the emailjs.send block, remove the simulate block.
-const EMAILJS_SERVICE_ID  = 'service_07t234l'
-const EMAILJS_TEMPLATE_ID = 'template_6wrrquf'
-const EMAILJS_PUBLIC_KEY  = '0Thqx9s95gzBPBAW-'
+const EMAILJS_SERVICE_ID  = 'YOUR_SERVICE_ID'
+const EMAILJS_TEMPLATE_ID = 'YOUR_TEMPLATE_ID'
+const EMAILJS_PUBLIC_KEY  = 'YOUR_PUBLIC_KEY'
 
 const OFFICES = [
   { flag:'🇬🇧', city:'London',     full:'London, UK',     phone:'+44 207 193 2502', addr:'30 St Mary Axe, EC3A 8EP',    tz:'GMT / BST',       color:C.blue   },
@@ -145,26 +144,13 @@ export default function ContactPage({ navigate, openConsult }) {
     setStatus('sending')
     try {
       // ── Uncomment when EmailJS keys added ──
-      
-      await emailjs.send(
-  EMAILJS_SERVICE_ID,
-  EMAILJS_TEMPLATE_ID,
-  {
-    name: form.name,
-    email: form.email,
-    company: form.company,
-    phone: form.phone,
-    interest: form.interest,
-    message: form.message,
-  },
-  EMAILJS_PUBLIC_KEY
-)
+      // import emailjs from '@emailjs/browser'
+      // await emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, { ...form }, EMAILJS_PUBLIC_KEY)
 
       // Demo simulate:
       await new Promise(r => setTimeout(r, 1500))
       setStatus('sent')
-    } catch(error) {
-      console.log(error)
+    } catch {
       setStatus('error')
       setErr('Something went wrong. Please email us directly at hello@devinstratus.com')
     }
@@ -621,7 +607,7 @@ export default function ContactPage({ navigate, openConsult }) {
       </section>
 
       {/* ── EmailJS setup developer guide ── */}
-      {/* <section style={{ padding:'48px 24px', background:'#fff', borderTop:`1px solid ${C.border}` }}>
+      <section style={{ padding:'48px 24px', background:'#fff', borderTop:`1px solid ${C.border}` }}>
         <div style={{ maxWidth:900, margin:'0 auto' }}>
           <div style={{ background:'#fffbeb', border:'1.5px solid #fcd34d', borderRadius:16, padding:'20px 24px', marginBottom:20 }}>
             <h3 style={{ fontSize:16, fontWeight:800, color:'#92400e', marginBottom:8 }}>📧 Developer: Activate Real Email (EmailJS — Free, 200 emails/month)</h3>
@@ -630,7 +616,7 @@ export default function ContactPage({ navigate, openConsult }) {
             </p>
           </div>
         </div>
-      </section> */}
+      </section>
     </div>
   )
 }

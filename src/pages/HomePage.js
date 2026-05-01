@@ -219,105 +219,45 @@ function Hero({ openConsult, navigate }) {
 
       @keyframes dsPulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:0.4;transform:scale(1.4)}}
       @keyframes dsScrollDot{0%,100%{transform:translateY(0)}50%{transform:translateY(8px)}}
-      @keyframes dsTypeCursorBlink{0%,49%{opacity:1}50%,100%{opacity:0}}
 
       /* Hero pill — dot follows active word: 3 separate dots, each fades in when its word activates */
-      /* Hero pill — 6 items, scanner sweeps through one at a time over 9s */
-/* Each item active for ~1.5s out of 9s = 16.66% window */
-/* Item 1: 0-16%, Item 2: 16-33%, Item 3: 33-50%, Item 4: 50-66%, Item 5: 66-83%, Item 6: 83-100% */
-
-/* Hero pill — 6 items, scanner sweeps through one at a time over 9s */
-/* Each item: ON during a 16% window, dot+word transition at the SAME keyframes for tight sync */
-
-@keyframes dsPillDot1 {
-  0%, 1%        { opacity: 0; transform: scale(0.6); box-shadow: 0 0 0 rgba(0, 63, 179, 0); }
-  3%            { opacity: 1; transform: scale(1.1); box-shadow: 0 0 12px rgba(0, 63, 179, 0.85); }
-  14%           { opacity: 1; transform: scale(1.1); box-shadow: 0 0 12px rgba(0, 63, 179, 0.85); }
-  16%, 100%     { opacity: 0; transform: scale(0.6); box-shadow: 0 0 0 rgba(0, 63, 179, 0); }
-}
-@keyframes dsPillDot2 {
-  0%, 17%       { opacity: 0; transform: scale(0.6); box-shadow: 0 0 0 rgba(0, 63, 179, 0); }
-  19%           { opacity: 1; transform: scale(1.1); box-shadow: 0 0 12px rgba(0, 63, 179, 0.85); }
-  31%           { opacity: 1; transform: scale(1.1); box-shadow: 0 0 12px rgba(0, 63, 179, 0.85); }
-  33%, 100%     { opacity: 0; transform: scale(0.6); box-shadow: 0 0 0 rgba(0, 63, 179, 0); }
-}
-@keyframes dsPillDot3 {
-  0%, 34%       { opacity: 0; transform: scale(0.6); box-shadow: 0 0 0 rgba(0, 63, 179, 0); }
-  36%           { opacity: 1; transform: scale(1.1); box-shadow: 0 0 12px rgba(0, 63, 179, 0.85); }
-  48%           { opacity: 1; transform: scale(1.1); box-shadow: 0 0 12px rgba(0, 63, 179, 0.85); }
-  50%, 100%     { opacity: 0; transform: scale(0.6); box-shadow: 0 0 0 rgba(0, 63, 179, 0); }
-}
-@keyframes dsPillDot4 {
-  0%, 51%       { opacity: 0; transform: scale(0.6); box-shadow: 0 0 0 rgba(0, 63, 179, 0); }
-  53%           { opacity: 1; transform: scale(1.1); box-shadow: 0 0 12px rgba(0, 63, 179, 0.85); }
-  64%           { opacity: 1; transform: scale(1.1); box-shadow: 0 0 12px rgba(0, 63, 179, 0.85); }
-  66%, 100%     { opacity: 0; transform: scale(0.6); box-shadow: 0 0 0 rgba(0, 63, 179, 0); }
-}
-@keyframes dsPillDot5 {
-  0%, 67%       { opacity: 0; transform: scale(0.6); box-shadow: 0 0 0 rgba(0, 63, 179, 0); }
-  69%           { opacity: 1; transform: scale(1.1); box-shadow: 0 0 12px rgba(0, 63, 179, 0.85); }
-  81%           { opacity: 1; transform: scale(1.1); box-shadow: 0 0 12px rgba(0, 63, 179, 0.85); }
-  83%, 100%     { opacity: 0; transform: scale(0.6); box-shadow: 0 0 0 rgba(0, 63, 179, 0); }
-}
-@keyframes dsPillDot6 {
-  0%, 84%       { opacity: 0; transform: scale(0.6); box-shadow: 0 0 0 rgba(0, 63, 179, 0); }
-  86%           { opacity: 1; transform: scale(1.1); box-shadow: 0 0 12px rgba(0, 63, 179, 0.85); }
-  98%           { opacity: 1; transform: scale(1.1); box-shadow: 0 0 12px rgba(0, 63, 179, 0.85); }
-  100%          { opacity: 0; transform: scale(0.6); box-shadow: 0 0 0 rgba(0, 63, 179, 0); }
-}
-
-/* Words use the SAME exact keyframe percentages as their matching dots */
-@keyframes dsPillWord1 {
-  0%, 1%        { color: rgba(10, 14, 30, 0.55); font-weight: 700; }
-  3%            { color: #003580; font-weight: 900; }
-  14%           { color: #003580; font-weight: 900; }
-  16%, 100%     { color: rgba(10, 14, 30, 0.55); font-weight: 700; }
-}
-@keyframes dsPillWord2 {
-  0%, 17%       { color: rgba(10, 14, 30, 0.55); font-weight: 700; }
-  19%           { color: #003580; font-weight: 900; }
-  31%           { color: #003580; font-weight: 900; }
-  33%, 100%     { color: rgba(10, 14, 30, 0.55); font-weight: 700; }
-}
-@keyframes dsPillWord3 {
-  0%, 34%       { color: rgba(10, 14, 30, 0.55); font-weight: 700; }
-  36%           { color: #003580; font-weight: 900; }
-  48%           { color: #003580; font-weight: 900; }
-  50%, 100%     { color: rgba(10, 14, 30, 0.55); font-weight: 700; }
-}
-@keyframes dsPillWord4 {
-  0%, 51%       { color: rgba(10, 14, 30, 0.55); font-weight: 700; }
-  53%           { color: #003580; font-weight: 900; }
-  64%           { color: #003580; font-weight: 900; }
-  66%, 100%     { color: rgba(10, 14, 30, 0.55); font-weight: 700; }
-}
-@keyframes dsPillWord5 {
-  0%, 67%       { color: rgba(10, 14, 30, 0.55); font-weight: 700; }
-  69%           { color: #003580; font-weight: 900; }
-  81%           { color: #003580; font-weight: 900; }
-  83%, 100%     { color: rgba(10, 14, 30, 0.55); font-weight: 700; }
-}
-@keyframes dsPillWord6 {
-  0%, 84%       { color: rgba(10, 14, 30, 0.55); font-weight: 700; }
-  86%           { color: #003580; font-weight: 900; }
-  98%           { color: #003580; font-weight: 900; }
-  100%          { color: rgba(10, 14, 30, 0.55); font-weight: 700; }
-}
-
-/* IMPORTANT: linear easing on both dots and words so they share the same timing curve */
-.ds-pill-dot1 { animation: dsPillDot1 9s linear infinite; display:inline-block; vertical-align:middle; }
-.ds-pill-dot2 { animation: dsPillDot2 9s linear infinite; display:inline-block; vertical-align:middle; }
-.ds-pill-dot3 { animation: dsPillDot3 9s linear infinite; display:inline-block; vertical-align:middle; }
-.ds-pill-dot4 { animation: dsPillDot4 9s linear infinite; display:inline-block; vertical-align:middle; }
-.ds-pill-dot5 { animation: dsPillDot5 9s linear infinite; display:inline-block; vertical-align:middle; }
-.ds-pill-dot6 { animation: dsPillDot6 9s linear infinite; display:inline-block; vertical-align:middle; }
-.ds-pill-w1   { animation: dsPillWord1 9s linear infinite; display:inline-block; }
-.ds-pill-w2   { animation: dsPillWord2 9s linear infinite; display:inline-block; }
-.ds-pill-w3   { animation: dsPillWord3 9s linear infinite; display:inline-block; }
-.ds-pill-w4   { animation: dsPillWord4 9s linear infinite; display:inline-block; }
-.ds-pill-w5   { animation: dsPillWord5 9s linear infinite; display:inline-block; }
-.ds-pill-w6   { animation: dsPillWord6 9s linear infinite; display:inline-block; }
-.ds-pill-sep  { color: rgba(10, 14, 30, 0.30); margin: 0 6px; font-weight: 700; }
+      @keyframes dsPillDot1 { /* visible 0%–28%, hidden 33%–100% */
+        0%, 6%        { opacity: 0; transform: scale(0.6); }
+        12%, 28%      { opacity: 1; transform: scale(1.1); box-shadow: 0 0 12px rgba(0, 63, 179, 0.85); }
+        34%, 100%     { opacity: 0; transform: scale(0.6); box-shadow: 0 0 4px rgba(0, 63, 179, 0); }
+      }
+      @keyframes dsPillDot2 { /* visible 33%–61% */
+        0%, 32%       { opacity: 0; transform: scale(0.6); }
+        38%, 61%      { opacity: 1; transform: scale(1.1); box-shadow: 0 0 12px rgba(0, 63, 179, 0.85); }
+        67%, 100%     { opacity: 0; transform: scale(0.6); box-shadow: 0 0 4px rgba(0, 63, 179, 0); }
+      }
+      @keyframes dsPillDot3 { /* visible 66%–94% */
+        0%, 65%       { opacity: 0; transform: scale(0.6); }
+        71%, 94%      { opacity: 1; transform: scale(1.1); box-shadow: 0 0 12px rgba(0, 63, 179, 0.85); }
+        100%          { opacity: 0; transform: scale(0.6); box-shadow: 0 0 4px rgba(0, 63, 179, 0); }
+      }
+      /* Each word lights up for ~1/3 of the cycle: ENTERPRISE AI → DATA → AUTOMATION */
+      @keyframes dsPillWord1 {
+        0%, 28%, 100%  { color: #003580; font-weight: 900; }
+        38%, 95%       { color: rgba(10, 14, 30, 0.55); font-weight: 700; }
+      }
+      @keyframes dsPillWord2 {
+        0%, 28%        { color: rgba(10, 14, 30, 0.55); font-weight: 700; }
+        38%, 61%       { color: #003580; font-weight: 900; }
+        72%, 100%      { color: rgba(10, 14, 30, 0.55); font-weight: 700; }
+      }
+      @keyframes dsPillWord3 {
+        0%, 61%        { color: rgba(10, 14, 30, 0.55); font-weight: 700; }
+        72%, 94%       { color: #003580; font-weight: 900; }
+        100%           { color: rgba(10, 14, 30, 0.55); font-weight: 700; }
+      }
+      .ds-pill-dot1 { animation: dsPillDot1 4.5s cubic-bezier(0.65,0,0.35,1) infinite; display:inline-block; vertical-align:middle; }
+      .ds-pill-dot2 { animation: dsPillDot2 4.5s cubic-bezier(0.65,0,0.35,1) infinite; display:inline-block; vertical-align:middle; }
+      .ds-pill-dot3 { animation: dsPillDot3 4.5s cubic-bezier(0.65,0,0.35,1) infinite; display:inline-block; vertical-align:middle; }
+      .ds-pill-w1   { animation: dsPillWord1 4.5s cubic-bezier(0.65,0,0.35,1) infinite; display:inline-block; transition: all 0.25s; }
+      .ds-pill-w2   { animation: dsPillWord2 4.5s cubic-bezier(0.65,0,0.35,1) infinite; display:inline-block; transition: all 0.25s; }
+      .ds-pill-w3   { animation: dsPillWord3 4.5s cubic-bezier(0.65,0,0.35,1) infinite; display:inline-block; transition: all 0.25s; }
+      .ds-pill-sep  { color: rgba(10, 14, 30, 0.30); margin: 0 6px; font-weight: 700; }
 
       /* ── Smaller laptops: tighten cluster slightly ── */
       @media(max-width:1280px){
@@ -337,10 +277,9 @@ function Hero({ openConsult, navigate }) {
         }
         /* Children: 1=pill, 2=h1, 3=p (description), 4=buttons */
         .ds-hero-content > :nth-child(1){ margin-bottom:18px !important; }   /* pill */
-        .ds-hero-content > :nth-child(2){ margin:0 0 4px 0 !important; font-size:2rem !important; line-height:1.15 !important; }      /* h1 */
+        .ds-hero-content > :nth-child(2){ margin:0 0 4px 0 !important; }      /* h1 */
         .ds-hero-content > :nth-child(3){ margin-top:14px !important; }       /* description */
         .ds-hero-content > :nth-child(4){ margin-top:22px !important; }       /* buttons */
-        .ds-hero-typewriter{ min-height:3.4em !important; }
         .ds-chev-area{
           position:relative !important;
           right:auto !important; top:auto !important; bottom:auto !important;
@@ -360,10 +299,8 @@ function Hero({ openConsult, navigate }) {
       @media(max-width:480px){
         .ds-hero-content{ padding:76px 16px 10px 16px !important; }
         .ds-hero-content > :nth-child(1){ margin-bottom:14px !important; font-size:10px !important; }
-        .ds-hero-content > :nth-child(2){ font-size:1.7rem !important; line-height:1.18 !important; letter-spacing:-0.025em !important; }   /* h1 */
         .ds-hero-content > :nth-child(3){ margin-top:12px !important; font-size:14.5px !important; }
         .ds-hero-content > :nth-child(4){ margin-top:18px !important; gap:10px !important; }
-        .ds-hero-typewriter{ min-height:4em !important; }
         .ds-chev-area{ max-width:300px !important; height:120px !important; margin:14px auto 24px !important; }
         .ds-chev-area > div:nth-child(-n+3){ width:80px !important; height:58px !important; }
         .ds-chev-area > div:nth-child(7){ width:98px !important; height:72px !important; }
@@ -484,64 +421,39 @@ function Hero({ openConsult, navigate }) {
 
       {/* Hero content */}
       <div className="ds-hero-content" style={{position:'relative',zIndex:10,height:'100%',display:'flex',flexDirection:'column',justifyContent:'center',padding:'0 56px',maxWidth:760}}>
-        <div style={{fontFamily:"'JetBrains Mono',monospace",fontSize:12,letterSpacing:'0.26em',textTransform:'uppercase',marginBottom:28,display:'inline-grid',gridTemplateColumns:'auto auto auto',rowGap:10,columnGap:28,padding:'14px 22px',background:'rgba(0,63,179,0.06)',border:'1px solid rgba(0,63,179,0.22)',borderRadius:22,backdropFilter:'blur(18px)',width:'fit-content',boxShadow:'0 4px 16px rgba(0,53,128,0.06), inset 0 1px 0 rgba(255,255,255,0.6)',fontWeight:700,color:'rgba(10,14,30,0.55)'}}>
-
-  {/* Row 1 — items 1, 2, 3 */}
-  <span style={{display:'inline-flex',alignItems:'center',gap:10}}>
-    <span className="ds-pill-dot1" style={{width:8,height:8,borderRadius:'50%',background:'#003FB3'}} />
-    <span className="ds-pill-w1">Microsoft Foundry</span>
-  </span>
-  <span style={{display:'inline-flex',alignItems:'center',gap:10}}>
-    <span className="ds-pill-dot2" style={{width:8,height:8,borderRadius:'50%',background:'#003FB3'}} />
-    <span className="ds-pill-w2">Copilot Studio</span>
-  </span>
-  <span style={{display:'inline-flex',alignItems:'center',gap:10}}>
-    <span className="ds-pill-dot3" style={{width:8,height:8,borderRadius:'50%',background:'#003FB3'}} />
-    <span className="ds-pill-w3">Power Platform</span>
-  </span>
-
-  {/* Row 2 — items 4, 5, 6 */}
-  <span style={{display:'inline-flex',alignItems:'center',gap:10}}>
-    <span className="ds-pill-dot4" style={{width:8,height:8,borderRadius:'50%',background:'#003FB3'}} />
-    <span className="ds-pill-w4">Dynamics 365</span>
-  </span>
-  <span style={{display:'inline-flex',alignItems:'center',gap:10}}>
-    <span className="ds-pill-dot5" style={{width:8,height:8,borderRadius:'50%',background:'#003FB3'}} />
-    <span className="ds-pill-w5">Azure AI</span>
-  </span>
-  <span style={{display:'inline-flex',alignItems:'center',gap:10}}>
-    <span className="ds-pill-dot6" style={{width:8,height:8,borderRadius:'50%',background:'#003FB3'}} />
-    <span className="ds-pill-w6">Fabric</span>
-  </span>
-
-</div>
-        
-        <h1 style={{fontSize:'clamp(2.2rem,4.5vw,3.6rem)',fontWeight:900,color:'rgb(10,10,20)',lineHeight:1.08,fontFamily:"'Plus Jakarta Sans',sans-serif",letterSpacing:'-0.03em',margin:'0 0 4px 0',maxWidth:760}}>
-          You've invested in Microsoft.<br/>
-          <span className="ds-hero-typewriter" style={{background:'linear-gradient(135deg,#0066FF 0%,#003FB3 100%)',WebkitBackgroundClip:'text',backgroundClip:'text',WebkitTextFillColor:'transparent',display:'inline-block',minHeight:'2.4em',verticalAlign:'top',width:'100%',paddingBottom:'0.18em',overflow:'visible'}}>
-            <TypewriterCycle phrases={[
-              'Are you getting everything it can do?',
-              'What if 40% of your manual work simply disappeared?',
-              'The enterprises winning tomorrow automated yesterday.',
-              'We find what slows your enterprise down. Then we eliminate it.',
-            ]} />
+        <div style={{fontFamily:"'JetBrains Mono',monospace",fontSize:12,letterSpacing:'0.26em',textTransform:'uppercase',marginBottom:28,display:'inline-flex',alignItems:'center',gap:0,padding:'10px 18px',background:'rgba(0,63,179,0.06)',border:'1px solid rgba(0,63,179,0.22)',borderRadius:100,backdropFilter:'blur(18px)',width:'fit-content',boxShadow:'0 4px 16px rgba(0,53,128,0.06), inset 0 1px 0 rgba(255,255,255,0.6)'}}>
+          <span style={{fontWeight:700, color:'rgba(10,14,30,0.55)', display:'inline-flex', alignItems:'center'}}>
+            <span className="ds-pill-dot1" style={{width:8,height:8,borderRadius:'50%',background:'#003FB3',marginRight:10}} />
+            <span className="ds-pill-w1">Enterprise AI</span>
+            <span className="ds-pill-sep">·</span>
+            <span className="ds-pill-dot2" style={{width:8,height:8,borderRadius:'50%',background:'#003FB3',marginRight:10}} />
+            <span className="ds-pill-w2">Data</span>
+            <span className="ds-pill-sep">·</span>
+            <span className="ds-pill-dot3" style={{width:8,height:8,borderRadius:'50%',background:'#003FB3',marginRight:10}} />
+            <span className="ds-pill-w3">Automation</span>
           </span>
+        </div>
+        <h1 style={{fontSize:'clamp(2.2rem,4.5vw,3.6rem)',fontWeight:900,color:'rgb(10,10,20)',lineHeight:1.08,fontFamily:"'Plus Jakarta Sans',sans-serif",letterSpacing:'-0.03em',margin:'0 0 4px 0',maxWidth:760}}>
+          Engineered intelligence<br/>
+          for enterprises that{' '}
+          <span style={{background:'linear-gradient(135deg,#0066FF 0%,#003FB3 100%)',WebkitBackgroundClip:'text',backgroundClip:'text',WebkitTextFillColor:'transparent'}}>already operate at scale.</span>
         </h1>
         <p style={{fontSize:16,lineHeight:1.6,fontWeight:400,color:'rgba(10,10,20,0.6)',maxWidth:540,marginTop:28,letterSpacing:'-0.005em'}}>
-            Most enterprises use less than 30% of their Microsoft stack's true capability. We map the gap, identify the highest-value opportunities, and engineer AI and automation solutions that turn your existing investment into measurable business transformation.        </p>
+          DEVINSTRATUS designs, deploys and operates Microsoft-native AI, data and automation systems for organisations where reliability, governance and outcome are non-negotiable.
+        </p>
         <div style={{display:'flex',gap:14,marginTop:40,alignItems:'center',flexWrap:'wrap'}}>
           <button onClick={openConsult}
             onMouseEnter={e=>{e.currentTarget.style.background='#0066FF';e.currentTarget.style.transform='translateY(-2px)';e.currentTarget.style.boxShadow='0 12px 40px rgba(0,102,255,0.3)'}}
             onMouseLeave={e=>{e.currentTarget.style.background='#0a0a14';e.currentTarget.style.transform='none';e.currentTarget.style.boxShadow='none'}}
             style={{fontFamily:"'Plus Jakarta Sans',sans-serif",fontSize:14,fontWeight:600,letterSpacing:'-0.005em',padding:'14px 26px',borderRadius:100,cursor:'pointer',background:'#0a0a14',color:'#fff',border:'none',display:'inline-flex',alignItems:'center',gap:10,transition:'all 0.3s cubic-bezier(0.2,0.8,0.2,1)'}}>
-            Discover My Microsoft ROI
+            Schedule a working session
             <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M3 7H11M11 7L7.5 3.5M11 7L7.5 10.5" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"/></svg>
           </button>
           <button onClick={() => navigate('/solutions')}
             onMouseEnter={e=>{e.currentTarget.style.borderColor='rgba(10,10,20,0.4)';e.currentTarget.style.background='rgba(10,10,20,0.03)'}}
             onMouseLeave={e=>{e.currentTarget.style.borderColor='rgba(10,10,20,0.18)';e.currentTarget.style.background='transparent'}}
             style={{fontFamily:"'Plus Jakarta Sans',sans-serif",fontSize:14,fontWeight:600,letterSpacing:'-0.005em',padding:'14px 26px',borderRadius:100,cursor:'pointer',background:'transparent',color:'rgba(10,10,20,0.85)',border:'1px solid rgba(10,10,20,0.18)',transition:'all 0.3s'}}>
-            Schedule a working session
+            View capability map
           </button>
         </div>
       </div>
@@ -554,7 +466,8 @@ function Hero({ openConsult, navigate }) {
         ))}
         {/* Step labels — positioned below chevrons, animated to highlight when active */}
         {STEPS.map((label,i) => (
-<span key={`l-${i}`} className={`ds-chev-label ds-chev-label-${i+1}`} style={{position:'absolute',top:'calc(52% + 90px)',left:`${14 + i*36}%`,transform:'translateX(-50%)',fontFamily:"'JetBrains Mono',monospace",fontSize:17, fontWeight: 'bold',letterSpacing:'0.3em',textTransform:'uppercase',whiteSpace:'nowrap',color:'#003580'}}>{label}</span>        ))}
+          <span key={`l-${i}`} className={`ds-chev-label ds-chev-label-${i+1}`} style={{position:'absolute',top:'calc(52% + 90px)',left:`${14 + i*36}%`,transform:'translateX(-50%)',fontFamily:"'JetBrains Mono',monospace",fontSize:10,letterSpacing:'0.3em',textTransform:'uppercase',whiteSpace:'nowrap'}}>{label}</span>
+        ))}
         <div style={{...CHEV,position:'absolute',top:'52%',width:220,height:161,transform:'translate(-50%,-50%)',animation:'dsChevAdvance 4.5s cubic-bezier(0.65,0,0.35,1) infinite'}} />
         <div style={{...CHEV,position:'absolute',top:'52%',width:180,height:132,transform:'translate(-50%,-50%)',opacity:0,animation:'dsChevTrail 4.5s cubic-bezier(0.65,0,0.35,1) infinite'}} />
       </div>
@@ -913,48 +826,6 @@ function FinalCTA({ openConsult, navigate }) {
         </div>
       </div>
     </section>
-  )
-}
-
-/* ── TYPEWRITER CYCLE — types each phrase letter-by-letter, holds, deletes, moves to next ── */
-function TypewriterCycle({ phrases, typingSpeed = 80, deletingSpeed = 28, pauseAfterTyping = 1200, pauseBetweenPhrases = 350 }) {
-  const [phraseIndex, setPhraseIndex] = useState(0)
-  const [text, setText] = useState('')
-  const [phase, setPhase] = useState('typing') // 'typing' | 'pausing' | 'deleting' | 'between'
-
-  useEffect(() => {
-    const current = phrases[phraseIndex]
-    let timer
-
-    if (phase === 'typing') {
-      if (text.length < current.length) {
-        timer = setTimeout(() => setText(current.slice(0, text.length + 1)), typingSpeed)
-      } else {
-        timer = setTimeout(() => setPhase('pausing'), 0)
-      }
-    } else if (phase === 'pausing') {
-      timer = setTimeout(() => setPhase('deleting'), pauseAfterTyping)
-    } else if (phase === 'deleting') {
-      if (text.length > 0) {
-        timer = setTimeout(() => setText(current.slice(0, text.length - 1)), deletingSpeed)
-      } else {
-        timer = setTimeout(() => setPhase('between'), 0)
-      }
-    } else if (phase === 'between') {
-      timer = setTimeout(() => {
-        setPhraseIndex((phraseIndex + 1) % phrases.length)
-        setPhase('typing')
-      }, pauseBetweenPhrases)
-    }
-
-    return () => clearTimeout(timer)
-  }, [phase, text, phraseIndex, phrases, typingSpeed, deletingSpeed, pauseAfterTyping, pauseBetweenPhrases])
-
-  return (
-    <>
-      {text}
-      <span className="dsTypeCursor" style={{ display:'inline-block', width:'0.08em', height:'0.95em', background:'currentColor', marginLeft:4, verticalAlign:'-0.12em', animation:'dsTypeCursorBlink 0.9s step-end infinite' }} />
-    </>
   )
 }
 
