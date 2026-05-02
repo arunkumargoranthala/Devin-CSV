@@ -324,22 +324,30 @@ function Hero({ openConsult, navigate }) {
         .ds-chev-area{ width:440px !important; right:48px !important; }
       }
 
-      /* ── Tablet & mobile: stack chevrons below hero text ── */
+      /* ── Tablet & mobile: chevron animation moves to top, pill moves to bottom (after buttons) ── */
       @media(max-width:820px){
-        .ds-hero-section{ height:auto !important; min-height:auto !important; }
+        .ds-hero-section{
+          height:auto !important;
+          min-height:auto !important;
+          display:flex !important;
+          flex-direction:column !important;
+        }
         .ds-scroll-indicator{ display:none !important; }
+        /* SWAP: chevron first, hero-content second */
+        .ds-chev-area{ order:1 !important; }
         .ds-hero-content{
-          padding:84px 18px 12px 18px !important;
+          order:2 !important;
+          padding:0 18px 32px 18px !important;
           height:auto !important;
           justify-content:flex-start !important;
           max-width:100% !important;
           gap:0 !important;
         }
-        /* Children: 1=pill, 2=h1, 3=p (description), 4=buttons */
-        .ds-hero-content > :nth-child(1){ margin-bottom:18px !important; }   /* pill */
-        .ds-hero-content > :nth-child(2){ margin:0 0 4px 0 !important; font-size:2rem !important; line-height:1.15 !important; }      /* h1 */
-        .ds-hero-content > :nth-child(3){ margin-top:14px !important; }       /* description */
-        .ds-hero-content > :nth-child(4){ margin-top:22px !important; }       /* buttons */
+        /* Children with flex order: 1=pill (now LAST), 2=h1, 3=p (description), 4=buttons */
+        .ds-hero-content > :nth-child(1){ order:99 !important; margin:22px 0 0 0 !important; }   /* pill — moved to LAST */
+        .ds-hero-content > :nth-child(2){ order:1 !important; margin:0 0 4px 0 !important; font-size:2rem !important; line-height:1.15 !important; }      /* h1 */
+        .ds-hero-content > :nth-child(3){ order:2 !important; margin-top:14px !important; }       /* description */
+        .ds-hero-content > :nth-child(4){ order:3 !important; margin-top:22px !important; }       /* buttons */
         .ds-hero-typewriter{ min-height:3.4em !important; }
         .ds-chev-area{
           position:relative !important;
@@ -347,7 +355,7 @@ function Hero({ openConsult, navigate }) {
           width:100% !important;
           max-width:340px !important;
           height:130px !important;
-          margin:18px auto 28px !important;
+          margin:84px auto 18px auto !important;
         }
         /* New flat structure: ghosts = direct div children 1-3, labels = spans, active = div 7, trail = div 8 */
         .ds-chev-area > div:nth-child(-n+3){ width:96px !important; height:70px !important; }
@@ -358,13 +366,13 @@ function Hero({ openConsult, navigate }) {
 
       /* ── Phone ── */
       @media(max-width:480px){
-        .ds-hero-content{ padding:76px 16px 10px 16px !important; }
-        .ds-hero-content > :nth-child(1){ margin-bottom:14px !important; font-size:10px !important; }
+        .ds-hero-content{ padding:0 16px 24px 16px !important; }
+        .ds-hero-content > :nth-child(1){ margin:14px 0 0 0 !important; font-size:10px !important; }   /* pill — at bottom on phone */
         .ds-hero-content > :nth-child(2){ font-size:1.7rem !important; line-height:1.18 !important; letter-spacing:-0.025em !important; }   /* h1 */
         .ds-hero-content > :nth-child(3){ margin-top:12px !important; font-size:14.5px !important; }
         .ds-hero-content > :nth-child(4){ margin-top:18px !important; gap:10px !important; }
         .ds-hero-typewriter{ min-height:4em !important; }
-        .ds-chev-area{ max-width:300px !important; height:120px !important; margin:14px auto 24px !important; }
+        .ds-chev-area{ max-width:300px !important; height:120px !important; margin:76px auto 14px auto !important; }
         .ds-chev-area > div:nth-child(-n+3){ width:80px !important; height:58px !important; }
         .ds-chev-area > div:nth-child(7){ width:98px !important; height:72px !important; }
         .ds-chev-area > div:nth-child(8){ width:80px !important; height:58px !important; }
@@ -500,10 +508,10 @@ function Hero({ openConsult, navigate }) {
     <span className="ds-pill-w3">Power Platform</span>
   </span>
 
-  {/* Row 2 — items 4, 5, 6 */}
+  {/* Row 2 — items 4, 5, 6 (Fabric → Azure AI → Dynamics 365) */}
   <span style={{display:'inline-flex',alignItems:'center',gap:10}}>
     <span className="ds-pill-dot4" style={{width:8,height:8,borderRadius:'50%',background:'#003FB3'}} />
-    <span className="ds-pill-w4">Dynamics 365</span>
+    <span className="ds-pill-w4">Fabric</span>
   </span>
   <span style={{display:'inline-flex',alignItems:'center',gap:10}}>
     <span className="ds-pill-dot5" style={{width:8,height:8,borderRadius:'50%',background:'#003FB3'}} />
@@ -511,7 +519,7 @@ function Hero({ openConsult, navigate }) {
   </span>
   <span style={{display:'inline-flex',alignItems:'center',gap:10}}>
     <span className="ds-pill-dot6" style={{width:8,height:8,borderRadius:'50%',background:'#003FB3'}} />
-    <span className="ds-pill-w6">Fabric</span>
+    <span className="ds-pill-w6">Dynamics 365</span>
   </span>
 
 </div>
@@ -874,48 +882,6 @@ function Testimonials() {
   )
 }
 
-/* ══════════════════════════════════════════════════════
-   SECTION 7 — FINAL CTA
-   ══════════════════════════════════════════════════════ */
-function FinalCTA({ openConsult, navigate }) {
-  const [sRef, on] = useOnScreen(0.2)
-  return (
-    <section ref={sRef} className="ds-section-cta" style={{ padding: '40px 32px 100px', background: 'linear-gradient(180deg,#fff 0%,#eff5ff 100%)' }}>
-      <div style={{ maxWidth: 1300, margin: '0 auto' }}>
-        <div style={{ borderRadius: 32, background: 'linear-gradient(135deg,#003580 0%,#0050b3 50%,#0066FF 100%)', padding: '72px 56px', position: 'relative', overflow: 'hidden', opacity: on ? 1 : 0, transform: on ? 'none' : 'translateY(24px)', transition: 'all .7s cubic-bezier(.22,1,.36,1)' }}>
-          {/* Orbs */}
-          <div style={{ position: 'absolute', top: -60, left: -60, width: 320, height: 320, borderRadius: '50%', background: 'radial-gradient(circle,rgba(125,196,255,.45),transparent 70%)', filter: 'blur(40px)', pointerEvents: 'none' }} />
-          <div style={{ position: 'absolute', bottom: -40, right: -40, width: 280, height: 280, borderRadius: '50%', background: 'radial-gradient(circle,rgba(255,255,255,.18),transparent 70%)', filter: 'blur(40px)', pointerEvents: 'none' }} />
-          <div style={{ position: 'absolute', inset: 0, backgroundImage: 'radial-gradient(circle,rgba(255,255,255,.05) 1px,transparent 1px)', backgroundSize: '28px 28px', pointerEvents: 'none' }} />
-          <div className="axis-footer-cta" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 40, position: 'relative', zIndex: 1 }}>
-            <div style={{ maxWidth: 540 }}>
-              <div style={{ fontSize: 11, fontWeight: 800, letterSpacing: '.18em', color: '#bfdbfe', marginBottom: 16, textTransform: 'uppercase' }}>READY TO START?</div>
-              <h2 style={{ fontSize: 'clamp(1.8rem,3.5vw,2.8rem)', fontWeight: 900, color: '#ffffff', fontFamily: "'Plus Jakarta Sans',sans-serif", lineHeight: 1.2, marginBottom: 14 }}>
-                Transform your business with Dynamics 365
-              </h2>
-              <p style={{ fontSize: 16, color: 'rgba(255,255,255,.78)', lineHeight: 1.75 }}>
-                Free 60-minute consultation. Tailored ROI model. No obligation. Our team typically responds within 2 hours.
-              </p>
-            </div>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: 12, flexShrink: 0 }}>
-              <button onClick={openConsult} style={{ padding: '16px 36px', borderRadius: 50, background: '#fff', border: 'none', color: '#003580', fontSize: 15, fontWeight: 700, cursor: 'pointer', fontFamily: "'Plus Jakarta Sans',sans-serif", boxShadow: '0 8px 28px rgba(0,53,128,.35)', transition: 'all .24s', whiteSpace: 'nowrap' }}
-                onMouseEnter={e => { e.currentTarget.style.transform = 'translateY(-3px)'; e.currentTarget.style.boxShadow = '0 16px 40px rgba(0,53,128,.5)' }}
-                onMouseLeave={e => { e.currentTarget.style.transform = 'none'; e.currentTarget.style.boxShadow = '0 8px 28px rgba(0,53,128,.35)' }}>
-                Book Free Consultation →
-              </button>
-              <button onClick={() => navigate('/contact')} style={{ padding: '16px 36px', borderRadius: 50, background: 'rgba(255,255,255,.10)', border: '1.5px solid rgba(255,255,255,.35)', color: '#fff', fontSize: 15, fontWeight: 700, cursor: 'pointer', fontFamily: "'Plus Jakarta Sans',sans-serif", backdropFilter: 'blur(10px)', transition: 'all .22s', whiteSpace: 'nowrap' }}
-                onMouseEnter={e => e.currentTarget.style.background = 'rgba(255,255,255,.18)'}
-                onMouseLeave={e => e.currentTarget.style.background = 'rgba(255,255,255,.10)'}>
-                Explore the Platform
-              </button>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-  )
-}
-
 /* ── TYPEWRITER CYCLE — types each phrase letter-by-letter, holds, deletes, moves to next ── */
 function TypewriterCycle({ phrases, typingSpeed = 80, deletingSpeed = 28, pauseAfterTyping = 1200, pauseBetweenPhrases = 350 }) {
   const [phraseIndex, setPhraseIndex] = useState(0)
@@ -968,7 +934,6 @@ export default function HomePage({ navigate, openConsult, openDemo }) {
       <Solutions navigate={navigate} />
       <HowWeDeliver navigate={navigate} />
       <Testimonials />
-      <FinalCTA openConsult={openConsult} navigate={navigate} />
     </div>
   )
 }
