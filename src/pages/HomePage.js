@@ -198,21 +198,21 @@ function Hero({ openConsult, navigate }) {
 
       /* Label highlight — each label lights up only while the active chevron rests on its step */
       @keyframes dsLabel1 {
-        0%, 5%   { color: rgba(10,10,20,0.30); font-weight: 400; letter-spacing: 0.30em; }
-        7%, 23%  { color: #0066FF; font-weight: 600; letter-spacing: 0.30em; text-shadow: 0 0 12px rgba(0,102,255,0.35); }
-        25%, 100%{ color: rgba(10,10,20,0.30); font-weight: 400; letter-spacing: 0.30em; text-shadow: none; }
+        0%, 5%   { color: rgba(0,45,111,0.35); font-weight: 400; letter-spacing: 0.30em; text-shadow:none; }
+        7%, 23%  { color: #002d6f; font-weight: 600; letter-spacing: 0.30em; text-shadow:none; }
+        25%, 100%{ color: rgba(0,45,111,0.35); font-weight: 400; letter-spacing: 0.30em; text-shadow:none; }
       }
       @keyframes dsLabel2 {
-        0%, 32%  { color: rgba(10,10,20,0.30); font-weight: 400; text-shadow: none; }
-        34%, 56% { color: #0066FF; font-weight: 600; text-shadow: 0 0 12px rgba(0,102,255,0.35); }
-        58%, 100%{ color: rgba(10,10,20,0.30); font-weight: 400; text-shadow: none; }
+        0%, 32%  { color: rgba(0,45,111,0.35); font-weight: 400; text-shadow:none; }
+        34%, 56% { color: #002d6f; font-weight: 600; text-shadow:none; }
+        58%, 100%{ color: rgba(0,45,111,0.35); font-weight: 400; text-shadow:none; }
       }
       @keyframes dsLabel3 {
-        0%, 65%  { color: rgba(10,10,20,0.30); font-weight: 400; text-shadow: none; }
-        67%, 89% { color: #0066FF; font-weight: 600; text-shadow: 0 0 12px rgba(0,102,255,0.35); }
-        91%, 100%{ color: rgba(10,10,20,0.30); font-weight: 400; text-shadow: none; }
+        0%, 65%  { color: rgba(0,45,111,0.35); font-weight: 400; text-shadow:none; }
+        67%, 89% { color: #002d6f; font-weight: 600; text-shadow:none; }
+        91%, 100%{ color: rgba(0,45,111,0.35); font-weight: 400; text-shadow:none; }
       }
-      .ds-chev-label { color: rgba(10,10,20,0.30); transition: color 0.3s ease; }
+      .ds-chev-label { color: rgba(0,45,111,0.35); transition: color 0.3s ease; }
       .ds-chev-label-1 { animation: dsLabel1 4.5s cubic-bezier(0.65,0,0.35,1) infinite; }
       .ds-chev-label-2 { animation: dsLabel2 4.5s cubic-bezier(0.65,0,0.35,1) infinite; }
       .ds-chev-label-3 { animation: dsLabel3 4.5s cubic-bezier(0.65,0,0.35,1) infinite; }
@@ -562,7 +562,7 @@ function Hero({ openConsult, navigate }) {
         ))}
         {/* Step labels — positioned below chevrons, animated to highlight when active */}
         {STEPS.map((label,i) => (
-<span key={`l-${i}`} className={`ds-chev-label ds-chev-label-${i+1}`} style={{position:'absolute',top:'calc(52% + 90px)',left:`${14 + i*36}%`,transform:'translateX(-50%)',fontFamily:"'JetBrains Mono',monospace",fontSize:17, fontWeight: 'bold',letterSpacing:'0.3em',textTransform:'uppercase',whiteSpace:'nowrap',color:'#003580'}}>{label}</span>        ))}
+<span key={`l-${i}`} className={`ds-chev-label ds-chev-label-${i+1}`} style={{position:'absolute',top:'calc(52% + 90px)',left:`${14 + i*36}%`,transform:'translateX(-50%)',fontFamily:"'JetBrains Mono',monospace",fontSize:17, fontWeight: 'bold',letterSpacing:'0.3em',textTransform:'uppercase',whiteSpace:'nowrap',color:'rgb(10,10,20)'}}>{label}</span>        ))}
         <div style={{...CHEV,position:'absolute',top:'52%',width:220,height:161,transform:'translate(-50%,-50%)',animation:'dsChevAdvance 4.5s cubic-bezier(0.65,0,0.35,1) infinite'}} />
         <div style={{...CHEV,position:'absolute',top:'52%',width:180,height:132,transform:'translate(-50%,-50%)',opacity:0,animation:'dsChevTrail 4.5s cubic-bezier(0.65,0,0.35,1) infinite'}} />
       </div>
