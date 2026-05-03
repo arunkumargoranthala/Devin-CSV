@@ -335,16 +335,16 @@ function Hero({ openConsult, navigate }) {
         .ds-scroll-indicator{ display:none !important; }
         .ds-hero-content{
           order:2 !important;
-          padding:65px 18px 32px 18px !important;
+          padding:46px 18px 32px 18px !important;
           height:auto !important;
           justify-content:flex-start !important;
           max-width:100% !important;
           gap:0 !important;
         }
         /* Children with flex order: 1=pill, 2=h1, 3=chev-mobile, 4=p, 5=buttons */
-        .ds-hero-content > :nth-child(1){ order:99 !important; margin:22px 0 0 0 !important; }   /* pill — moved to LAST */
-        .ds-hero-content > :nth-child(2){ order:1 !important; margin:24px 0 4px 0 !important; font-size:2rem !important; line-height:1.15 !important; }      /* h1 */
-        .ds-hero-content > :nth-child(3){ order:2 !important; margin:64px 0 18px 0 !important; display:block !important; }       /* chev-mobile */
+        .ds-hero-content > :nth-child(1){ order:99 !important; margin:3px 0 10px 0 !important; }   /* pill — moved to LAST */
+        .ds-hero-content > :nth-child(2){ order:1 !important; margin:4px 0 4px 0 !important; font-size:2rem !important; line-height:1.15 !important; }      /* h1 */
+        .ds-hero-content > :nth-child(3){ order:2 !important; margin:24px 0 18px 0 !important; display:block !important; }       /* chev-mobile */
         .ds-hero-content > :nth-child(4){ order:3 !important; margin-top:14px !important; }       /* description */
         .ds-hero-content > :nth-child(5){ order:4 !important; margin-top:22px !important; }       /* buttons */
         .ds-hero-typewriter{ min-height:3.4em !important; }
@@ -357,10 +357,10 @@ function Hero({ openConsult, navigate }) {
 
       /* ── Phone ── */
       @media(max-width:480px){
-        .ds-hero-content{ padding:96px 16px 24px 16px !important; }
-        .ds-hero-content > :nth-child(1){ order:5 !important; margin:14px 0 0 0 !important; font-size:10px !important; }   /* pill — at bottom on phone */
+        .ds-hero-content{ padding:66px 16px 24px 16px !important; }
+        .ds-hero-content > :nth-child(1){ order:5 !important; margin:3px 0 10px 0 !important; font-size:10px !important; }   /* pill — at bottom on phone */
         .ds-hero-content > :nth-child(2){ order:1 !important; font-size:1.7rem !important; line-height:1.18 !important; letter-spacing:-0.025em !important; }   /* h1 */
-        .ds-hero-content > :nth-child(3){ order:2 !important; margin:32px 0 12px 0 !important; width:100% !important; max-width:300px !important; height:120px !important; }       /* chev-mobile */
+        .ds-hero-content > :nth-child(3){ order:2 !important; margin:3px 0 12px 0 !important; width:100% !important; max-width:300px !important; height:120px !important; }       /* chev-mobile */
         .ds-hero-content > :nth-child(4){ order:3 !important; margin-top:12px !important; font-size:14.5px !important; }       /* description */
         .ds-hero-content > :nth-child(5){ order:4 !important; margin-top:18px !important; gap:10px !important; }       /* buttons */
         .ds-hero-typewriter{ min-height:4em !important; }
@@ -549,7 +549,7 @@ function Hero({ openConsult, navigate }) {
 
         <p style={{fontSize:16,lineHeight:1.6,fontWeight:400,color:'rgba(10,10,20,0.6)',maxWidth:540,marginTop:28,letterSpacing:'-0.005em'}}>
             Most enterprises use less than 30% of their Microsoft stack's true capability. We map the gap, identify the highest-value opportunities, and engineer AI and automation solutions that turn your existing investment into measurable business transformation.        </p>
-        <div style={{display:'flex',gap:14,marginTop:40,alignItems:'center',flexWrap:'wrap'}}>
+        <div style={{display:'flex',gap:14,marginTop:40,alignItems:'center',flexWrap:'wrap',justifyContent:'center'}}>
           <button onClick={openConsult}
             onMouseEnter={e=>{e.currentTarget.style.background='#0066FF';e.currentTarget.style.transform='translateY(-2px)';e.currentTarget.style.boxShadow='0 12px 40px rgba(0,102,255,0.3)'}}
             onMouseLeave={e=>{e.currentTarget.style.background='#0a0a14';e.currentTarget.style.transform='none';e.currentTarget.style.boxShadow='none'}}
