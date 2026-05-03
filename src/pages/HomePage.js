@@ -198,21 +198,21 @@ function Hero({ openConsult, navigate }) {
 
       /* Label highlight — each label lights up only while the active chevron rests on its step */
       @keyframes dsLabel1 {
-        0%, 5%   { color: rgba(0,45,111,0.35); font-weight: 400; letter-spacing: 0.30em; text-shadow:none; }
-        7%, 23%  { color: #002d6f; font-weight: 600; letter-spacing: 0.30em; text-shadow:none; }
-        25%, 100%{ color: rgba(0,45,111,0.35); font-weight: 400; letter-spacing: 0.30em; text-shadow:none; }
+        0%, 5%   { color: rgba(10,10,20,0.30); font-weight: 400; letter-spacing: 0.30em; }
+        7%, 23%  { color: #0066FF; font-weight: 600; letter-spacing: 0.30em; text-shadow: 0 0 12px rgba(0,102,255,0.35); }
+        25%, 100%{ color: rgba(10,10,20,0.30); font-weight: 400; letter-spacing: 0.30em; text-shadow: none; }
       }
       @keyframes dsLabel2 {
-        0%, 32%  { color: rgba(0,45,111,0.35); font-weight: 400; text-shadow:none; }
-        34%, 56% { color: #002d6f; font-weight: 600; text-shadow:none; }
-        58%, 100%{ color: rgba(0,45,111,0.35); font-weight: 400; text-shadow:none; }
+        0%, 32%  { color: rgba(10,10,20,0.30); font-weight: 400; text-shadow: none; }
+        34%, 56% { color: #0066FF; font-weight: 600; text-shadow: 0 0 12px rgba(0,102,255,0.35); }
+        58%, 100%{ color: rgba(10,10,20,0.30); font-weight: 400; text-shadow: none; }
       }
       @keyframes dsLabel3 {
-        0%, 65%  { color: rgba(0,45,111,0.35); font-weight: 400; text-shadow:none; }
-        67%, 89% { color: #002d6f; font-weight: 600; text-shadow:none; }
-        91%, 100%{ color: rgba(0,45,111,0.35); font-weight: 400; text-shadow:none; }
+        0%, 65%  { color: rgba(10,10,20,0.30); font-weight: 400; text-shadow: none; }
+        67%, 89% { color: #0066FF; font-weight: 600; text-shadow: 0 0 12px rgba(0,102,255,0.35); }
+        91%, 100%{ color: rgba(10,10,20,0.30); font-weight: 400; text-shadow: none; }
       }
-      .ds-chev-label { color: rgba(0,45,111,0.35); transition: color 0.3s ease; }
+      .ds-chev-label { color: rgba(10,10,20,0.30); transition: color 0.3s ease; }
       .ds-chev-label-1 { animation: dsLabel1 4.5s cubic-bezier(0.65,0,0.35,1) infinite; }
       .ds-chev-label-2 { animation: dsLabel2 4.5s cubic-bezier(0.65,0,0.35,1) infinite; }
       .ds-chev-label-3 { animation: dsLabel3 4.5s cubic-bezier(0.65,0,0.35,1) infinite; }
@@ -321,7 +321,7 @@ function Hero({ openConsult, navigate }) {
 
       /* ── Smaller laptops: tighten cluster slightly ── */
       @media(max-width:1280px){
-        .ds-chev-area{ width:440px !important; right:48px !important; }
+        .ds-chev-area-desktop{ width:440px !important; right:48px !important; }
       }
 
       /* ── Tablet & mobile: chevron animation moves into the hero flow and desktop chevrons hide ── */
@@ -341,15 +341,16 @@ function Hero({ openConsult, navigate }) {
           max-width:100% !important;
           gap:0 !important;
         }
-        /* Children with flex order: 1=pill, 2=h1, 3=chev-mobile, 4=p, 5=buttons */
-        .ds-hero-content > :nth-child(1){ order:99 !important; margin:3px 0 10px 0 !important; }   /* pill — moved to LAST */
+        /* Children with flex order: 1=pill, 2=h1, 3=chev-mobile, 4=p (description), 5=buttons */
+        /* User wants chev BETWEEN description and buttons → description order 2, chev order 3 */
+        .ds-hero-content > :nth-child(1){ order:99 !important; margin:3px 0 10px 0 !important; align-self:center !important; }   /* pill — LAST + centered */
         .ds-hero-content > :nth-child(2){ order:1 !important; margin:4px 0 4px 0 !important; font-size:2rem !important; line-height:1.15 !important; }      /* h1 */
-        .ds-hero-content > :nth-child(3){ order:2 !important; margin:24px 0 18px 0 !important; display:block !important; }       /* chev-mobile */
-        .ds-hero-content > :nth-child(4){ order:3 !important; margin-top:14px !important; }       /* description */
+        .ds-hero-content > :nth-child(3){ order:3 !important; margin:12px 0 18px 0 !important; display:block !important; }       /* chev-mobile — moved to AFTER description */
+        .ds-hero-content > :nth-child(4){ order:2 !important; margin-top:14px !important; }       /* description — moved BEFORE chev */
         .ds-hero-content > :nth-child(5){ order:4 !important; margin-top:22px !important; }       /* buttons */
         .ds-hero-typewriter{ min-height:3.4em !important; }
         .ds-chev-area-desktop{ display:none !important; visibility:hidden !important; opacity:0 !important; pointer-events:none !important; position:static !important; top:auto !important; right:auto !important; bottom:auto !important; width:auto !important; height:auto !important; transform:none !important; z-index:-1 !important; }
-        .ds-chev-area-mobile{ display:flex !important; align-items:center !important; justify-content:center !important; width:100% !important; max-width:340px !important; margin:32px auto 18px auto !important; }
+        .ds-chev-area-mobile{ display:flex !important; align-items:center !important; justify-content:center !important; width:100% !important; max-width:340px !important; margin:8px auto 18px auto !important; }
       }
       @media(min-width:821px){
         .ds-chev-area-mobile{ display:none !important; }
@@ -358,10 +359,10 @@ function Hero({ openConsult, navigate }) {
       /* ── Phone ── */
       @media(max-width:480px){
         .ds-hero-content{ padding:66px 16px 24px 16px !important; }
-        .ds-hero-content > :nth-child(1){ order:5 !important; margin:3px 0 10px 0 !important; font-size:10px !important; }   /* pill — at bottom on phone */
+        .ds-hero-content > :nth-child(1){ order:5 !important; margin:3px 0 10px 0 !important; font-size:10px !important; align-self:center !important; }   /* pill — at bottom + centered */
         .ds-hero-content > :nth-child(2){ order:1 !important; font-size:1.7rem !important; line-height:1.18 !important; letter-spacing:-0.025em !important; }   /* h1 */
-        .ds-hero-content > :nth-child(3){ order:2 !important; margin:3px 0 12px 0 !important; width:100% !important; max-width:300px !important; height:120px !important; }       /* chev-mobile */
-        .ds-hero-content > :nth-child(4){ order:3 !important; margin-top:12px !important; font-size:14.5px !important; }       /* description */
+        .ds-hero-content > :nth-child(3){ order:3 !important; margin:12px 0 12px 0 !important; width:100% !important; max-width:300px !important; height:120px !important; }       /* chev-mobile — AFTER description */
+        .ds-hero-content > :nth-child(4){ order:2 !important; margin-top:12px !important; font-size:14.5px !important; }       /* description — BEFORE chev */
         .ds-hero-content > :nth-child(5){ order:4 !important; margin-top:18px !important; gap:10px !important; }       /* buttons */
         .ds-hero-typewriter{ min-height:4em !important; }
         .ds-chev-area-mobile{
@@ -369,7 +370,7 @@ function Hero({ openConsult, navigate }) {
           width:100% !important;
           max-width:300px !important;
           height:120px !important;
-          margin:24px auto 14px auto !important;
+          margin:8px auto 14px auto !important;
         }
         .ds-chev-area-mobile > div:nth-child(-n+3){ width:80px !important; height:58px !important; }
         .ds-chev-area-mobile > div:nth-child(7){ width:98px !important; height:72px !important; }
@@ -534,15 +535,16 @@ function Hero({ openConsult, navigate }) {
           </span>
         </h1>
 
-        {/* Chevrons — mobile: positioned between typewriter and description */}
-        <div className="ds-chev-area-mobile" style={{display:'none',position:'relative',width:'100%',maxWidth:340,height:140,margin:'42px auto 18px auto',zIndex:10,pointerEvents:'none'}}>
-          {/* Ghost chevrons — each centered at top:52% (matches active chevron) */}
+        {/* Chevrons — mobile: positioned via flex order (between description and buttons) */}
+        <div className="ds-chev-area-mobile" style={{display:'none',position:'relative',width:'100%',maxWidth:340,height:140,margin:'24px auto 18px auto',zIndex:10,pointerEvents:'none'}}>
+          {/* Ghost chevrons */}
           {STEPS.map((label,i) => (
-            <div key={`g-${i}`} style={{...CHEV,position:'absolute',top:'52%',left:`${14 + i*36}%`,width:96,height:70,transform:'translate(-50%,-50%)',opacity:0.18}} />
+            <div key={`gm-${i}`} style={{...CHEV,position:'absolute',top:'52%',left:`${14 + i*36}%`,width:96,height:70,transform:'translate(-50%,-50%)',opacity:0.18}} />
           ))}
-          {/* Step labels — positioned below chevrons, animated to highlight when active */}
+          {/* Step labels */}
           {STEPS.map((label,i) => (
-<span key={`l-${i}`} className={`ds-chev-label ds-chev-label-${i+1}`} style={{position:'absolute',top:'calc(52% + 60px)',left:`${14 + i*36}%`,transform:'translateX(-50%)',fontFamily:"'JetBrains Mono',monospace",fontSize:9, fontWeight: 'bold',letterSpacing:'0.22em',textTransform:'uppercase',whiteSpace:'nowrap',color:'rgb(10,10,20)'}}>{label}</span>          ))}
+            <span key={`lm-${i}`} className={`ds-chev-label ds-chev-label-${i+1}`} style={{position:'absolute',top:'calc(52% + 60px)',left:`${14 + i*36}%`,transform:'translateX(-50%)',fontFamily:"'JetBrains Mono',monospace",fontSize:9,fontWeight:'bold',letterSpacing:'0.22em',textTransform:'uppercase',whiteSpace:'nowrap',color:'rgb(10,10,20)'}}>{label}</span>
+          ))}
           <div style={{...CHEV,position:'absolute',top:'52%',width:118,height:86,transform:'translate(-50%,-50%)',animation:'dsChevAdvance 4.5s cubic-bezier(0.65,0,0.35,1) infinite'}} />
           <div style={{...CHEV,position:'absolute',top:'52%',width:96,height:70,transform:'translate(-50%,-50%)',opacity:0,animation:'dsChevTrail 4.5s cubic-bezier(0.65,0,0.35,1) infinite'}} />
         </div>
@@ -566,7 +568,7 @@ function Hero({ openConsult, navigate }) {
         </div>
       </div>
 
-      {/* Chevrons — right side */}
+      {/* Chevrons — desktop: right side (hidden on mobile via .ds-chev-area-desktop CSS) */}
       <div className="ds-chev-area-desktop" style={{position:'absolute',right:80,top:0,bottom:0,width:560,zIndex:10,pointerEvents:'none'}}>
         {/* Ghost chevrons — each centered at top:52% (matches active chevron) */}
         {STEPS.map((label,i) => (
@@ -574,7 +576,7 @@ function Hero({ openConsult, navigate }) {
         ))}
         {/* Step labels — positioned below chevrons, animated to highlight when active */}
         {STEPS.map((label,i) => (
-<span key={`l-${i}`} className={`ds-chev-label ds-chev-label-${i+1}`} style={{position:'absolute',top:'calc(52% + 90px)',left:`${14 + i*36}%`,transform:'translateX(-50%)',fontFamily:"'JetBrains Mono',monospace",fontSize:17, fontWeight: 'bold',letterSpacing:'0.3em',textTransform:'uppercase',whiteSpace:'nowrap',color:'rgb(10,10,20)'}}>{label}</span>        ))}
+<span key={`l-${i}`} className={`ds-chev-label ds-chev-label-${i+1}`} style={{position:'absolute',top:'calc(52% + 90px)',left:`${14 + i*36}%`,transform:'translateX(-50%)',fontFamily:"'JetBrains Mono',monospace",fontSize:17, fontWeight: 'bold',letterSpacing:'0.3em',textTransform:'uppercase',whiteSpace:'nowrap',color:'#003580'}}>{label}</span>        ))}
         <div style={{...CHEV,position:'absolute',top:'52%',width:220,height:161,transform:'translate(-50%,-50%)',animation:'dsChevAdvance 4.5s cubic-bezier(0.65,0,0.35,1) infinite'}} />
         <div style={{...CHEV,position:'absolute',top:'52%',width:180,height:132,transform:'translate(-50%,-50%)',opacity:0,animation:'dsChevTrail 4.5s cubic-bezier(0.65,0,0.35,1) infinite'}} />
       </div>

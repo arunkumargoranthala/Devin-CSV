@@ -2,7 +2,6 @@ import { useState, useEffect, useRef } from 'react'
 import { C, Ic } from './ui'
 import { SOLUTIONS, SERVICES } from '../data/content'
 import logoFull from '../assets/DS_Logo_and_Text.png'
-import logoIcon from '../assets/DS_Logo.png'
 
 const NAV_INDUSTRIES = [
   { n:'Truck',    t:'Manufacturing',         d:'Smart factory & production ops',        c:C.blue,   bg:C.blueL,   slug:'manufacturing'  },
@@ -138,12 +137,12 @@ export default function Header({ navigate, openConsult }) {
             className="hide-desk"
             style={{ height:50, width:'auto', display:'block', objectFit:'contain' }}
           />
-          {/* Icon only — visible on mobile, hidden on desktop */}
+          {/* Full logo with text — also shown on mobile (smaller) for brand prominence */}
           <img
-            src={logoIcon}
+            src={logoFull}
             alt="DevinStratus"
-            className="show-mob"
-            style={{ height:44, width:'auto', display:'block', objectFit:'contain' }}
+            className="show-mob ds-header-logo-mob"
+            style={{ height:38, width:'auto', display:'block', objectFit:'contain' }}
           />
         </button>
 
