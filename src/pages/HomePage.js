@@ -491,7 +491,7 @@ function Hero({ openConsult, navigate }) {
       <div style={{position:'absolute',inset:0,zIndex:2,pointerEvents:'none',background:'radial-gradient(ellipse at 50% 50%, transparent 35%, rgba(245,248,255,0.6) 100%)'}} />
 
       {/* Hero content */}
-      <div className="ds-hero-content" style={{position:'relative',zIndex:10,height:'100%',display:'flex',flexDirection:'column',justifyContent:'center',padding:'0 56px',maxWidth:760}}>
+      <div className="ds-hero-content" style={{position:'relative',zIndex:10,height:'100%',display:'flex',flexDirection:'column',justifyContent:'flex-start',padding:'112px 56px 0 56px',maxWidth:760}}>
         <div style={{fontFamily:"'JetBrains Mono',monospace",fontSize:12,letterSpacing:'0.26em',textTransform:'uppercase',marginBottom:28,display:'inline-grid',gridTemplateColumns:'auto auto auto',rowGap:10,columnGap:28,padding:'14px 22px',background:'rgba(0,63,179,0.06)',border:'1px solid rgba(0,63,179,0.22)',borderRadius:22,backdropFilter:'blur(18px)',width:'fit-content',boxShadow:'0 4px 16px rgba(0,53,128,0.06), inset 0 1px 0 rgba(255,255,255,0.6)',fontWeight:700,color:'rgba(10,14,30,0.55)'}}>
 
   {/* Row 1 — items 1, 2, 3 */}
