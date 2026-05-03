@@ -660,12 +660,10 @@ function ImpactNumbers() {
     { target: 3, sfx: 'x', label: 'Average ROI at 12 months', sub: 'Measured across all clients', c: '#bfdbfe' },
   ]
   return (
-    <section ref={sRef} className="ds-section" style={{ padding: '100px 32px', background: 'linear-gradient(160deg,#001d4a,#003580,#0050b3)', position: 'relative', overflow: 'hidden' }}>
+    <section ref={sRef} className="ds-section" style={{ padding: '100px 32px', background: 'linear-gradient(160deg,#0c4a6e,#0e7490,#06b6d4)', position: 'relative', overflow: 'hidden' }}>
       {/* Top fade — softens transition from white trust strip into dark blue */}
-      <div style={{ position: 'absolute', top: 0, left: 0, right: 0, height: 80, background: 'linear-gradient(180deg, #f5f9ff 0%, rgba(0, 29, 74, 0) 100%)', pointerEvents: 'none', zIndex: 2 }} />
-      {/* Bottom fade — softens transition from dark blue into light blue solutions */}
-      <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, height: 80, background: 'linear-gradient(0deg, #f5f9ff 0%, rgba(0, 80, 179, 0) 100%)', pointerEvents: 'none', zIndex: 2 }} />
-      <div style={{ position: 'absolute', inset: 0, backgroundImage: 'radial-gradient(circle,rgba(255,255,255,.05) 1px,transparent 1px)', backgroundSize: '32px 32px', pointerEvents: 'none' }} />
+      <div style={{ position: 'absolute', top: 0, left: 0, right: 0, height: 80, background: 'linear-gradient(180deg, #f5f9ff 0%, rgba(12, 74, 110, 0) 100%)', pointerEvents: 'none', zIndex: 2 }} />
+      {/* (bottom fade removed — next section is now also dark navy) */}      <div style={{ position: 'absolute', inset: 0, backgroundImage: 'radial-gradient(circle,rgba(255,255,255,.05) 1px,transparent 1px)', backgroundSize: '32px 32px', pointerEvents: 'none' }} />
       <div style={{ position: 'absolute', top: '20%', left: '50%', width: 700, height: 700, borderRadius: '50%', background: 'radial-gradient(circle,rgba(102,178,255,.18) 0%,transparent 68%)', filter: 'blur(70px)', transform: 'translateX(-50%)', pointerEvents: 'none' }} />
       <div style={{ position: 'absolute', top: '-10%', left: '-5%', width: 500, height: 500, borderRadius: '50%', background: 'radial-gradient(circle,rgba(0,180,255,.12) 0%,transparent 70%)', filter: 'blur(80px)', pointerEvents: 'none' }} />
       <div style={{ maxWidth: 1300, margin: '0 auto', position: 'relative', zIndex: 1 }}>
@@ -704,22 +702,24 @@ function Solutions({ navigate }) {
   const [sRef, on] = useOnScreen()
   const filtered = SOLUTIONS.filter(s => s.slug !== 'erp')
   return (
-    <section ref={sRef} className="ds-section" style={{ padding: '100px 32px', background: 'linear-gradient(180deg,#f5f9ff 0%,#fff 35%)', position: 'relative', overflow: 'hidden' }}>
-      {/* One subtle drifting orb */}
-      <div style={{ position: 'absolute', top: '20%', right: '-8%', width: 380, height: 380, borderRadius: '50%', background: 'radial-gradient(circle, rgba(0,102,255,0.08), transparent 70%)', filter: 'blur(60px)', pointerEvents: 'none', animation: 'sectionOrbA 22s ease-in-out infinite' }} />
+    <section ref={sRef} className="ds-section" style={{ padding: '100px 32px', background: 'linear-gradient(160deg,#0c4a6e,#0e7490,#06b6d4)', position: 'relative', overflow: 'hidden' }}>
+      {/* Subtle dot pattern overlay */}
+      <div style={{ position: 'absolute', inset: 0, backgroundImage: 'radial-gradient(circle,rgba(255,255,255,.04) 1px,transparent 1px)', backgroundSize: '32px 32px', pointerEvents: 'none' }} />
+      {/* Drifting orb — brighter on dark bg */}
+      <div style={{ position: 'absolute', top: '20%', right: '-8%', width: 380, height: 380, borderRadius: '50%', background: 'radial-gradient(circle, rgba(125,196,255,0.18), transparent 70%)', filter: 'blur(60px)', pointerEvents: 'none', animation: 'sectionOrbA 22s ease-in-out infinite' }} />
       <div style={{ maxWidth: 1300, margin: '0 auto', position: 'relative', zIndex: 1 }}>
         <div className="ds-section-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: 56, flexWrap: 'wrap', gap: 20 }}>
           <div>
-            <div style={{ fontSize: 11, fontWeight: 800, letterSpacing: '.18em', color: '#0066FF', marginBottom: 12, textTransform: 'uppercase' }}>PLATFORM SOLUTIONS</div>
-            <h2 style={{ fontSize: 'clamp(1.8rem,3.5vw,2.8rem)', fontWeight: 900, color: '#0f172a', fontFamily: "'Plus Jakarta Sans',sans-serif", lineHeight: 1.15, margin: 0 }}>
+            <div style={{ fontSize: 11, fontWeight: 800, letterSpacing: '.18em', color: '#7dc4ff', marginBottom: 12, textTransform: 'uppercase' }}>PLATFORM SOLUTIONS</div>
+            <h2 style={{ fontSize: 'clamp(1.8rem,3.5vw,2.8rem)', fontWeight: 900, color: '#ffffff', fontFamily: "'Plus Jakarta Sans',sans-serif", lineHeight: 1.15, margin: 0 }}>
               Every tool your business needs,<br />
-              <span className="grad-text" style={{ background: 'linear-gradient(135deg,#0066FF,#003FB3)' }}>unified on one platform</span>
+              <span className="grad-text" style={{ background: 'linear-gradient(135deg,#7dc4ff,#bfdbfe)' }}>unified on one platform</span>
             </h2>
           </div>
-          <button className="ds-view-all-btn" onClick={() => navigate('/solutions')} style={{ display: 'flex', alignItems: 'center', gap: 8, padding: '12px 24px', borderRadius: 50, background: '#f8fafc', border: '1.5px solid #e2e8f0', color: '#475569', fontSize: 14, fontWeight: 700, cursor: 'pointer', transition: 'all .2s', whiteSpace: 'nowrap' }}
-            onMouseEnter={e => e.currentTarget.style.borderColor = '#0066FF'}
-            onMouseLeave={e => e.currentTarget.style.borderColor = '#e2e8f0'}>
-            View all solutions <Ic n="Arrow" s={14} style={{ color: '#0066FF' }} />
+          <button className="ds-view-all-btn" onClick={() => navigate('/solutions')} style={{ display: 'flex', alignItems: 'center', gap: 8, padding: '12px 24px', borderRadius: 50, background: 'rgba(255,255,255,0.08)', border: '1.5px solid rgba(255,255,255,0.18)', color: '#ffffff', fontSize: 14, fontWeight: 700, cursor: 'pointer', transition: 'all .2s', whiteSpace: 'nowrap', backdropFilter: 'blur(8px)' }}
+            onMouseEnter={e => { e.currentTarget.style.background = 'rgba(255,255,255,0.14)'; e.currentTarget.style.borderColor = 'rgba(125,196,255,0.5)' }}
+            onMouseLeave={e => { e.currentTarget.style.background = 'rgba(255,255,255,0.08)'; e.currentTarget.style.borderColor = 'rgba(255,255,255,0.18)' }}>
+            View all solutions <Ic n="Arrow" s={14} style={{ color: '#7dc4ff' }} />
           </button>
         </div>
         <div className="axis-sol-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: 22 }}>
@@ -777,19 +777,21 @@ function HowWeDeliver({ navigate }) {
     { n: '04', icon: 'Zap', title: 'Optimise & Grow', desc: 'Ongoing managed support, system health checks and new capability rollouts. Your platform evolves as your business does.', color: '#0EA5E9' },
   ]
   return (
-    <section ref={sRef} className="ds-section" style={{ padding: '100px 32px', background: 'linear-gradient(180deg,#fafcff 0%,#eff5ff 100%)', position: 'relative', overflow: 'hidden' }}>
-      {/* One subtle drifting orb */}
-      <div style={{ position: 'absolute', top: '30%', left: '-6%', width: 360, height: 360, borderRadius: '50%', background: 'radial-gradient(circle, rgba(6,182,212,0.08), transparent 70%)', filter: 'blur(60px)', pointerEvents: 'none', animation: 'sectionOrbB 26s ease-in-out infinite' }} />
+    <section ref={sRef} className="ds-section" style={{ padding: '100px 32px', background: 'linear-gradient(160deg,#0c4a6e,#0e7490,#06b6d4)', position: 'relative', overflow: 'hidden' }}>
+      {/* Subtle dot pattern overlay */}
+      <div style={{ position: 'absolute', inset: 0, backgroundImage: 'radial-gradient(circle,rgba(255,255,255,.04) 1px,transparent 1px)', backgroundSize: '32px 32px', pointerEvents: 'none' }} />
+      {/* Drifting orb — brighter on dark bg */}
+      <div style={{ position: 'absolute', top: '30%', left: '-6%', width: 360, height: 360, borderRadius: '50%', background: 'radial-gradient(circle, rgba(6,182,212,0.22), transparent 70%)', filter: 'blur(60px)', pointerEvents: 'none', animation: 'sectionOrbB 26s ease-in-out infinite' }} />
       <div style={{ maxWidth: 1300, margin: '0 auto', position: 'relative', zIndex: 1 }}>
         <div className="ds-section-header" style={{ textAlign: 'center', marginBottom: 72 }}>
-          <div style={{ fontSize: 11, fontWeight: 800, letterSpacing: '.18em', color: '#003FB3', marginBottom: 14, textTransform: 'uppercase' }}>HOW WE WORK</div>
-          <h2 style={{ fontSize: 'clamp(1.8rem,3.5vw,2.8rem)', fontWeight: 900, color: '#0f172a', fontFamily: "'Plus Jakarta Sans',sans-serif", margin: 0 }}>
-            A clear process. <span className="grad-text" style={{ background: 'linear-gradient(135deg,#003FB3,#0066FF)' }}>Zero surprises.</span>
+          <div style={{ fontSize: 11, fontWeight: 800, letterSpacing: '.18em', color: '#7dc4ff', marginBottom: 14, textTransform: 'uppercase' }}>HOW WE WORK</div>
+          <h2 style={{ fontSize: 'clamp(1.8rem,3.5vw,2.8rem)', fontWeight: 900, color: '#ffffff', fontFamily: "'Plus Jakarta Sans',sans-serif", margin: 0 }}>
+            A clear process. <span className="grad-text" style={{ background: 'linear-gradient(135deg,#7dc4ff,#bfdbfe)' }}>Zero surprises.</span>
           </h2>
         </div>
         <div className="axis-steps-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(4,1fr)', gap: 22, position: 'relative' }}>
           {/* Connecting line behind cards (desktop) */}
-          <div className="step-connector" style={{ position: 'absolute', top: 65, left: '12%', right: '12%', height: 2, background: 'linear-gradient(90deg, transparent 0%, #0066FF44 20%, #0066FF44 80%, transparent 100%)', zIndex: 0 }} />
+          <div className="step-connector" style={{ position: 'absolute', top: 65, left: '12%', right: '12%', height: 2, background: 'linear-gradient(90deg, transparent 0%, rgba(125,196,255,0.35) 20%, rgba(125,196,255,0.35) 80%, transparent 100%)', zIndex: 0 }} />
           {steps.map((s, i) => (
             <div key={i} className={`step-card-premium ${on ? 'vis' : ''}`}
               style={{
@@ -843,15 +845,17 @@ function Testimonials() {
     { q: "The Power BI dashboards changed how our board makes decisions. Data we didn't know we could surface is now our competitive edge.", name: 'Charlotte Wu', role: 'COO', co: 'Stratford Retail Group', c: '#06b6d4', ini: 'CW' },
   ]
   return (
-    <section ref={sRef} className="ds-section" style={{ padding: '100px 32px', background: 'linear-gradient(180deg,#fff 0%,#fafcff 100%)', position: 'relative', overflow: 'hidden' }}>
-      {/* One subtle drifting orb */}
-      <div style={{ position: 'absolute', top: '40%', right: '-7%', width: 360, height: 360, borderRadius: '50%', background: 'radial-gradient(circle, rgba(0,53,128,0.08), transparent 70%)', filter: 'blur(60px)', pointerEvents: 'none', animation: 'sectionOrbA 28s ease-in-out infinite' }} />
+    <section ref={sRef} className="ds-section" style={{ padding: '100px 32px', background: 'linear-gradient(160deg,#0c4a6e,#0e7490,#06b6d4)', position: 'relative', overflow: 'hidden' }}>
+      {/* Subtle dot pattern overlay */}
+      <div style={{ position: 'absolute', inset: 0, backgroundImage: 'radial-gradient(circle,rgba(255,255,255,.04) 1px,transparent 1px)', backgroundSize: '32px 32px', pointerEvents: 'none' }} />
+      {/* Drifting orb — brighter on dark bg */}
+      <div style={{ position: 'absolute', top: '40%', right: '-7%', width: 360, height: 360, borderRadius: '50%', background: 'radial-gradient(circle, rgba(125,196,255,0.18), transparent 70%)', filter: 'blur(60px)', pointerEvents: 'none', animation: 'sectionOrbA 28s ease-in-out infinite' }} />
       <div style={{ maxWidth: 1300, margin: '0 auto', position: 'relative', zIndex: 1 }}>
         <div className="ds-section-header" style={{ textAlign: 'center', marginBottom: 64 }}>
-          <div style={{ fontSize: 11, fontWeight: 800, letterSpacing: '.18em', color: '#0066FF', marginBottom: 14, textTransform: 'uppercase' }}>CLIENT SUCCESS</div>
-          <h2 style={{ fontSize: 'clamp(1.8rem,3.5vw,2.8rem)', fontWeight: 900, color: '#0f172a', fontFamily: "'Plus Jakarta Sans',sans-serif", margin: 0 }}>
+          <div style={{ fontSize: 11, fontWeight: 800, letterSpacing: '.18em', color: '#7dc4ff', marginBottom: 14, textTransform: 'uppercase' }}>CLIENT SUCCESS</div>
+          <h2 style={{ fontSize: 'clamp(1.8rem,3.5vw,2.8rem)', fontWeight: 900, color: '#ffffff', fontFamily: "'Plus Jakarta Sans',sans-serif", margin: 0 }}>
             Real results from{' '}
-            <span className="grad-text" style={{ background: 'linear-gradient(135deg,#0066FF,#003FB3)' }}>real clients</span>
+            <span className="grad-text" style={{ background: 'linear-gradient(135deg,#7dc4ff,#bfdbfe)' }}>real clients</span>
           </h2>
         </div>
         <div className="axis-test-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: 22 }}>
