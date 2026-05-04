@@ -18,7 +18,7 @@ import { C, Ic } from '../components/ui'
    5. Run:  npm install @emailjs/browser
    6. Replace the 3 values below. After saving, restart your dev server.
    ─────────────────────────────────────────────────────────────────────────── */
-const EMAILJS_SERVICE_ID  = 'service_07t234l'
+const EMAILJS_SERVICE_ID  = 'service_ugcn2fo'
 const EMAILJS_TEMPLATE_ID = 'template_6wrrquf'
 const EMAILJS_PUBLIC_KEY  = '0Thqx9s95gzBPBAW-'
 
