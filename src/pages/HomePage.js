@@ -936,7 +936,7 @@ function TypewriterCycle({ phrases, typingSpeed = 80, deletingSpeed = 28, pauseA
 /* ── ROOT EXPORT ────────────────────────────────────── */
 export default function HomePage({ navigate, openConsult, openDemo }) {
   return (
-    <div className="page-fade" style={{ background: '#f5f9ff' }}>
+    <div className="page-fade" style={{ background: 'linear-gradient(180deg, #f5f9ff 0%, #e0f2fe 60%, #cffafe 100%)' }}>
       <Hero openConsult={openConsult} openDemo={openDemo} navigate={navigate} />
       <Trust />
       <ImpactNumbers />
