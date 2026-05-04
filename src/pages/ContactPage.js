@@ -116,15 +116,15 @@ function TypeWriter({ text, speed=40 }) {
    - Pure SMIL animations — no JS render loop, no extra weight.
    ════════════════════════════════════════════════════════════════════════════ */
 function ManualToAutomated() {
-  // EXACT match to the working preview HTML structure: just an SVG with
-  // viewBox + preserveAspectRatio + inline styles for sizing. Nothing fancy.
-  // Inline `display:block; width:100%; height:auto` means external CSS can't
-  // accidentally hide or collapse it (inline styles win every cascade fight).
+  // SVG fills 100% of wrapper width AND height. preserveAspectRatio handles
+  // letterboxing if wrapper aspect ratio differs from 700:440.
+  // The WRAPPER drives sizing — it has explicit pixel heights at each breakpoint
+  // via CSS so it cannot collapse to 0 on mobile (which is what was happening).
   return (
     <svg viewBox="0 0 700 440" className="m2a-svg" preserveAspectRatio="xMidYMid meet" style={{
       display: 'block',
       width:   '100%',
-      height:  'auto',
+      height:  '100%',
     }}>
       <defs>
         {/* Soft top atmosphere — muted gray, fades to transparent */}
@@ -445,12 +445,21 @@ export default function ContactPage({ navigate, openConsult }) {
            matching the working preview HTML structure exactly. */
         .m2a-wrap { width: 100%; }
 
+        /* CRITICAL OVERRIDE: somewhere in this project (likely App.jsx) there is a rule:
+           @media (max-width: 900px) { .contact-hero-g > div:nth-child(2) { display: none !important; } }
+           That rule hides this animation on mobile. Until that rule is found and removed,
+           this ID-based selector beats it via specificity (ID = 100, class = 10). */
+        #m2aWrapAnchor {
+          display: block !important;
+          visibility: visible !important;
+        }
+
         /* ─── RESPONSIVE ─── */
         @media (max-width: 1023px) {
-          .contact-hero-g  { grid-template-columns: 1fr !important; gap: 36px !important; text-align: center !important; }
+          .contact-hero-g  { grid-template-columns: 1fr !important; gap: 36px !important; text-align: center !important; align-items: stretch !important; }
           .contact-hero-g .hero-trust { justify-content: center !important; }
           .contact-main-g  { grid-template-columns: 1fr !important; gap: 32px !important; }
-          .m2a-wrap { max-width: 620px; margin: 0 auto !important; width: 100%; }
+          .m2a-wrap        { max-width: 620px; margin: 0 auto !important; width: 100%; height: 360px !important; }
         }
         @media (max-width: 767px) {
           .contact-hero-section { padding: 56px 18px 56px !important; }
@@ -464,14 +473,14 @@ export default function ContactPage({ navigate, openConsult }) {
           .step-indicator-label { display: none !important; }
           .office-tabs          { gap:6px !important; }
           .office-tabs button   { padding:7px 11px !important; font-size:12px !important; }
-          .m2a-wrap             { max-width: 540px; }
+          .m2a-wrap             { max-width: 540px; height: 320px !important; }
         }
         @media (max-width: 480px) {
           .contact-hero-section { padding: 44px 14px 44px !important; }
           .contact-main-section { padding: 44px 14px !important; }
           .why-us-section       { padding: 40px 14px !important; }
           .contact-form-grid-2  { gap:10px !important; }
-          .m2a-wrap             { max-width: 100%; }
+          .m2a-wrap             { max-width: 100%; height: 240px !important; }
         }
       `}</style>
 
@@ -510,7 +519,7 @@ export default function ContactPage({ navigate, openConsult }) {
               </div>
             </div>
 
-            <div className="m2a-wrap" style={{ position:'relative', background:'transparent' }}>
+            <div id="m2aWrapAnchor" className="m2a-wrap" style={{ position:'relative', background:'transparent', width:'100%', alignSelf:'stretch' }}>
               <ManualToAutomated/>
             </div>
           </div>
