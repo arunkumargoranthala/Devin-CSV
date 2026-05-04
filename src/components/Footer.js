@@ -1,4 +1,4 @@
-import { C, Ic, LogoSvg } from './ui'
+import { Ic } from './ui'
 import { SOLUTIONS, SERVICES } from '../data/content'
 import logoFull from '../assets/DS_Logo_and_Text.png'
 
@@ -6,18 +6,18 @@ export default function Footer({ navigate, openConsult }) {
   const go = (path) => { navigate(path); window.scrollTo({ top:0, behavior:'instant' }) }
 
   return (
-    <footer style={{ background:'linear-gradient(180deg, #001d4a 0%, #001233 100%)', color:'#fff' }}>
+    <footer style={{ background:'linear-gradient(180deg, #0c4a6e 0%, #082f49 100%)', color:'#fff' }}>
       {/* CTA Banner */}
       <div style={{ maxWidth:1280, margin:'0 auto', padding:'64px 24px 56px' }}>
-        <div className="foot-cta-card" style={{ borderRadius:28, background:'linear-gradient(135deg,#003580 0%,#0050b3 50%,#0066FF 100%)', padding:'52px 48px', display:'flex', alignItems:'center', justifyContent:'space-between', flexWrap:'wrap', gap:28, position:'relative', overflow:'hidden' }}>
-          <div style={{ position:'absolute', top:-40, right:-40, width:220, height:220, borderRadius:'50%', background:'radial-gradient(circle, rgba(125,196,255,.35), transparent 70%)', filter:'blur(20px)', pointerEvents:'none' }}/>
+        <div className="foot-cta-card" style={{ borderRadius:28, background:'linear-gradient(135deg,#0c4a6e 0%,#155e75 50%,#06b6d4 100%)', padding:'52px 48px', display:'flex', alignItems:'center', justifyContent:'space-between', flexWrap:'wrap', gap:28, position:'relative', overflow:'hidden' }}>
+          <div style={{ position:'absolute', top:-40, right:-40, width:220, height:220, borderRadius:'50%', background:'radial-gradient(circle, rgba(103,232,249,.4), transparent 70%)', filter:'blur(20px)', pointerEvents:'none' }}/>
           <div style={{ position:'absolute', bottom:-30, left:120, width:160, height:160, borderRadius:'50%', background:'radial-gradient(circle, rgba(255,255,255,.12), transparent 70%)', filter:'blur(20px)', pointerEvents:'none' }}/>
           <div style={{ position:'relative', zIndex:1, minWidth:0, flex:'1 1 280px' }}>
             <div style={{ fontSize:28, fontWeight:800, fontFamily:"'Plus Jakarta Sans',sans-serif", marginBottom:8, lineHeight:1.2 }}>Ready to transform your business?</div>
             <div style={{ fontSize:15, opacity:.82, lineHeight:1.65, maxWidth:480 }}>Join 350+ businesses who chose DevinStratus for their Dynamics 365 journey.</div>
           </div>
           <div className="foot-cta-buttons" style={{ display:'flex', gap:12, position:'relative', zIndex:1, flexWrap:'wrap' }}>
-            <button onClick={openConsult} style={{ padding:'14px 28px', borderRadius:50, background:'#fff', color:C.blue, border:'none', fontSize:14, fontWeight:700, cursor:'pointer', fontFamily:"'Plus Jakarta Sans',sans-serif", transition:'all .2s', whiteSpace:'nowrap' }}
+            <button onClick={openConsult} style={{ padding:'14px 28px', borderRadius:50, background:'#fff', color:'#0c4a6e', border:'none', fontSize:14, fontWeight:700, cursor:'pointer', fontFamily:"'Plus Jakarta Sans',sans-serif", transition:'all .2s', whiteSpace:'nowrap' }}
               onMouseEnter={e=>e.currentTarget.style.transform='translateY(-2px)'}
               onMouseLeave={e=>e.currentTarget.style.transform='none'}>
               Free Consultation →
@@ -42,7 +42,7 @@ export default function Footer({ navigate, openConsult }) {
               <div style={{
                 width: 220,
                 height: 46,
-                background: 'linear-gradient(135deg, #ffffff 0%, #7dc4ff 35%, #0066FF 70%, #001233 100%)',
+                background: 'linear-gradient(135deg, #ffffff 0%, #67e8f9 35%, #06b6d4 70%, #082f49 100%)',
                 WebkitMaskImage: `url(${logoFull})`,
                 maskImage: `url(${logoFull})`,
                 WebkitMaskSize: 'contain',
@@ -60,7 +60,7 @@ export default function Footer({ navigate, openConsult }) {
             <div style={{ display:'flex', gap:8, marginBottom:28 }}>
               {['Linkedin','Twitter','Youtube'].map(n => (
                 <button key={n} className="soc-btn" style={{ width:36, height:36, borderRadius:9, background:'rgba(255,255,255,.06)', border:'1px solid rgba(255,255,255,.1)', cursor:'pointer', display:'flex', alignItems:'center', justifyContent:'center', transition:'all .18s' }}
-                  onMouseEnter={e=>{ e.currentTarget.style.background='rgba(0,87,184,.3)'; e.currentTarget.style.borderColor='rgba(0,87,184,.5)' }}
+                  onMouseEnter={e=>{ e.currentTarget.style.background='rgba(6,182,212,.3)'; e.currentTarget.style.borderColor='rgba(6,182,212,.5)' }}
                   onMouseLeave={e=>{ e.currentTarget.style.background='rgba(255,255,255,.06)'; e.currentTarget.style.borderColor='rgba(255,255,255,.1)' }}>
                   <Ic n={n} s={15} style={{ color:'#64748b' }}/>
                 </button>
@@ -80,7 +80,7 @@ export default function Footer({ navigate, openConsult }) {
             {SOLUTIONS.filter(s => s.slug !== 'erp').map(s => ( // ERP hidden — remove .filter() to re-enable
               <button key={s.slug} className="foot-link" onClick={() => go(`/solutions/${s.slug}`)}
                 style={{ display:'block', width:'100%', textAlign:'left', padding:'6px 0', background:'none', border:'none', cursor:'pointer', fontSize:13.5, color:'#64748b', fontFamily:'Inter,sans-serif', transition:'color .16s' }}
-                onMouseEnter={e=>e.currentTarget.style.color='#60b4ff'}
+                onMouseEnter={e=>e.currentTarget.style.color='#67e8f9'}
                 onMouseLeave={e=>e.currentTarget.style.color='#64748b'}>
                 {s.heading}
               </button>
@@ -93,7 +93,7 @@ export default function Footer({ navigate, openConsult }) {
             {SERVICES.map(s => (
               <button key={s.slug} className="foot-link" onClick={() => go(`/service/${s.slug}`)}
                 style={{ display:'block', width:'100%', textAlign:'left', padding:'6px 0', background:'none', border:'none', cursor:'pointer', fontSize:13.5, color:'#64748b', fontFamily:'Inter,sans-serif', transition:'color .16s' }}
-                onMouseEnter={e=>e.currentTarget.style.color='#60b4ff'}
+                onMouseEnter={e=>e.currentTarget.style.color='#67e8f9'}
                 onMouseLeave={e=>e.currentTarget.style.color='#64748b'}>
                 {s.t}
               </button>
@@ -106,7 +106,7 @@ export default function Footer({ navigate, openConsult }) {
             {[['About Us','/company/about'],['Our Team','/company/team'],['Careers','/company/careers'],['Blog','/resources/blog'],['Contact','/contact']].map(([l,p]) => (
               <button key={l} className="foot-link" onClick={() => go(p)}
                 style={{ display:'block', width:'100%', textAlign:'left', padding:'6px 0', background:'none', border:'none', cursor:'pointer', fontSize:13.5, color:'#64748b', fontFamily:'Inter,sans-serif', transition:'color .16s' }}
-                onMouseEnter={e=>e.currentTarget.style.color='#60b4ff'}
+                onMouseEnter={e=>e.currentTarget.style.color='#67e8f9'}
                 onMouseLeave={e=>e.currentTarget.style.color='#64748b'}>
                 {l}
               </button>
@@ -129,7 +129,7 @@ export default function Footer({ navigate, openConsult }) {
         <div style={{ display:'flex', gap:20, flexWrap:'wrap' }}>
           {['Privacy Policy','Terms of Service','Cookie Policy'].map(l => (
             <button key={l} style={{ background:'none', border:'none', cursor:'pointer', fontSize:12.5, color:'#334155', fontFamily:'Inter,sans-serif', transition:'color .15s' }}
-              onMouseEnter={e=>e.currentTarget.style.color='#60b4ff'}
+              onMouseEnter={e=>e.currentTarget.style.color='#67e8f9'}
               onMouseLeave={e=>e.currentTarget.style.color='#334155'}>
               {l}
             </button>
