@@ -116,8 +116,16 @@ function TypeWriter({ text, speed=40 }) {
    - Pure SMIL animations — no JS render loop, no extra weight.
    ════════════════════════════════════════════════════════════════════════════ */
 function ManualToAutomated() {
+  // EXACT match to the working preview HTML structure: just an SVG with
+  // viewBox + preserveAspectRatio + inline styles for sizing. Nothing fancy.
+  // Inline `display:block; width:100%; height:auto` means external CSS can't
+  // accidentally hide or collapse it (inline styles win every cascade fight).
   return (
-    <svg viewBox="0 0 700 440" className="m2a-svg" preserveAspectRatio="xMidYMid meet">
+    <svg viewBox="0 0 700 440" className="m2a-svg" preserveAspectRatio="xMidYMid meet" style={{
+      display: 'block',
+      width:   '100%',
+      height:  'auto',
+    }}>
       <defs>
         {/* Soft top atmosphere — muted gray, fades to transparent */}
         <radialGradient id="m2a-topAtmo" cx="50%" cy="50%" r="55%">
@@ -432,17 +440,10 @@ export default function ContactPage({ navigate, openConsult }) {
         }
 
         /* ─── RESPONSIVE ─── */
-        /* Padding-bottom hack maintains 700:440 aspect ratio (440/700 = 62.857%).
-           Works in every browser ever made — much more reliable than aspect-ratio CSS. */
-        .m2a-wrap {
-          width: 100%; position: relative;
-          padding-bottom: 62.857%; height: 0;
-          overflow: visible;
-        }
-        .m2a-wrap .m2a-svg {
-          position: absolute; top: 0; left: 0;
-          width: 100%; height: 100%; display: block;
-        }
+        /* .m2a-wrap is a simple responsive max-width container.
+           The SVG itself uses inline width:100%; height:auto for sizing,
+           matching the working preview HTML structure exactly. */
+        .m2a-wrap { width: 100%; }
 
         /* ─── RESPONSIVE ─── */
         @media (max-width: 1023px) {
