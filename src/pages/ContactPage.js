@@ -117,7 +117,7 @@ function TypeWriter({ text, speed=40 }) {
    ════════════════════════════════════════════════════════════════════════════ */
 function ManualToAutomated() {
   return (
-    <svg viewBox="0 0 700 440" width="700" height="440" className="m2a-svg" preserveAspectRatio="xMidYMid meet" style={{ width:'100%', height:'auto', display:'block', maxWidth:'100%' }}>
+    <svg viewBox="0 0 700 440" className="m2a-svg" preserveAspectRatio="xMidYMid meet">
       <defs>
         {/* Soft top atmosphere — muted gray, fades to transparent */}
         <radialGradient id="m2a-topAtmo" cx="50%" cy="50%" r="55%">
@@ -432,8 +432,17 @@ export default function ContactPage({ navigate, openConsult }) {
         }
 
         /* ─── RESPONSIVE ─── */
-        .m2a-wrap     { width: 100%; line-height: 0; }
-        .m2a-wrap svg { display: block; width: 100%; height: auto; max-width: 100%; }
+        /* Padding-bottom hack maintains 700:440 aspect ratio (440/700 = 62.857%).
+           Works in every browser ever made — much more reliable than aspect-ratio CSS. */
+        .m2a-wrap {
+          width: 100%; position: relative;
+          padding-bottom: 62.857%; height: 0;
+          overflow: visible;
+        }
+        .m2a-wrap .m2a-svg {
+          position: absolute; top: 0; left: 0;
+          width: 100%; height: 100%; display: block;
+        }
 
         /* ─── RESPONSIVE ─── */
         @media (max-width: 1023px) {
