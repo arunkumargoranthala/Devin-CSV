@@ -95,7 +95,7 @@ const VALUES = [
 
 const TEAM = [
   {
-    name: 'Deepakteja', role: 'Founder & CEO', loc: 'Ontario, CA', exp: '20 yrs', cert: 'MBA · MC-900', initials: 'DT', color: C.blue,
+    name: 'Deepakteja', role: 'Founder & CTO', loc: 'Ontario, CA', exp: '20 yrs', cert: 'MBA · MC-900', initials: 'DT', color: C.blue,
     about: 'Deepakteja founded DevinStratus in 2009 with a vision to make Dynamics 365 deliver real, measurable business outcomes. He sets company strategy, leads global client relationships, and drives the partnerships that have made DevinStratus a Microsoft Gold Partner.',
     linkedin: 'https://linkedin.com'
   },
