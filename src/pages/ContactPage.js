@@ -87,103 +87,201 @@ function TypeWriter({ text, speed=40 }) {
 }
 
 /* ════════════════════════════════════════════════════════════════════════════
-   LIVE PULSE — the unique contact-page animation.
-   Central beacon transmits data packets along curved paths to 4 office endpoints.
-   Pure SVG with native SMIL animations — lightweight, no JS rendering loop.
-   ════════════════════════════════════════════════════════════════════════════ */
-function LivePulse() {
-  const cx = 300, cy = 210
-  const paths = [
-    { id:'p1', d:`M ${cx} ${cy} Q 220 140 ${OFFICES[0].coords.x} ${OFFICES[0].coords.y}`, label:'London',    flag:'🇬🇧', x:OFFICES[0].coords.x, y:OFFICES[0].coords.y, delay:'0s'   },
-    { id:'p2', d:`M ${cx} ${cy} Q 220 280 ${OFFICES[1].coords.x} ${OFFICES[1].coords.y}`, label:'New York',  flag:'🇺🇸', x:OFFICES[1].coords.x, y:OFFICES[1].coords.y, delay:'1s'   },
-    { id:'p3', d:`M ${cx} ${cy} Q 380 140 ${OFFICES[2].coords.x} ${OFFICES[2].coords.y}`, label:'Toronto',   flag:'🇨🇦', x:OFFICES[2].coords.x, y:OFFICES[2].coords.y, delay:'2s'   },
-    { id:'p4', d:`M ${cx} ${cy} Q 380 280 ${OFFICES[3].coords.x} ${OFFICES[3].coords.y}`, label:'New Delhi', flag:'🇮🇳', x:OFFICES[3].coords.x, y:OFFICES[3].coords.y, delay:'3s'   },
-  ]
+   MANUAL → AUTOMATED — the contact-page hero animation.
+   Top half: muted-gray manual world (drifting paperwork, slow clock, walking person).
+   Center: AI Automation Engine (glowing orb on an energy beam).
+   Bottom half: vibrant cyan automated world (zooming tasks, rocket, "10× FASTER").
 
+   Design choices:
+   - NO hard rectangles. Top/bottom zones are soft elliptical "atmospheres" that
+     fade to transparent so the page background shows through naturally.
+   - Energy beam is a thin gradient that fades at both ends — no boxed look.
+   - Larger SVG font sizes so labels stay readable on phones.
+   - Pure SMIL animations — no JS render loop, no extra weight.
+   ════════════════════════════════════════════════════════════════════════════ */
+function ManualToAutomated() {
   return (
-    <svg viewBox="0 0 600 420" className="live-pulse-svg" preserveAspectRatio="xMidYMid meet" style={{ width:'100%', height:'auto', display:'block' }}>
+    <svg viewBox="0 0 700 440" className="m2a-svg" preserveAspectRatio="xMidYMid meet" style={{ width:'100%', height:'auto', display:'block' }}>
       <defs>
-        <pattern id="lp-grid" width="32" height="32" patternUnits="userSpaceOnUse">
-          <path d="M 32 0 L 0 0 0 32" fill="none" stroke="rgba(6,182,212,0.10)" strokeWidth="0.6"/>
-        </pattern>
-        <radialGradient id="lp-coreGlow" cx="50%" cy="50%" r="50%">
-          <stop offset="0%"  stopColor="#67e8f9" stopOpacity="0.65"/>
-          <stop offset="60%" stopColor="#06b6d4" stopOpacity="0.25"/>
+        {/* Soft top atmosphere — muted gray, fades to transparent */}
+        <radialGradient id="m2a-topAtmo" cx="50%" cy="50%" r="55%">
+          <stop offset="0%"   stopColor="#94a3b8" stopOpacity="0.20"/>
+          <stop offset="100%" stopColor="#94a3b8" stopOpacity="0"/>
+        </radialGradient>
+        {/* Soft bottom atmosphere — cyan, fades to transparent */}
+        <radialGradient id="m2a-bottomAtmo" cx="50%" cy="50%" r="55%">
+          <stop offset="0%"   stopColor="#06b6d4" stopOpacity="0.26"/>
           <stop offset="100%" stopColor="#06b6d4" stopOpacity="0"/>
         </radialGradient>
-        <filter id="lp-soft" x="-50%" y="-50%" width="200%" height="200%">
-          <feGaussianBlur stdDeviation="3" result="blur"/>
-          <feMerge>
-            <feMergeNode in="blur"/>
-            <feMergeNode in="SourceGraphic"/>
-          </feMerge>
+        {/* Energy beam — gradient with fade at both ends */}
+        <linearGradient id="m2a-beam" x1="0%" y1="0%" x2="100%" y2="0%">
+          <stop offset="0%"   stopColor="#06b6d4" stopOpacity="0"/>
+          <stop offset="18%"  stopColor="#0c4a6e" stopOpacity="0.55"/>
+          <stop offset="50%"  stopColor="#06b6d4" stopOpacity="0.85"/>
+          <stop offset="82%"  stopColor="#67e8f9" stopOpacity="0.55"/>
+          <stop offset="100%" stopColor="#67e8f9" stopOpacity="0"/>
+        </linearGradient>
+        {/* Engine orb gradient (3D liquid look) */}
+        <radialGradient id="m2a-engineCore" cx="35%" cy="35%" r="65%">
+          <stop offset="0%"   stopColor="#a5f3fc" stopOpacity="1"/>
+          <stop offset="50%"  stopColor="#06b6d4" stopOpacity="0.65"/>
+          <stop offset="100%" stopColor="#0c4a6e" stopOpacity="1"/>
+        </radialGradient>
+        <filter id="m2a-glow" x="-50%" y="-50%" width="200%" height="200%">
+          <feGaussianBlur stdDeviation="3" result="b"/>
+          <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
         </filter>
       </defs>
 
-      <rect width="600" height="420" fill="url(#lp-grid)"/>
-      <circle cx={cx} cy={cy} r="170" fill="url(#lp-coreGlow)"/>
+      {/* ── SOFT ATMOSPHERES (no hard edges, blend with page bg) ── */}
+      <ellipse cx="350" cy="105" rx="345" ry="100" fill="url(#m2a-topAtmo)"/>
+      <ellipse cx="350" cy="335" rx="345" ry="100" fill="url(#m2a-bottomAtmo)"/>
 
-      {/* Concentric expanding rings */}
-      {[0, 1.4, 2.8].map((delay, i) => (
-        <circle key={i} cx={cx} cy={cy} r="30" fill="none" stroke="#06b6d4" strokeWidth="1.5">
-          <animate attributeName="r"       from="30"  to="155" dur="4.2s" begin={`${delay}s`} repeatCount="indefinite"/>
-          <animate attributeName="opacity" from="0.55" to="0"   dur="4.2s" begin={`${delay}s`} repeatCount="indefinite"/>
-        </circle>
-      ))}
+      {/* ════════════════ TOP ZONE — MANUAL / SLOW ════════════════ */}
+      <text x="40" y="38" fontSize="14" fontWeight="800" letterSpacing="0.22em" fill="#64748b" fontFamily="'JetBrains Mono', monospace">
+        BEFORE  ·  MANUAL  ·  SLOW
+      </text>
 
-      {/* Connection paths */}
-      {paths.map(p => (
-        <path key={p.id} id={p.id} d={p.d} fill="none" stroke="rgba(6,182,212,0.28)" strokeWidth="1.4" strokeDasharray="3 5"/>
-      ))}
-
-      {/* Animated data packets */}
-      {paths.map(p => (
-        <g key={p.id + '-pkt'}>
-          <circle r="6" fill="#06b6d4" opacity="0.35">
-            <animateMotion dur="3.4s" begin={p.delay} repeatCount="indefinite">
-              <mpath href={`#${p.id}`}/>
-            </animateMotion>
-            <animate attributeName="opacity" values="0;0.35;0" keyTimes="0;0.3;1" dur="3.4s" begin={p.delay} repeatCount="indefinite"/>
-          </circle>
-          <circle r="3.5" fill="#67e8f9" filter="url(#lp-soft)">
-            <animateMotion dur="3.4s" begin={p.delay} repeatCount="indefinite">
-              <mpath href={`#${p.id}`}/>
-            </animateMotion>
-            <animate attributeName="opacity" values="0;1;1;0" keyTimes="0;0.1;0.9;1" dur="3.4s" begin={p.delay} repeatCount="indefinite"/>
-          </circle>
-        </g>
-      ))}
-
-      {/* Endpoint nodes */}
-      {paths.map((p, i) => (
-        <g key={p.id + '-end'} transform={`translate(${p.x}, ${p.y})`}>
-          <circle r="20" fill="rgba(6,182,212,0.10)" stroke="#06b6d4" strokeWidth="1.5"/>
-          <circle r="8" fill="#06b6d4" opacity="0.85">
-            <animate attributeName="r" values="8;11;8" dur="2.4s" begin={`${i * 0.6}s`} repeatCount="indefinite"/>
-            <animate attributeName="opacity" values="0.85;1;0.85" dur="2.4s" begin={`${i * 0.6}s`} repeatCount="indefinite"/>
-          </circle>
-          <text y="3.5" textAnchor="middle" fontSize="13" style={{ pointerEvents:'none' }}>{p.flag}</text>
-          <text y="42" textAnchor="middle" fontSize="11" fontWeight="700" fill="#0c4a6e" fontFamily="'Plus Jakarta Sans',sans-serif" style={{ letterSpacing:'.04em' }}>{p.label}</text>
-        </g>
-      ))}
-
-      {/* Central beacon */}
-      <g transform={`translate(${cx}, ${cy})`}>
-        <circle r="44" fill="rgba(6,182,212,0.12)" stroke="rgba(6,182,212,0.4)" strokeWidth="1.5"/>
-        <circle r="32" fill="rgba(6,182,212,0.18)" stroke="#06b6d4" strokeWidth="2"/>
-        <circle r="22" fill="#0c4a6e" filter="url(#lp-soft)">
-          <animate attributeName="r" values="22;26;22" dur="2.8s" repeatCount="indefinite"/>
-        </circle>
-        <text y="6" textAnchor="middle" fontSize="15" fontWeight="900" fill="#67e8f9" fontFamily="'Plus Jakarta Sans',sans-serif" letterSpacing="0.06em">DS</text>
+      {/* "..." SLOW indicator floating top-right */}
+      <g>
+        <text x="640" y="48" textAnchor="middle" fontSize="11" fontWeight="800" letterSpacing="0.20em" fill="#64748b" fontFamily="'JetBrains Mono', monospace">SLOW</text>
+        <text x="640" y="72" textAnchor="middle" fontSize="22" fontWeight="900" fill="#94a3b8">. . .</text>
       </g>
 
-      {/* Top + bottom labels */}
-      <text x="300" y="32" textAnchor="middle" fontSize="11" fontWeight="700" letterSpacing="0.22em" fill={CY.cyanMid} fontFamily="'JetBrains Mono', monospace">
-        ◆  LIVE  GLOBAL  NETWORK  ◆
+      {/* Drifting manual icons (slow loop, gray) */}
+      {/* 1) Stack of papers */}
+      <g>
+        <g transform="translate(0,0)">
+          <rect x="-2" y="-15" width="36" height="24" rx="3" fill="#fff" stroke="#cbd5e1" strokeWidth="1.4"/>
+          <rect x="-4" y="-12" width="36" height="24" rx="3" fill="#fff" stroke="#cbd5e1" strokeWidth="1.4"/>
+          <rect x="-6" y="-9"  width="36" height="24" rx="3" fill="#fff" stroke="#cbd5e1" strokeWidth="1.4"/>
+          <line x1="-2" y1="-3" x2="22" y2="-3" stroke="#94a3b8" strokeWidth="1.2"/>
+          <line x1="-2" y1="2"  x2="22" y2="2"  stroke="#94a3b8" strokeWidth="1.2"/>
+        </g>
+        <animateTransform attributeName="transform" type="translate" values="60 100; 540 100" dur="14s" repeatCount="indefinite"/>
+      </g>
+
+      {/* 2) Walking person */}
+      <g>
+        <g>
+          <circle cx="0" cy="-12" r="7" fill="#cbd5e1" stroke="#64748b" strokeWidth="1.3"/>
+          <rect x="-6" y="-3" width="12" height="16" rx="3" fill="#cbd5e1" stroke="#64748b" strokeWidth="1.3"/>
+          <line x1="-3" y1="13" x2="-5" y2="22" stroke="#64748b" strokeWidth="1.6" strokeLinecap="round"/>
+          <line x1="3"  y1="13" x2="5"  y2="22" stroke="#64748b" strokeWidth="1.6" strokeLinecap="round"/>
+        </g>
+        <animateTransform attributeName="transform" type="translate" values="100 135; 580 135" dur="14s" begin="3s" repeatCount="indefinite"/>
+      </g>
+
+      {/* 3) Slow clock with rotating hands */}
+      <g>
+        <g>
+          <circle r="15" fill="#fff" stroke="#cbd5e1" strokeWidth="1.4"/>
+          <line x1="0" y1="0" x2="0" y2="-9" stroke="#64748b" strokeWidth="1.6" strokeLinecap="round">
+            <animateTransform attributeName="transform" type="rotate" from="0" to="360" dur="8s" repeatCount="indefinite"/>
+          </line>
+          <line x1="0" y1="0" x2="6" y2="0" stroke="#64748b" strokeWidth="2" strokeLinecap="round">
+            <animateTransform attributeName="transform" type="rotate" from="0" to="360" dur="60s" repeatCount="indefinite"/>
+          </line>
+          <circle r="2" fill="#64748b"/>
+        </g>
+        <animateTransform attributeName="transform" type="translate" values="160 168; 600 168" dur="14s" begin="1.5s" repeatCount="indefinite"/>
+      </g>
+
+      {/* ════════════════ CENTER — ENERGY BEAM + ENGINE ════════════════ */}
+      {/* Energy beam (transparent at ends, no rectangle) */}
+      <rect x="0" y="217" width="700" height="6" fill="url(#m2a-beam)"/>
+
+      {/* Speed lines streaking through */}
+      <g>
+        <line x1="0" y1="217" x2="40" y2="217" stroke="#a5f3fc" strokeWidth="1.5" opacity="0.75">
+          <animate attributeName="x1" values="-50;700" dur="2s" begin="0s" repeatCount="indefinite"/>
+          <animate attributeName="x2" values="-10;740" dur="2s" begin="0s" repeatCount="indefinite"/>
+        </line>
+        <line x1="0" y1="222" x2="40" y2="222" stroke="#67e8f9" strokeWidth="1" opacity="0.6">
+          <animate attributeName="x1" values="-50;700" dur="2s" begin="0.5s" repeatCount="indefinite"/>
+          <animate attributeName="x2" values="-10;740" dur="2s" begin="0.5s" repeatCount="indefinite"/>
+        </line>
+        <line x1="0" y1="220" x2="40" y2="220" stroke="#a5f3fc" strokeWidth="1.5" opacity="0.75">
+          <animate attributeName="x1" values="-50;700" dur="2s" begin="1s" repeatCount="indefinite"/>
+          <animate attributeName="x2" values="-10;740" dur="2s" begin="1s" repeatCount="indefinite"/>
+        </line>
+        <line x1="0" y1="223" x2="40" y2="223" stroke="#67e8f9" strokeWidth="1" opacity="0.6">
+          <animate attributeName="x1" values="-50;700" dur="2s" begin="1.5s" repeatCount="indefinite"/>
+          <animate attributeName="x2" values="-10;740" dur="2s" begin="1.5s" repeatCount="indefinite"/>
+        </line>
+      </g>
+
+      {/* Engine label above orb */}
+      <text x="350" y="200" textAnchor="middle" fontSize="14" fontWeight="800" letterSpacing="0.22em" fill="#0c4a6e" fontFamily="'JetBrains Mono', monospace">
+        ◆  AI  AUTOMATION  ENGINE  ◆
       </text>
-      <text x="300" y="402" textAnchor="middle" fontSize="10" fontWeight="600" letterSpacing="0.18em" fill="rgba(12,74,110,0.7)" fontFamily="'JetBrains Mono', monospace">
-        SIGNAL · ONLINE · 4 OFFICES · 4 TIMEZONES
+
+      {/* Engine orb — the focal showpiece */}
+      <g transform="translate(350, 220)">
+        {/* Outer breathing halo */}
+        <circle r="46" fill="rgba(6,182,212,0.18)">
+          <animate attributeName="r" values="46;52;46" dur="3s" repeatCount="indefinite"/>
+        </circle>
+        {/* Liquid gradient sphere */}
+        <circle r="36" fill="url(#m2a-engineCore)" filter="url(#m2a-glow)"/>
+        {/* Inner pulsing core */}
+        <circle r="25" fill="#0c4a6e">
+          <animate attributeName="r" values="25;28;25" dur="2.2s" repeatCount="indefinite"/>
+        </circle>
+        {/* Highlight reflection */}
+        <ellipse cx="-9" cy="-12" rx="11" ry="6" fill="rgba(255,255,255,0.35)"/>
+        {/* Lightning bolt — the transformation symbol */}
+        <path d="M 3 -13 L -7 2 L 0 2 L -3 14 L 7 -1 L 0 -1 Z" fill="#a5f3fc"/>
+      </g>
+
+      {/* ════════════════ BOTTOM ZONE — AUTOMATED / FAST ════════════════ */}
+      <text x="40" y="288" fontSize="14" fontWeight="800" letterSpacing="0.22em" fill="#0c4a6e" fontFamily="'JetBrains Mono', monospace">
+        AFTER  ·  AUTOMATED  ·  INSTANT
       </text>
+
+      {/* Auto-flowing tasks (fast, with checkmarks + speed trails) */}
+      {/* Task lane 1 */}
+      <g>
+        <g>
+          <rect x="-19" y="-12" width="38" height="24" rx="6" fill="#06b6d4"/>
+          <path d="M -8 -1 L -2 5 L 8 -6" fill="none" stroke="#fff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+          {/* Trailing speed marks */}
+          <path d="M -28 -8 L -22 -8 M -34 -2 L -24 -2 M -30 4 L -22 4" stroke="#67e8f9" strokeWidth="1.5" strokeLinecap="round" opacity="0.7"/>
+        </g>
+        <animateTransform attributeName="transform" type="translate" values="60 320; 660 320" dur="3.5s" repeatCount="indefinite"/>
+      </g>
+      {/* Task lane 2 */}
+      <g>
+        <g>
+          <rect x="-19" y="-12" width="38" height="24" rx="6" fill="#06b6d4"/>
+          <path d="M -8 -1 L -2 5 L 8 -6" fill="none" stroke="#fff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+          <path d="M -28 -8 L -22 -8 M -34 -2 L -24 -2 M -30 4 L -22 4" stroke="#67e8f9" strokeWidth="1.5" strokeLinecap="round" opacity="0.7"/>
+        </g>
+        <animateTransform attributeName="transform" type="translate" values="60 360; 660 360" dur="3.5s" begin="0.9s" repeatCount="indefinite"/>
+      </g>
+      {/* Rocket lane */}
+      <g>
+        <g>
+          <path d="M 0 -16 L -7 -2 L -9 7 L -3 7 L -3 13 L 3 13 L 3 7 L 9 7 L 7 -2 Z" fill="#0c4a6e"/>
+          <path d="M -7 9 L -11 16 M 7 9 L 11 16 M 0 13 L 0 20" stroke="#67e8f9" strokeWidth="1.6" strokeLinecap="round" opacity="0.85"/>
+          <path d="M -28 0 L -14 0 M -34 -7 L -18 -7 M -34 7 L -18 7" stroke="#a5f3fc" strokeWidth="1.5" strokeLinecap="round" opacity="0.75"/>
+        </g>
+        <animateTransform attributeName="transform" type="translate" values="100 395; 700 395" dur="3.5s" begin="1.7s" repeatCount="indefinite"/>
+      </g>
+
+      {/* "10× FASTER" badge — punctuates the difference */}
+      <g transform="translate(605, 308)">
+        <rect x="-44" y="-15" width="88" height="30" rx="15" fill="#0c4a6e"/>
+        <text y="4" textAnchor="middle" fontSize="13" fontWeight="900" fill="#67e8f9" fontFamily="'Plus Jakarta Sans', sans-serif" letterSpacing="0.04em">10× FASTER</text>
+      </g>
+
+      {/* Bottom outcomes row */}
+      <g fontFamily="'Plus Jakarta Sans', sans-serif">
+        <text x="100" y="425" textAnchor="middle" fontSize="12" fontWeight="800" letterSpacing="0.16em" fill="#0c4a6e">ZERO ERRORS</text>
+        <text x="265" y="425" textAnchor="middle" fontSize="12" fontWeight="800" letterSpacing="0.16em" fill="#0c4a6e">24/7 UPTIME</text>
+        <text x="430" y="425" textAnchor="middle" fontSize="12" fontWeight="800" letterSpacing="0.16em" fill="#0c4a6e">INSTANT DECISIONS</text>
+        <text x="600" y="425" textAnchor="middle" fontSize="12" fontWeight="800" letterSpacing="0.16em" fill="#0c4a6e">INFINITE SCALE</text>
+      </g>
     </svg>
   )
 }
@@ -299,11 +397,15 @@ export default function ContactPage({ navigate, openConsult }) {
         }
 
         /* ─── RESPONSIVE ─── */
+        .m2a-wrap     { width: 100%; }
+        .m2a-wrap svg { display: block; width: 100%; height: auto; }
+
+        /* ─── RESPONSIVE ─── */
         @media (max-width: 1023px) {
           .contact-hero-g  { grid-template-columns: 1fr !important; gap: 36px !important; text-align: center !important; }
           .contact-hero-g .hero-trust { justify-content: center !important; }
           .contact-main-g  { grid-template-columns: 1fr !important; gap: 32px !important; }
-          .live-pulse-wrap { max-width: 540px; margin: 0 auto !important; }
+          .m2a-wrap { max-width: 620px; margin: 0 auto !important; width: 100%; }
         }
         @media (max-width: 767px) {
           .contact-hero-section { padding: 56px 18px 56px !important; }
@@ -317,12 +419,14 @@ export default function ContactPage({ navigate, openConsult }) {
           .step-indicator-label { display: none !important; }
           .office-tabs          { gap:6px !important; }
           .office-tabs button   { padding:7px 11px !important; font-size:12px !important; }
+          .m2a-wrap             { max-width: 540px; }
         }
         @media (max-width: 480px) {
           .contact-hero-section { padding: 44px 14px 44px !important; }
           .contact-main-section { padding: 44px 14px !important; }
           .why-us-section       { padding: 40px 14px !important; }
           .contact-form-grid-2  { gap:10px !important; }
+          .m2a-wrap             { max-width: 100%; }
         }
       `}</style>
 
@@ -335,24 +439,24 @@ export default function ContactPage({ navigate, openConsult }) {
           <div className="contact-hero-g" style={{ display:'grid', gridTemplateColumns:'1fr 1.1fr', gap:48, alignItems:'center' }}>
 
             <div>
-              <div style={{ display:'inline-flex', alignItems:'center', gap:9, background:'rgba(16,185,129,.10)', border:'1px solid rgba(16,185,129,.28)', borderRadius:50, padding:'7px 16px', fontSize:12, fontWeight:700, color:'#059669', marginBottom:24 }}>
-                <span className="live-status-dot"/> Usually responds within 2 hours
+              <div style={{ display:'inline-flex', alignItems:'center', gap:9, background:'rgba(6,182,212,.10)', border:`1px solid ${CY.cyan}40`, borderRadius:50, padding:'7px 16px', fontSize:12, fontWeight:800, color:CY.cyanDark, marginBottom:24, letterSpacing:'.06em' }}>
+                <span className="live-status-dot"/> MICROSOFT INNER CIRCLE PARTNER · 350+ ENTERPRISES
               </div>
-              <h1 className="contact-h1" style={{ fontSize:'clamp(32px, 4.6vw, 54px)', fontWeight:900, color:C.text, lineHeight:1.1, marginBottom:20, fontFamily:"'Plus Jakarta Sans',sans-serif" }}>
-                Let's start the<br/>
+              <h1 className="contact-h1" style={{ fontSize:'clamp(32px, 4.6vw, 54px)', fontWeight:900, color:C.text, lineHeight:1.08, marginBottom:20, fontFamily:"'Plus Jakarta Sans',sans-serif", letterSpacing:'-0.02em' }}>
+                Transform operations with{' '}
                 <span style={{ background:`linear-gradient(135deg, ${CY.cyan}, ${CY.cyanDark})`, WebkitBackgroundClip:'text', WebkitTextFillColor:'transparent' }}>
-                  <TypeWriter text="conversation." speed={60}/>
+                  <TypeWriter text="Microsoft-powered AI." speed={55}/>
                 </span>
               </h1>
-              <p className="contact-sub" style={{ fontSize:16.5, color:C.textM, lineHeight:1.75, marginBottom:32, maxWidth:480 }}>
-                Whether you need a complete Dynamics 365 transformation or just honest advice — book a free 30-minute call with a certified specialist. No sales scripts, just value.
+              <p className="contact-sub" style={{ fontSize:16.5, color:C.textM, lineHeight:1.75, marginBottom:32, maxWidth:520 }}>
+                From Dynamics 365 to Copilot, we deliver enterprise-grade automation, intelligent insights, and operational change at scale. Speak with a solution architect about your transformation.
               </p>
 
               <div className="hero-trust" style={{ display:'flex', gap:18, flexWrap:'wrap' }}>
                 {[
-                  { icon:'CheckCircle', text:'Free consultation, no obligation', color:'#059669' },
-                  { icon:'Clock',       text:'Same-day response guaranteed',     color:CY.cyan   },
-                  { icon:'Shield',      text:'Your data stays confidential',     color:CY.cyanDark },
+                  { icon:'Award',  text:'Inner Circle (Top 1%) Partner',    color:CY.cyanDark },
+                  { icon:'Users',  text:'Solution Architect on first call', color:CY.cyan     },
+                  { icon:'Globe',  text:'Delivery across UK · USA · CA · IN', color:CY.cyanMid  },
                 ].map(t => (
                   <div key={t.text} style={{ display:'flex', alignItems:'center', gap:8, fontSize:13, color:C.textM, fontWeight:600 }}>
                     <Ic n={t.icon} s={15} style={{ color:t.color }}/> {t.text}
@@ -361,8 +465,8 @@ export default function ContactPage({ navigate, openConsult }) {
               </div>
             </div>
 
-            <div className="live-pulse-wrap rv" style={{ position:'relative' }}>
-              <LivePulse/>
+            <div className="m2a-wrap rv" style={{ position:'relative', background:'transparent' }}>
+              <ManualToAutomated/>
             </div>
           </div>
         </div>
