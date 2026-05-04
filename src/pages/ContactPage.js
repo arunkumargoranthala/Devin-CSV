@@ -18,13 +18,13 @@ import { C, Ic } from '../components/ui'
    5. Run:  npm install @emailjs/browser
    6. Replace the 3 values below AND uncomment the real send block in sendForm.
    ─────────────────────────────────────────────────────────────────────────── */
-const EMAILJS_SERVICE_ID  = 'YOUR_SERVICE_ID'
-const EMAILJS_TEMPLATE_ID = 'YOUR_TEMPLATE_ID'
-const EMAILJS_PUBLIC_KEY  = 'YOUR_PUBLIC_KEY'
+const EMAILJS_SERVICE_ID  = 'service_07t234l'
+const EMAILJS_TEMPLATE_ID = 'template_6wrrquf'
+const EMAILJS_PUBLIC_KEY  = '0Thqx9s95gzBPBAW'
 const EMAILJS_CONFIGURED  =
-  EMAILJS_SERVICE_ID  !== 'YOUR_SERVICE_ID'  &&
-  EMAILJS_TEMPLATE_ID !== 'YOUR_TEMPLATE_ID' &&
-  EMAILJS_PUBLIC_KEY  !== 'YOUR_PUBLIC_KEY'
+  EMAILJS_SERVICE_ID  !== 'service_07t234l'  &&
+  EMAILJS_TEMPLATE_ID !== 'template_6wrrquf' &&
+  EMAILJS_PUBLIC_KEY  !== '0Thqx9s95gzBPBAW'
 
 /* ─── Cyan accent palette (used in addition to brand C) ───────────────────── */
 const CY = {
@@ -397,8 +397,8 @@ export default function ContactPage({ navigate, openConsult }) {
         }
 
         /* ─── RESPONSIVE ─── */
-        .m2a-wrap     { width: 100%; }
-        .m2a-wrap svg { display: block; width: 100%; height: auto; }
+        .m2a-wrap     { width: 100%; aspect-ratio: 700 / 440; min-height: 240px; }
+        .m2a-wrap svg { display: block; width: 100%; height: 100%; }
 
         /* ─── RESPONSIVE ─── */
         @media (max-width: 1023px) {
@@ -440,23 +440,23 @@ export default function ContactPage({ navigate, openConsult }) {
 
             <div>
               <div style={{ display:'inline-flex', alignItems:'center', gap:9, background:'rgba(6,182,212,.10)', border:`1px solid ${CY.cyan}40`, borderRadius:50, padding:'7px 16px', fontSize:12, fontWeight:800, color:CY.cyanDark, marginBottom:24, letterSpacing:'.06em' }}>
-                <span className="live-status-dot"/> MICROSOFT INNER CIRCLE PARTNER · 350+ ENTERPRISES
+                <span className="live-status-dot"/> START THE CONVERSATION
               </div>
               <h1 className="contact-h1" style={{ fontSize:'clamp(32px, 4.6vw, 54px)', fontWeight:900, color:C.text, lineHeight:1.08, marginBottom:20, fontFamily:"'Plus Jakarta Sans',sans-serif", letterSpacing:'-0.02em' }}>
-                Transform operations with{' '}
+                Tell us what's slowing you{' '}
                 <span style={{ background:`linear-gradient(135deg, ${CY.cyan}, ${CY.cyanDark})`, WebkitBackgroundClip:'text', WebkitTextFillColor:'transparent' }}>
-                  <TypeWriter text="Microsoft-powered AI." speed={55}/>
+                  <TypeWriter text="down." speed={120}/>
                 </span>
               </h1>
               <p className="contact-sub" style={{ fontSize:16.5, color:C.textM, lineHeight:1.75, marginBottom:32, maxWidth:520 }}>
-                From Dynamics 365 to Copilot, we deliver enterprise-grade automation, intelligent insights, and operational change at scale. Speak with a solution architect about your transformation.
+                From repetitive workflows to system upgrades, share your challenge with a Microsoft-certified solution architect. We'll respond with a real plan — not a sales deck.
               </p>
 
               <div className="hero-trust" style={{ display:'flex', gap:18, flexWrap:'wrap' }}>
                 {[
-                  { icon:'Award',  text:'Inner Circle (Top 1%) Partner',    color:CY.cyanDark },
-                  { icon:'Users',  text:'Solution Architect on first call', color:CY.cyan     },
-                  { icon:'Globe',  text:'Delivery across UK · USA · CA · IN', color:CY.cyanMid  },
+                  { icon:'Users',       text:'Solution Architect on first call', color:CY.cyanDark },
+                  { icon:'CheckCircle', text:'No obligation, no pressure',       color:CY.cyan     },
+                  { icon:'Shield',      text:'Confidential by default',          color:CY.cyanMid  },
                 ].map(t => (
                   <div key={t.text} style={{ display:'flex', alignItems:'center', gap:8, fontSize:13, color:C.textM, fontWeight:600 }}>
                     <Ic n={t.icon} s={15} style={{ color:t.color }}/> {t.text}
@@ -465,7 +465,7 @@ export default function ContactPage({ navigate, openConsult }) {
               </div>
             </div>
 
-            <div className="m2a-wrap rv" style={{ position:'relative', background:'transparent' }}>
+            <div className="m2a-wrap" style={{ position:'relative', background:'transparent' }}>
               <ManualToAutomated/>
             </div>
           </div>
