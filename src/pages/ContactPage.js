@@ -16,15 +16,31 @@ import { C, Ic } from '../components/ui'
       {{phone}}, {{interest}}, {{message}} → copy TEMPLATE_ID
    4. Account → API Keys → copy PUBLIC_KEY
    5. Run:  npm install @emailjs/browser
-   6. Replace the 3 values below AND uncomment the real send block in sendForm.
+   6. Replace the 3 values below. After saving, restart your dev server.
    ─────────────────────────────────────────────────────────────────────────── */
 const EMAILJS_SERVICE_ID  = 'service_07t234l'
 const EMAILJS_TEMPLATE_ID = 'template_6wrrquf'
-const EMAILJS_PUBLIC_KEY  = '0Thqx9s95gzBPBAW'
-const EMAILJS_CONFIGURED  =
-  EMAILJS_SERVICE_ID  !== 'service_07t234l'  &&
-  EMAILJS_TEMPLATE_ID !== 'template_6wrrquf' &&
-  EMAILJS_PUBLIC_KEY  !== '0Thqx9s95gzBPBAW'
+const EMAILJS_PUBLIC_KEY  = '0Thqx9s95gzBPBAW-'
+
+// A "real" key is any non-empty string that is NOT the placeholder.
+// This is more forgiving than strict-equality with one fixed placeholder string.
+const _isReal = v => typeof v === 'string' && v.trim().length > 4 && !v.startsWith('YOUR_')
+const EMAILJS_CONFIGURED =
+  _isReal(EMAILJS_SERVICE_ID) &&
+  _isReal(EMAILJS_TEMPLATE_ID) &&
+  _isReal(EMAILJS_PUBLIC_KEY)
+
+// Diagnostic log — open browser DevTools (F12 → Console) to see which keys read
+// as "real". Tells you instantly if a key wasn't picked up correctly.
+if (typeof window !== 'undefined') {
+  // eslint-disable-next-line no-console
+  console.log('[ContactPage] EmailJS status:', {
+    configured:       EMAILJS_CONFIGURED,
+    serviceId_real:   _isReal(EMAILJS_SERVICE_ID),
+    templateId_real:  _isReal(EMAILJS_TEMPLATE_ID),
+    publicKey_real:   _isReal(EMAILJS_PUBLIC_KEY),
+  })
+}
 
 /* ─── Cyan accent palette (used in addition to brand C) ───────────────────── */
 const CY = {
@@ -101,7 +117,7 @@ function TypeWriter({ text, speed=40 }) {
    ════════════════════════════════════════════════════════════════════════════ */
 function ManualToAutomated() {
   return (
-    <svg viewBox="0 0 700 440" className="m2a-svg" preserveAspectRatio="xMidYMid meet" style={{ width:'100%', height:'auto', display:'block' }}>
+    <svg viewBox="0 0 700 440" width="700" height="440" className="m2a-svg" preserveAspectRatio="xMidYMid meet" style={{ width:'100%', height:'auto', display:'block', maxWidth:'100%' }}>
       <defs>
         {/* Soft top atmosphere — muted gray, fades to transparent */}
         <radialGradient id="m2a-topAtmo" cx="50%" cy="50%" r="55%">
@@ -340,21 +356,40 @@ export default function ContactPage({ navigate, openConsult }) {
   }
 
   /* ─── FORM SUBMISSION ──────────────────────────────────────────────────────
-     If EmailJS is configured → real send.
+     If EmailJS is configured → real send via @emailjs/browser.
      Otherwise → DEMO MODE: status is 'demo' (NOT 'sent'), shows a clear
      "captured but not actually emailed" message. This was the original bug.
+     PREREQUISITE: run `npm install @emailjs/browser` once.
      ──────────────────────────────────────────────────────────────────────── */
   const sendForm = async () => {
     setStatus('sending'); setErr('')
     if (EMAILJS_CONFIGURED) {
       try {
-        // const emailjs = (await import('@emailjs/browser')).default
-        // await emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, { ...form }, EMAILJS_PUBLIC_KEY)
-        await new Promise(r => setTimeout(r, 1200))
+        const { default: emailjs } = await import('@emailjs/browser')
+        const result = await emailjs.send(
+          EMAILJS_SERVICE_ID,
+          EMAILJS_TEMPLATE_ID,
+          {
+            name:     form.name,
+            email:    form.email,
+            company:  form.company || '—',
+            phone:    form.phone   || '—',
+            interest: form.interest,
+            message:  form.message || '(no message)',
+            day:      form.day     || 'Flexible',
+            time:     form.time    || 'Flexible',
+          },
+          EMAILJS_PUBLIC_KEY
+        )
+        // eslint-disable-next-line no-console
+        console.log('[ContactPage] EmailJS send OK:', result)
         setStatus('sent')
       } catch (e) {
+        // eslint-disable-next-line no-console
+        console.error('[ContactPage] EmailJS send FAILED:', e)
         setStatus('error')
-        setErr('Could not send your message. Please email us directly at hello@devinstratus.com')
+        const detail = e?.text || e?.message || (typeof e === 'string' ? e : 'Unknown error')
+        setErr(`Couldn't send: ${detail}. Please email us directly at hello@devinstratus.com`)
       }
     } else {
       await new Promise(r => setTimeout(r, 1000))
@@ -397,8 +432,8 @@ export default function ContactPage({ navigate, openConsult }) {
         }
 
         /* ─── RESPONSIVE ─── */
-        .m2a-wrap     { width: 100%; aspect-ratio: 700 / 440; min-height: 240px; }
-        .m2a-wrap svg { display: block; width: 100%; height: 100%; }
+        .m2a-wrap     { width: 100%; line-height: 0; }
+        .m2a-wrap svg { display: block; width: 100%; height: auto; max-width: 100%; }
 
         /* ─── RESPONSIVE ─── */
         @media (max-width: 1023px) {
