@@ -234,36 +234,33 @@ export default function ContactPage({ navigate, openConsult }) {
         }
 
         /* ─── RESPONSIVE ─── */
-        /* .m2a-wrap fills the grid cell (alignItems:stretch makes both columns equal height).
-           SVG inside uses preserveAspectRatio="xMidYMid meet" to fit cleanly. */
-        .m2a-wrap        { width: 100%; height: 100%; min-height: 380px; }
+        /* Desktop: wrapper fills the grid right column (height inherits from grid alignment). */
+        .m2a-wrap        { width: 100%; aspect-ratio: 1200 / 450; }
 
         /* CRITICAL OVERRIDE: somewhere in this project (likely App.jsx) there is a rule:
            @media (max-width: 900px) { .contact-hero-g > div:nth-child(2) { display: none !important; } }
-           That rule hides this animation on mobile. Until that rule is found and removed,
-           this ID-based selector beats it via specificity (ID = 100, class = 10). */
+           This ID-based selector beats it via specificity (ID = 100, class = 10). */
         #m2aWrapAnchor {
           display: block !important;
           visibility: visible !important;
         }
 
-        /* heroFloat animation if not already defined in app-level styles */
+        /* heroFloat keyframes (also used by Global Offices) */
         @keyframes heroFloat { 0%,100%{transform:translate(0,0)} 50%{transform:translate(10px,-10px)} }
 
-        /* ─── RESPONSIVE ─── */
-        /* Medium screens (1024-1280px): give the text column more room */
         @media (max-width: 1280px) and (min-width: 1024px) {
-          .contact-hero-g { grid-template-columns: 1fr 1.2fr !important; gap: 32px !important; min-height: 440px !important; }
+          .contact-hero-g  { grid-template-columns: 0.65fr 1.35fr !important; height: 480px !important; gap: 28px !important; }
         }
         @media (max-width: 1023px) {
-          .contact-hero-g  { grid-template-columns: 1fr !important; gap: 24px !important; text-align: center !important; align-items: stretch !important; min-height: 0 !important; }
+          .contact-hero-section { padding: 48px 18px !important; }
+          .contact-hero-g  { grid-template-columns: 1fr !important; gap: 24px !important; text-align: center !important; height: auto !important; }
           .contact-hero-g .hero-trust { justify-content: center !important; }
           .contact-hero-g > div:first-child { align-items: center !important; }
           .contact-main-g  { grid-template-columns: 1fr !important; gap: 32px !important; }
-          .m2a-wrap        { max-width: 760px; margin: 0 auto !important; width: 100%; height: auto !important; aspect-ratio: 1200 / 700; min-height: 0 !important; }
+          .m2a-wrap        { max-width: 760px; margin: 0 auto !important; aspect-ratio: 1200 / 450; height: auto !important; }
         }
         @media (max-width: 767px) {
-          .contact-hero-section { padding: 44px 18px 48px !important; }
+          .contact-hero-section { padding: 36px 18px !important; }
           .contact-main-section { padding: 56px 18px !important; }
           .contact-h1           { font-size: clamp(26px, 7vw, 36px) !important; }
           .contact-sub          { font-size: 14.5px !important; }
@@ -274,21 +271,20 @@ export default function ContactPage({ navigate, openConsult }) {
           .step-indicator-label { display: none !important; }
           .office-tabs          { gap:6px !important; }
           .office-tabs button   { padding:7px 11px !important; font-size:12px !important; }
-          /* Mobile portrait SVG aspect 460/740 ≈ 0.622 */
-          .m2a-wrap             { max-width: 380px; aspect-ratio: 460 / 740; height: auto !important; }
+          .m2a-wrap             { max-width: 380px; aspect-ratio: 460 / 740; }
         }
         @media (max-width: 480px) {
-          .contact-hero-section { padding: 36px 14px 36px !important; }
+          .contact-hero-section { padding: 32px 14px !important; }
           .contact-main-section { padding: 44px 14px !important; }
           .why-us-section       { padding: 40px 14px !important; }
           .contact-form-grid-2  { gap:10px !important; }
-          .m2a-wrap             { max-width: 100%; aspect-ratio: 460 / 740; height: auto !important; }
+          .m2a-wrap             { max-width: 100%; aspect-ratio: 460 / 740; }
         }
       `}</style>
 
-      {/* ════ HERO ════ Background + composition matches Global Offices */}
+      {/* ════ HERO ════ Background matches Global Offices; layout is simple grid with no wasted space */}
       <section className="contact-hero-section" style={{
-        padding:'64px 24px 56px',
+        padding:'40px 24px 32px',
         position:'relative',
         overflow:'hidden',
         background: `
@@ -298,25 +294,24 @@ export default function ContactPage({ navigate, openConsult }) {
         `,
         borderBottom: '1px solid rgba(0,102,255,0.10)',
       }}>
-        {/* Floating decorative orbs — same recipe as Global Offices */}
+        {/* Floating decorative orbs */}
         <div style={{ position:'absolute', top:'15%', right:'-5%', width:380, height:380, borderRadius:'50%', background:'radial-gradient(circle, rgba(6,182,212,0.30), transparent 70%)', filter:'blur(50px)', animation:'heroFloat 8s ease-in-out infinite', pointerEvents:'none' }}/>
         <div style={{ position:'absolute', bottom:'-15%', left:'-5%', width:300, height:300, borderRadius:'50%', background:'radial-gradient(circle, rgba(0,102,255,0.18), transparent 70%)', filter:'blur(50px)', animation:'heroFloat 11s ease-in-out infinite reverse', pointerEvents:'none' }}/>
-        <div style={{ position:'absolute', top:'40%', right:'25%', width:200, height:200, borderRadius:'50%', background:`radial-gradient(circle, ${CY.cyan}25, transparent 70%)`, filter:'blur(40px)', animation:'heroFloat 13s ease-in-out infinite 2s', pointerEvents:'none' }}/>
 
-        <div style={{ maxWidth:1400, margin:'0 auto', position:'relative', zIndex:1 }}>
-          <div className="contact-hero-g" style={{ display:'grid', gridTemplateColumns:'0.7fr 1.3fr', gap:40, alignItems:'stretch', minHeight:480 }}>
+        <div style={{ maxWidth:1400, margin:'0 auto', position:'relative', zIndex:1,paddingTop:30 }}>
+          <div className="contact-hero-g" style={{ display:'grid', gridTemplateColumns:'0.55fr 1.45fr', gap:32, alignItems:'center' }}>
 
-            <div style={{ display:'flex', flexDirection:'column', justifyContent:'center' }}>
-              <div style={{ display:'inline-flex', alignItems:'center', gap:9, background:'rgba(6,182,212,.10)', border:`1px solid ${CY.cyan}40`, borderRadius:50, padding:'7px 16px', fontSize:12, fontWeight:800, color:CY.cyanDark, marginBottom:22, letterSpacing:'.06em', alignSelf:'flex-start' }}>
+            <div>
+              <div style={{ display:'inline-flex', alignItems:'center', gap:9, background:'rgba(6,182,212,.10)', border:`1px solid ${CY.cyan}40`, borderRadius:50, padding:'7px 16px', fontSize:12, fontWeight:800, color:CY.cyanDark, marginBottom:18, letterSpacing:'.06em' }}>
                 <span className="live-status-dot"/> START THE CONVERSATION
               </div>
-              <h1 className="contact-h1" style={{ fontSize:'clamp(26px, 3.4vw, 42px)', fontWeight:900, color:C.text, lineHeight:1.1, marginBottom:18, fontFamily:"'Plus Jakarta Sans',sans-serif", letterSpacing:'-0.02em' }}>
+              <h1 className="contact-h1" style={{ fontSize:'clamp(28px, 3.6vw, 44px)', fontWeight:900, color:C.text, lineHeight:1.1, marginBottom:14, fontFamily:"'Plus Jakarta Sans',sans-serif", letterSpacing:'-0.02em' }}>
                 Tell us what's slowing you{' '}
                 <span style={{ background:`linear-gradient(135deg, ${CY.cyan}, ${CY.cyanDark})`, WebkitBackgroundClip:'text', WebkitTextFillColor:'transparent' }}>
                   <TypeWriter text="down." speed={120}/>
                 </span>
               </h1>
-              <p className="contact-sub" style={{ fontSize:15.5, color:C.textM, lineHeight:1.7, marginBottom:24, maxWidth:520 }}>
+              <p className="contact-sub" style={{ fontSize:15, color:C.textM, lineHeight:1.6, marginBottom:18, maxWidth:480 }}>
                 From repetitive workflows to system upgrades, share your challenge with a Microsoft-certified solution architect. We'll respond with a real plan — not a sales deck.
               </p>
 
@@ -333,7 +328,7 @@ export default function ContactPage({ navigate, openConsult }) {
               </div>
             </div>
 
-            <div id="m2aWrapAnchor" className="m2a-wrap" style={{ position:'relative', background:'transparent', width:'100%', height:'100%' }}>
+            <div id="m2aWrapAnchor" className="m2a-wrap" style={{ position:'relative', background:'transparent', width:'100%' }}>
               <ContactJohnHero/>
             </div>
           </div>

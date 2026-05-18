@@ -101,7 +101,6 @@ export default function ContactJohnHero() {
      ═══════════════════════════════════════════════════════════════════ */
   const getLayout = (mobile) => {
     if (mobile) {
-      // PORTRAIT: cards stack vertically (tight), John walks DOWN the left side
       return {
         viewBox: '0 0 460 740',
         floor: { x1: 60, y1: 30, x2: 60, y2: 720, axis: 'y' },
@@ -115,20 +114,21 @@ export default function ContactJohnHero() {
         johnAtCard: (i) => ({ x: 65, y: [100, 265, 430, 615][i] + 35 }),
       }
     }
-    // LANDSCAPE: 4 BIGGER cards in a row, John walks along the floor below them.
-    // viewBox 1200×700 (aspect 1.71) — when rendered in a ~800px column, ~470px tall.
-    // Cards render ~165px tall (vs the prior ~115px) — substantially more presence.
+    // LANDSCAPE: COMPACT layout — viewBox 1200×450 (aspect 2.67).
+    // Cards occupy y=20..300 (60% of vertical), John walks at y=420 (right below cards
+    // with a 29-unit gap). Floor at y=435. Total empty space ~10% (was 50% with 1200×700).
+    // Cards spread to fill horizontal width: balanced 32-unit margins L/R.
     return {
-      viewBox: '0 0 1200 700',
-      floor: { x1: 0, y1: 600, x2: 1200, y2: 600, axis: 'x' },
+      viewBox: '0 0 1200 450',
+      floor: { x1: 0, y1: 435, x2: 1200, y2: 435, axis: 'x' },
       cards: [
-        { cx: 175, cy: 220, w: 215, h: 250, num: '01', label: 'CHOOSE',  type: 'choose' },
-        { cx: 430, cy: 220, w: 215, h: 250, num: '02', label: 'TYPING',  type: 'who' },
-        { cx: 685, cy: 220, w: 215, h: 250, num: '03', label: 'PICKING', type: 'when' },
-        { cx: 960, cy: 220, w: 245, h: 280, num: '04', label: 'BOOKED',  type: 'done' },
+        { cx: 157,  cy: 160, w: 250, h: 280, num: '01', label: 'CHOOSE',  type: 'choose' },
+        { cx: 442,  cy: 160, w: 250, h: 280, num: '02', label: 'TYPING',  type: 'who' },
+        { cx: 727,  cy: 160, w: 250, h: 280, num: '03', label: 'PICKING', type: 'when' },
+        { cx: 1027, cy: 170, w: 280, h: 300, num: '04', label: 'BOOKED',  type: 'done' },
       ],
-      johnStart: { x: 60, y: 585 },
-      johnAtCard: (i) => ({ x: [175 - 30, 430 - 30, 685 - 30, 960 - 30][i], y: 585 }),
+      johnStart: { x: 120, y: 420 },
+      johnAtCard: (i) => ({ x: [127, 412, 697, 997][i], y: 420 }),
     }
   }
 
@@ -773,21 +773,21 @@ export default function ContactJohnHero() {
           stroke="url(#floorGrad)" strokeWidth="2" strokeDasharray="6 8"
         />
 
-        {/* Ambient particles */}
+        {/* Ambient particles — placed in the top decorative band above cards */}
         <g opacity="0.55">
-          <circle cx={isMobile ? 50 : 100} cy={isMobile ? 80 : 80} r="2.5" fill={C.cyanLite}>
+          <circle cx={isMobile ? 50 : 80} cy={isMobile ? 80 : 12} r="2.5" fill={C.cyanLite}>
             <animate attributeName="opacity" values="0.3;1;0.3" dur="3s" repeatCount="indefinite"/>
           </circle>
-          <circle cx={isMobile ? 420 : 360} cy={isMobile ? 200 : 60} r="2" fill={C.cyanGlow}>
+          <circle cx={isMobile ? 420 : 340} cy={isMobile ? 200 : 8} r="2" fill={C.cyanGlow}>
             <animate attributeName="opacity" values="0.3;1;0.3" dur="4s" begin="0.5s" repeatCount="indefinite"/>
           </circle>
-          <circle cx={isMobile ? 80 : 600} cy={isMobile ? 380 : 100} r="2.5" fill={C.cyanLite}>
+          <circle cx={isMobile ? 80 : 600} cy={isMobile ? 380 : 14} r="2.5" fill={C.cyanLite}>
             <animate attributeName="opacity" values="0.3;1;0.3" dur="3.5s" begin="1s" repeatCount="indefinite"/>
           </circle>
-          <circle cx={isMobile ? 400 : 900} cy={isMobile ? 560 : 80} r="2" fill={C.cyanGlow}>
+          <circle cx={isMobile ? 400 : 870} cy={isMobile ? 560 : 8} r="2" fill={C.cyanGlow}>
             <animate attributeName="opacity" values="0.3;1;0.3" dur="4.5s" begin="1.5s" repeatCount="indefinite"/>
           </circle>
-          <circle cx={isMobile ? 50 : 1100} cy={isMobile ? 720 : 90} r="2.5" fill={C.cyanLite}>
+          <circle cx={isMobile ? 50 : 1130} cy={isMobile ? 720 : 12} r="2.5" fill={C.cyanLite}>
             <animate attributeName="opacity" values="0.3;1;0.3" dur="3s" begin="2s" repeatCount="indefinite"/>
           </circle>
         </g>
