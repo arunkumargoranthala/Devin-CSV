@@ -271,14 +271,14 @@ export default function ContactPage({ navigate, openConsult }) {
           .step-indicator-label { display: none !important; }
           .office-tabs          { gap:6px !important; }
           .office-tabs button   { padding:7px 11px !important; font-size:12px !important; }
-          .m2a-wrap             { max-width: 380px; aspect-ratio: 460 / 740; }
+          .m2a-wrap             { max-width: 380px; aspect-ratio: 460 / 980; }
         }
         @media (max-width: 480px) {
           .contact-hero-section { padding: 32px 14px !important; }
           .contact-main-section { padding: 44px 14px !important; }
           .why-us-section       { padding: 40px 14px !important; }
           .contact-form-grid-2  { gap:10px !important; }
-          .m2a-wrap             { max-width: 100%; aspect-ratio: 460 / 740; }
+          .m2a-wrap             { max-width: 100%; aspect-ratio: 460 / 980; }
         }
       `}</style>
 
@@ -298,7 +298,7 @@ export default function ContactPage({ navigate, openConsult }) {
         <div style={{ position:'absolute', top:'15%', right:'-5%', width:380, height:380, borderRadius:'50%', background:'radial-gradient(circle, rgba(6,182,212,0.30), transparent 70%)', filter:'blur(50px)', animation:'heroFloat 8s ease-in-out infinite', pointerEvents:'none' }}/>
         <div style={{ position:'absolute', bottom:'-15%', left:'-5%', width:300, height:300, borderRadius:'50%', background:'radial-gradient(circle, rgba(0,102,255,0.18), transparent 70%)', filter:'blur(50px)', animation:'heroFloat 11s ease-in-out infinite reverse', pointerEvents:'none' }}/>
 
-        <div style={{ maxWidth:1400, margin:'0 auto', position:'relative', zIndex:1,paddingTop:30 }}>
+        <div style={{ maxWidth:1400, margin:'0 auto', position:'relative', zIndex:1, paddingTop:30 }}>
           <div className="contact-hero-g" style={{ display:'grid', gridTemplateColumns:'0.55fr 1.45fr', gap:32, alignItems:'center' }}>
 
             <div>

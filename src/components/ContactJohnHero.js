@@ -101,34 +101,40 @@ export default function ContactJohnHero() {
      ═══════════════════════════════════════════════════════════════════ */
   const getLayout = (mobile) => {
     if (mobile) {
+      // PORTRAIT: cards stack vertically on the LEFT, John walks DOWN the RIGHT side.
+      // ViewBox 460×980 (was 460×740) — taller to give each card breathing room so
+      // content (5 options on card 1, 4-line summary + button on card 4) never
+      // overflows the card border.
+      // Card sizes: cards 1-3 h=215 (fits 5 options), card 4 h=240 (fits summary + button).
+      // John at x=400 (right side). Floor is the vertical line he walks along.
       return {
-        viewBox: '0 0 460 740',
-        floor: { x1: 60, y1: 30, x2: 60, y2: 720, axis: 'y' },
+        viewBox: '0 0 460 980',
+        floor: { x1: 400, y1: 50, x2: 400, y2: 960, axis: 'y' },
         cards: [
-          { cx: 275, cy: 100, w: 290, h: 145, num: '01', label: 'CHOOSE',  type: 'choose' },
-          { cx: 275, cy: 265, w: 290, h: 145, num: '02', label: 'TYPING',  type: 'who' },
-          { cx: 275, cy: 430, w: 290, h: 145, num: '03', label: 'PICKING', type: 'when' },
-          { cx: 275, cy: 615, w: 310, h: 185, num: '04', label: 'BOOKED',  type: 'done' },
+          { cx: 160, cy: 125, w: 290, h: 215, num: '01', label: 'CHOOSE',  type: 'choose' },
+          { cx: 160, cy: 365, w: 290, h: 215, num: '02', label: 'TYPING',  type: 'who' },
+          { cx: 160, cy: 605, w: 290, h: 215, num: '03', label: 'PICKING', type: 'when' },
+          { cx: 160, cy: 845, w: 290, h: 240, num: '04', label: 'BOOKED',  type: 'done' },
         ],
-        johnStart: { x: 65, y: 30 },
-        johnAtCard: (i) => ({ x: 65, y: [100, 265, 430, 615][i] + 35 }),
+        johnStart: { x: 400, y: 55 },
+        johnAtCard: (i) => ({ x: 400, y: [125, 365, 605, 845][i] }),
       }
     }
     // LANDSCAPE: COMPACT layout — viewBox 1200×450 (aspect 2.67).
-    // Cards occupy y=20..300 (60% of vertical), John walks at y=420 (right below cards
-    // with a 29-unit gap). Floor at y=435. Total empty space ~10% (was 50% with 1200×700).
-    // Cards spread to fill horizontal width: balanced 32-unit margins L/R.
+    // ALL cards are now the same size (260×300) for visual uniformity. Earlier Card 4
+    // was wider+taller which the client flagged as inconsistent. Even outer margins (32px),
+    // gaps (32px between cards). Cards span y=20-320, John at y=425, floor y=440.
     return {
       viewBox: '0 0 1200 450',
-      floor: { x1: 0, y1: 435, x2: 1200, y2: 435, axis: 'x' },
+      floor: { x1: 0, y1: 440, x2: 1200, y2: 440, axis: 'x' },
       cards: [
-        { cx: 157,  cy: 160, w: 250, h: 280, num: '01', label: 'CHOOSE',  type: 'choose' },
-        { cx: 442,  cy: 160, w: 250, h: 280, num: '02', label: 'TYPING',  type: 'who' },
-        { cx: 727,  cy: 160, w: 250, h: 280, num: '03', label: 'PICKING', type: 'when' },
-        { cx: 1027, cy: 170, w: 280, h: 300, num: '04', label: 'BOOKED',  type: 'done' },
+        { cx: 162,  cy: 170, w: 260, h: 300, num: '01', label: 'CHOOSE',  type: 'choose' },
+        { cx: 454,  cy: 170, w: 260, h: 300, num: '02', label: 'TYPING',  type: 'who' },
+        { cx: 746,  cy: 170, w: 260, h: 300, num: '03', label: 'PICKING', type: 'when' },
+        { cx: 1038, cy: 170, w: 260, h: 300, num: '04', label: 'BOOKED',  type: 'done' },
       ],
-      johnStart: { x: 120, y: 420 },
-      johnAtCard: (i) => ({ x: [127, 412, 697, 997][i], y: 420 }),
+      johnStart: { x: 60, y: 425 },
+      johnAtCard: (i) => ({ x: [132, 424, 716, 1008][i], y: 425 }),
     }
   }
 
@@ -659,12 +665,20 @@ export default function ContactJohnHero() {
     )
   }
 
-  /* ═══ John character SVG ═══ */
+  /* ═══ John character SVG ═══
+   * On MOBILE, the entire body (legs/torso/arms/head) is wrapped in scale(-1,1)
+   * so John faces LEFT — his right arm (which the pointing animations control)
+   * visually appears on his left side, pointing toward the cards.
+   * The speech bubble is OUTSIDE the flip group so the text reads normally,
+   * and we redraw it on the left side of John on mobile.
+   */
   const renderJohn = () => (
     <g ref={setR('john')} transform={`translate(${layout.johnStart.x}, ${layout.johnStart.y})`}>
       {/* Inner group scaled 1.4× for visual prominence */}
       <g transform="scale(1.4)">
       <ellipse cx="0" cy="2" rx="14" ry="2.5" fill="rgba(0,0,0,0.18)"/>
+      {/* BODY — flipped horizontally on mobile so John faces the cards (left) */}
+      <g transform={isMobile ? 'scale(-1, 1)' : ''}>
       <g ref={setR('john_body')} transform="translate(0,-28)">
         {/* Legs */}
         <g ref={setR('john_legL')} transform="rotate(0)">
@@ -698,12 +712,17 @@ export default function ContactJohnHero() {
           <ellipse cx="-11" cy="0" rx="1.5" ry="2" fill="#e8c697"/>
           <ellipse cx="11" cy="0" rx="1.5" ry="2" fill="#e8c697"/>
         </g>
-        {/* Speech bubble */}
-        <g ref={setR('john_bubble')} transform="translate(15,-45)" opacity="0">
-          <rect x="-3" y="-12" width="46" height="20" rx="10" fill={C.accent}/>
-          <polygon points="-3,-3 -10,4 -3,2" fill={C.accent}/>
-          <text ref={setR('john_bubbleText')} x="20" y="2" textAnchor="middle" fontSize="9" fontWeight="800" fill="#fff" fontFamily="'Plus Jakarta Sans', sans-serif">Hi</text>
-        </g>
+      </g>
+      </g>
+      {/* Speech bubble — OUTSIDE the flip group so the text reads normally.
+       * On mobile, the bubble sits on John's LEFT (toward cards) with the tail pointing right.
+       * On desktop, the bubble sits on John's RIGHT with the tail pointing left.
+       * Position is (±15, -73) — equivalent to the original (15, -45) inside the body group
+       * which itself had translate(0, -28), so combined y = -45 + -28 = -73. */}
+      <g ref={setR('john_bubble')} transform={isMobile ? 'translate(-15,-73)' : 'translate(15,-73)'} opacity="0">
+        <rect x={isMobile ? -43 : -3} y="-12" width="46" height="20" rx="10" fill={C.accent}/>
+        <polygon points={isMobile ? '3,-3 10,4 3,2' : '-3,-3 -10,4 -3,2'} fill={C.accent}/>
+        <text ref={setR('john_bubbleText')} x={isMobile ? -20 : 20} y="2" textAnchor="middle" fontSize="9" fontWeight="800" fill="#fff" fontFamily="'Plus Jakarta Sans', sans-serif">Hi</text>
       </g>
       </g>
     </g>
@@ -773,21 +792,22 @@ export default function ContactJohnHero() {
           stroke="url(#floorGrad)" strokeWidth="2" strokeDasharray="6 8"
         />
 
-        {/* Ambient particles — placed in the top decorative band above cards */}
+        {/* Ambient particles — in the breathing space between cards (left) and John (right) on mobile,
+            and in the top decorative band on desktop. */}
         <g opacity="0.55">
-          <circle cx={isMobile ? 50 : 80} cy={isMobile ? 80 : 12} r="2.5" fill={C.cyanLite}>
+          <circle cx={isMobile ? 340 : 80} cy={isMobile ? 65 : 12} r="2.5" fill={C.cyanLite}>
             <animate attributeName="opacity" values="0.3;1;0.3" dur="3s" repeatCount="indefinite"/>
           </circle>
-          <circle cx={isMobile ? 420 : 340} cy={isMobile ? 200 : 8} r="2" fill={C.cyanGlow}>
+          <circle cx={isMobile ? 425 : 340} cy={isMobile ? 285 : 8} r="2" fill={C.cyanGlow}>
             <animate attributeName="opacity" values="0.3;1;0.3" dur="4s" begin="0.5s" repeatCount="indefinite"/>
           </circle>
-          <circle cx={isMobile ? 80 : 600} cy={isMobile ? 380 : 14} r="2.5" fill={C.cyanLite}>
+          <circle cx={isMobile ? 340 : 600} cy={isMobile ? 510 : 14} r="2.5" fill={C.cyanLite}>
             <animate attributeName="opacity" values="0.3;1;0.3" dur="3.5s" begin="1s" repeatCount="indefinite"/>
           </circle>
-          <circle cx={isMobile ? 400 : 870} cy={isMobile ? 560 : 8} r="2" fill={C.cyanGlow}>
+          <circle cx={isMobile ? 425 : 870} cy={isMobile ? 735 : 8} r="2" fill={C.cyanGlow}>
             <animate attributeName="opacity" values="0.3;1;0.3" dur="4.5s" begin="1.5s" repeatCount="indefinite"/>
           </circle>
-          <circle cx={isMobile ? 50 : 1130} cy={isMobile ? 720 : 12} r="2.5" fill={C.cyanLite}>
+          <circle cx={isMobile ? 340 : 1130} cy={isMobile ? 950 : 12} r="2.5" fill={C.cyanLite}>
             <animate attributeName="opacity" values="0.3;1;0.3" dur="3s" begin="2s" repeatCount="indefinite"/>
           </circle>
         </g>
