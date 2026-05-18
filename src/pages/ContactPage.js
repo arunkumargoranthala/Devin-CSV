@@ -8,6 +8,7 @@
 
 import { useState, useEffect, useRef } from 'react'
 import { C, Ic } from '../components/ui'
+import ContactJohnHero from '../components/ContactJohnHero'
 
 /* ─── EmailJS Setup (free 200 emails/month) ─────────────────────────────────
    1. Sign up at https://www.emailjs.com (no credit card)
@@ -102,213 +103,6 @@ function TypeWriter({ text, speed=40 }) {
   return <span>{displayed}<span style={{ borderRight:'2px solid currentColor', marginLeft:1, animation:'blink 1s step-end infinite' }}>‌</span></span>
 }
 
-/* ════════════════════════════════════════════════════════════════════════════
-   MANUAL → AUTOMATED — the contact-page hero animation.
-   Top half: muted-gray manual world (drifting paperwork, slow clock, walking person).
-   Center: AI Automation Engine (glowing orb on an energy beam).
-   Bottom half: vibrant cyan automated world (zooming tasks, rocket, "10× FASTER").
-
-   Design choices:
-   - NO hard rectangles. Top/bottom zones are soft elliptical "atmospheres" that
-     fade to transparent so the page background shows through naturally.
-   - Energy beam is a thin gradient that fades at both ends — no boxed look.
-   - Larger SVG font sizes so labels stay readable on phones.
-   - Pure SMIL animations — no JS render loop, no extra weight.
-   ════════════════════════════════════════════════════════════════════════════ */
-function ManualToAutomated() {
-  // SVG fills 100% of wrapper width AND height. preserveAspectRatio handles
-  // letterboxing if wrapper aspect ratio differs from 700:440.
-  // The WRAPPER drives sizing — it has explicit pixel heights at each breakpoint
-  // via CSS so it cannot collapse to 0 on mobile (which is what was happening).
-  return (
-    <svg viewBox="0 0 700 440" className="m2a-svg" preserveAspectRatio="xMidYMid meet" style={{
-      display: 'block',
-      width:   '100%',
-      height:  '100%',
-    }}>
-      <defs>
-        {/* Soft top atmosphere — muted gray, fades to transparent */}
-        <radialGradient id="m2a-topAtmo" cx="50%" cy="50%" r="55%">
-          <stop offset="0%"   stopColor="#94a3b8" stopOpacity="0.20"/>
-          <stop offset="100%" stopColor="#94a3b8" stopOpacity="0"/>
-        </radialGradient>
-        {/* Soft bottom atmosphere — cyan, fades to transparent */}
-        <radialGradient id="m2a-bottomAtmo" cx="50%" cy="50%" r="55%">
-          <stop offset="0%"   stopColor="#06b6d4" stopOpacity="0.26"/>
-          <stop offset="100%" stopColor="#06b6d4" stopOpacity="0"/>
-        </radialGradient>
-        {/* Energy beam — gradient with fade at both ends */}
-        <linearGradient id="m2a-beam" x1="0%" y1="0%" x2="100%" y2="0%">
-          <stop offset="0%"   stopColor="#06b6d4" stopOpacity="0"/>
-          <stop offset="18%"  stopColor="#0c4a6e" stopOpacity="0.55"/>
-          <stop offset="50%"  stopColor="#06b6d4" stopOpacity="0.85"/>
-          <stop offset="82%"  stopColor="#67e8f9" stopOpacity="0.55"/>
-          <stop offset="100%" stopColor="#67e8f9" stopOpacity="0"/>
-        </linearGradient>
-        {/* Engine orb gradient (3D liquid look) */}
-        <radialGradient id="m2a-engineCore" cx="35%" cy="35%" r="65%">
-          <stop offset="0%"   stopColor="#a5f3fc" stopOpacity="1"/>
-          <stop offset="50%"  stopColor="#06b6d4" stopOpacity="0.65"/>
-          <stop offset="100%" stopColor="#0c4a6e" stopOpacity="1"/>
-        </radialGradient>
-        <filter id="m2a-glow" x="-50%" y="-50%" width="200%" height="200%">
-          <feGaussianBlur stdDeviation="3" result="b"/>
-          <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
-        </filter>
-      </defs>
-
-      {/* ── SOFT ATMOSPHERES (no hard edges, blend with page bg) ── */}
-      <ellipse cx="350" cy="105" rx="345" ry="100" fill="url(#m2a-topAtmo)"/>
-      <ellipse cx="350" cy="335" rx="345" ry="100" fill="url(#m2a-bottomAtmo)"/>
-
-      {/* ════════════════ TOP ZONE — MANUAL / SLOW ════════════════ */}
-      <text x="40" y="38" fontSize="14" fontWeight="800" letterSpacing="0.22em" fill="#64748b" fontFamily="'JetBrains Mono', monospace">
-        BEFORE  ·  MANUAL  ·  SLOW
-      </text>
-
-      {/* "..." SLOW indicator floating top-right */}
-      <g>
-        <text x="640" y="48" textAnchor="middle" fontSize="11" fontWeight="800" letterSpacing="0.20em" fill="#64748b" fontFamily="'JetBrains Mono', monospace">SLOW</text>
-        <text x="640" y="72" textAnchor="middle" fontSize="22" fontWeight="900" fill="#94a3b8">. . .</text>
-      </g>
-
-      {/* Drifting manual icons (slow loop, gray) */}
-      {/* 1) Stack of papers */}
-      <g>
-        <g transform="translate(0,0)">
-          <rect x="-2" y="-15" width="36" height="24" rx="3" fill="#fff" stroke="#cbd5e1" strokeWidth="1.4"/>
-          <rect x="-4" y="-12" width="36" height="24" rx="3" fill="#fff" stroke="#cbd5e1" strokeWidth="1.4"/>
-          <rect x="-6" y="-9"  width="36" height="24" rx="3" fill="#fff" stroke="#cbd5e1" strokeWidth="1.4"/>
-          <line x1="-2" y1="-3" x2="22" y2="-3" stroke="#94a3b8" strokeWidth="1.2"/>
-          <line x1="-2" y1="2"  x2="22" y2="2"  stroke="#94a3b8" strokeWidth="1.2"/>
-        </g>
-        <animateTransform attributeName="transform" type="translate" values="60 100; 540 100" dur="14s" repeatCount="indefinite"/>
-      </g>
-
-      {/* 2) Walking person */}
-      <g>
-        <g>
-          <circle cx="0" cy="-12" r="7" fill="#cbd5e1" stroke="#64748b" strokeWidth="1.3"/>
-          <rect x="-6" y="-3" width="12" height="16" rx="3" fill="#cbd5e1" stroke="#64748b" strokeWidth="1.3"/>
-          <line x1="-3" y1="13" x2="-5" y2="22" stroke="#64748b" strokeWidth="1.6" strokeLinecap="round"/>
-          <line x1="3"  y1="13" x2="5"  y2="22" stroke="#64748b" strokeWidth="1.6" strokeLinecap="round"/>
-        </g>
-        <animateTransform attributeName="transform" type="translate" values="100 135; 580 135" dur="14s" begin="3s" repeatCount="indefinite"/>
-      </g>
-
-      {/* 3) Slow clock with rotating hands */}
-      <g>
-        <g>
-          <circle r="15" fill="#fff" stroke="#cbd5e1" strokeWidth="1.4"/>
-          <line x1="0" y1="0" x2="0" y2="-9" stroke="#64748b" strokeWidth="1.6" strokeLinecap="round">
-            <animateTransform attributeName="transform" type="rotate" from="0" to="360" dur="8s" repeatCount="indefinite"/>
-          </line>
-          <line x1="0" y1="0" x2="6" y2="0" stroke="#64748b" strokeWidth="2" strokeLinecap="round">
-            <animateTransform attributeName="transform" type="rotate" from="0" to="360" dur="60s" repeatCount="indefinite"/>
-          </line>
-          <circle r="2" fill="#64748b"/>
-        </g>
-        <animateTransform attributeName="transform" type="translate" values="160 168; 600 168" dur="14s" begin="1.5s" repeatCount="indefinite"/>
-      </g>
-
-      {/* ════════════════ CENTER — ENERGY BEAM + ENGINE ════════════════ */}
-      {/* Energy beam (transparent at ends, no rectangle) */}
-      <rect x="0" y="217" width="700" height="6" fill="url(#m2a-beam)"/>
-
-      {/* Speed lines streaking through */}
-      <g>
-        <line x1="0" y1="217" x2="40" y2="217" stroke="#a5f3fc" strokeWidth="1.5" opacity="0.75">
-          <animate attributeName="x1" values="-50;700" dur="2s" begin="0s" repeatCount="indefinite"/>
-          <animate attributeName="x2" values="-10;740" dur="2s" begin="0s" repeatCount="indefinite"/>
-        </line>
-        <line x1="0" y1="222" x2="40" y2="222" stroke="#67e8f9" strokeWidth="1" opacity="0.6">
-          <animate attributeName="x1" values="-50;700" dur="2s" begin="0.5s" repeatCount="indefinite"/>
-          <animate attributeName="x2" values="-10;740" dur="2s" begin="0.5s" repeatCount="indefinite"/>
-        </line>
-        <line x1="0" y1="220" x2="40" y2="220" stroke="#a5f3fc" strokeWidth="1.5" opacity="0.75">
-          <animate attributeName="x1" values="-50;700" dur="2s" begin="1s" repeatCount="indefinite"/>
-          <animate attributeName="x2" values="-10;740" dur="2s" begin="1s" repeatCount="indefinite"/>
-        </line>
-        <line x1="0" y1="223" x2="40" y2="223" stroke="#67e8f9" strokeWidth="1" opacity="0.6">
-          <animate attributeName="x1" values="-50;700" dur="2s" begin="1.5s" repeatCount="indefinite"/>
-          <animate attributeName="x2" values="-10;740" dur="2s" begin="1.5s" repeatCount="indefinite"/>
-        </line>
-      </g>
-
-      {/* Engine label above orb */}
-      <text x="350" y="200" textAnchor="middle" fontSize="14" fontWeight="800" letterSpacing="0.22em" fill="#0c4a6e" fontFamily="'JetBrains Mono', monospace">
-        ◆  AI  AUTOMATION  ENGINE  ◆
-      </text>
-
-      {/* Engine orb — the focal showpiece */}
-      <g transform="translate(350, 220)">
-        {/* Outer breathing halo */}
-        <circle r="46" fill="rgba(6,182,212,0.18)">
-          <animate attributeName="r" values="46;52;46" dur="3s" repeatCount="indefinite"/>
-        </circle>
-        {/* Liquid gradient sphere */}
-        <circle r="36" fill="url(#m2a-engineCore)" filter="url(#m2a-glow)"/>
-        {/* Inner pulsing core */}
-        <circle r="25" fill="#0c4a6e">
-          <animate attributeName="r" values="25;28;25" dur="2.2s" repeatCount="indefinite"/>
-        </circle>
-        {/* Highlight reflection */}
-        <ellipse cx="-9" cy="-12" rx="11" ry="6" fill="rgba(255,255,255,0.35)"/>
-        {/* Lightning bolt — the transformation symbol */}
-        <path d="M 3 -13 L -7 2 L 0 2 L -3 14 L 7 -1 L 0 -1 Z" fill="#a5f3fc"/>
-      </g>
-
-      {/* ════════════════ BOTTOM ZONE — AUTOMATED / FAST ════════════════ */}
-      <text x="40" y="288" fontSize="14" fontWeight="800" letterSpacing="0.22em" fill="#0c4a6e" fontFamily="'JetBrains Mono', monospace">
-        AFTER  ·  AUTOMATED  ·  INSTANT
-      </text>
-
-      {/* Auto-flowing tasks (fast, with checkmarks + speed trails) */}
-      {/* Task lane 1 */}
-      <g>
-        <g>
-          <rect x="-19" y="-12" width="38" height="24" rx="6" fill="#06b6d4"/>
-          <path d="M -8 -1 L -2 5 L 8 -6" fill="none" stroke="#fff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-          {/* Trailing speed marks */}
-          <path d="M -28 -8 L -22 -8 M -34 -2 L -24 -2 M -30 4 L -22 4" stroke="#67e8f9" strokeWidth="1.5" strokeLinecap="round" opacity="0.7"/>
-        </g>
-        <animateTransform attributeName="transform" type="translate" values="60 320; 660 320" dur="3.5s" repeatCount="indefinite"/>
-      </g>
-      {/* Task lane 2 */}
-      <g>
-        <g>
-          <rect x="-19" y="-12" width="38" height="24" rx="6" fill="#06b6d4"/>
-          <path d="M -8 -1 L -2 5 L 8 -6" fill="none" stroke="#fff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-          <path d="M -28 -8 L -22 -8 M -34 -2 L -24 -2 M -30 4 L -22 4" stroke="#67e8f9" strokeWidth="1.5" strokeLinecap="round" opacity="0.7"/>
-        </g>
-        <animateTransform attributeName="transform" type="translate" values="60 360; 660 360" dur="3.5s" begin="0.9s" repeatCount="indefinite"/>
-      </g>
-      {/* Rocket lane */}
-      <g>
-        <g>
-          <path d="M 0 -16 L -7 -2 L -9 7 L -3 7 L -3 13 L 3 13 L 3 7 L 9 7 L 7 -2 Z" fill="#0c4a6e"/>
-          <path d="M -7 9 L -11 16 M 7 9 L 11 16 M 0 13 L 0 20" stroke="#67e8f9" strokeWidth="1.6" strokeLinecap="round" opacity="0.85"/>
-          <path d="M -28 0 L -14 0 M -34 -7 L -18 -7 M -34 7 L -18 7" stroke="#a5f3fc" strokeWidth="1.5" strokeLinecap="round" opacity="0.75"/>
-        </g>
-        <animateTransform attributeName="transform" type="translate" values="100 395; 700 395" dur="3.5s" begin="1.7s" repeatCount="indefinite"/>
-      </g>
-
-      {/* "10× FASTER" badge — punctuates the difference */}
-      <g transform="translate(605, 308)">
-        <rect x="-44" y="-15" width="88" height="30" rx="15" fill="#0c4a6e"/>
-        <text y="4" textAnchor="middle" fontSize="13" fontWeight="900" fill="#67e8f9" fontFamily="'Plus Jakarta Sans', sans-serif" letterSpacing="0.04em">10× FASTER</text>
-      </g>
-
-      {/* Bottom outcomes row */}
-      <g fontFamily="'Plus Jakarta Sans', sans-serif">
-        <text x="100" y="425" textAnchor="middle" fontSize="12" fontWeight="800" letterSpacing="0.16em" fill="#0c4a6e">ZERO ERRORS</text>
-        <text x="265" y="425" textAnchor="middle" fontSize="12" fontWeight="800" letterSpacing="0.16em" fill="#0c4a6e">24/7 UPTIME</text>
-        <text x="430" y="425" textAnchor="middle" fontSize="12" fontWeight="800" letterSpacing="0.16em" fill="#0c4a6e">INSTANT DECISIONS</text>
-        <text x="600" y="425" textAnchor="middle" fontSize="12" fontWeight="800" letterSpacing="0.16em" fill="#0c4a6e">INFINITE SCALE</text>
-      </g>
-    </svg>
-  )
-}
 
 /* ════════════════════════════════════════════════════════════════════════════
    MAIN PAGE
@@ -406,7 +200,7 @@ export default function ContactPage({ navigate, openConsult }) {
   }
 
   return (
-    <div className="page-fade" style={{ paddingTop:68, background:CY.bgGrad, minHeight:'100vh' }}>
+    <div className="page-fade" style={{ background:CY.bgGrad, minHeight:'100vh' }}>
 
       <style>{`
         @keyframes blink     { 0%,100%{opacity:1} 50%{opacity:0} }
@@ -435,15 +229,14 @@ export default function ContactPage({ navigate, openConsult }) {
           box-shadow: 0 0 0 3px rgba(6,182,212,.15);
         }
         .live-status-dot {
-          width:8px; height:8px; border-radius:50%; background:#10b981;
+          width:8px; height:8px; border-radius:50%; background:#06b6d4;
           display:inline-block; animation: pulseGlow 2s ease-in-out infinite;
         }
 
         /* ─── RESPONSIVE ─── */
-        /* .m2a-wrap is a simple responsive max-width container.
-           The SVG itself uses inline width:100%; height:auto for sizing,
-           matching the working preview HTML structure exactly. */
-        .m2a-wrap { width: 100%; }
+        /* .m2a-wrap fills the grid cell (alignItems:stretch makes both columns equal height).
+           SVG inside uses preserveAspectRatio="xMidYMid meet" to fit cleanly. */
+        .m2a-wrap        { width: 100%; height: 100%; min-height: 380px; }
 
         /* CRITICAL OVERRIDE: somewhere in this project (likely App.jsx) there is a rule:
            @media (max-width: 900px) { .contact-hero-g > div:nth-child(2) { display: none !important; } }
@@ -454,17 +247,25 @@ export default function ContactPage({ navigate, openConsult }) {
           visibility: visible !important;
         }
 
+        /* heroFloat animation if not already defined in app-level styles */
+        @keyframes heroFloat { 0%,100%{transform:translate(0,0)} 50%{transform:translate(10px,-10px)} }
+
         /* ─── RESPONSIVE ─── */
+        /* Medium screens (1024-1280px): give the text column more room */
+        @media (max-width: 1280px) and (min-width: 1024px) {
+          .contact-hero-g { grid-template-columns: 1fr 1.2fr !important; gap: 32px !important; min-height: 440px !important; }
+        }
         @media (max-width: 1023px) {
-          .contact-hero-g  { grid-template-columns: 1fr !important; gap: 36px !important; text-align: center !important; align-items: stretch !important; }
+          .contact-hero-g  { grid-template-columns: 1fr !important; gap: 24px !important; text-align: center !important; align-items: stretch !important; min-height: 0 !important; }
           .contact-hero-g .hero-trust { justify-content: center !important; }
+          .contact-hero-g > div:first-child { align-items: center !important; }
           .contact-main-g  { grid-template-columns: 1fr !important; gap: 32px !important; }
-          .m2a-wrap        { max-width: 620px; margin: 0 auto !important; width: 100%; height: 360px !important; }
+          .m2a-wrap        { max-width: 760px; margin: 0 auto !important; width: 100%; height: auto !important; aspect-ratio: 1200 / 700; min-height: 0 !important; }
         }
         @media (max-width: 767px) {
-          .contact-hero-section { padding: 56px 18px 56px !important; }
+          .contact-hero-section { padding: 44px 18px 48px !important; }
           .contact-main-section { padding: 56px 18px !important; }
-          .contact-h1           { font-size: clamp(28px, 7vw, 38px) !important; }
+          .contact-h1           { font-size: clamp(26px, 7vw, 36px) !important; }
           .contact-sub          { font-size: 14.5px !important; }
           .contact-form-grid-2  { grid-template-columns: 1fr !important; gap:12px !important; }
           .interest-grid        { grid-template-columns: 1fr !important; }
@@ -473,36 +274,49 @@ export default function ContactPage({ navigate, openConsult }) {
           .step-indicator-label { display: none !important; }
           .office-tabs          { gap:6px !important; }
           .office-tabs button   { padding:7px 11px !important; font-size:12px !important; }
-          .m2a-wrap             { max-width: 540px; height: 320px !important; }
+          /* Mobile portrait SVG aspect 460/740 ≈ 0.622 */
+          .m2a-wrap             { max-width: 380px; aspect-ratio: 460 / 740; height: auto !important; }
         }
         @media (max-width: 480px) {
-          .contact-hero-section { padding: 44px 14px 44px !important; }
+          .contact-hero-section { padding: 36px 14px 36px !important; }
           .contact-main-section { padding: 44px 14px !important; }
           .why-us-section       { padding: 40px 14px !important; }
           .contact-form-grid-2  { gap:10px !important; }
-          .m2a-wrap             { max-width: 100%; height: 240px !important; }
+          .m2a-wrap             { max-width: 100%; aspect-ratio: 460 / 740; height: auto !important; }
         }
       `}</style>
 
-      {/* ════ HERO ════ */}
-      <section className="contact-hero-section" style={{ padding:'80px 24px 70px', position:'relative', overflow:'hidden' }}>
-        <div style={{ position:'absolute', top:-120, right:-100, width:480, height:480, borderRadius:'50%', background:'radial-gradient(circle, rgba(6,182,212,0.12), transparent 70%)', filter:'blur(60px)', pointerEvents:'none', animation:'drift 11s ease-in-out infinite' }}/>
-        <div style={{ position:'absolute', bottom:-100, left:-80,  width:380, height:380, borderRadius:'50%', background:'radial-gradient(circle, rgba(103,232,249,0.18), transparent 70%)', filter:'blur(60px)', pointerEvents:'none', animation:'drift 9s ease-in-out infinite reverse' }}/>
+      {/* ════ HERO ════ Background + composition matches Global Offices */}
+      <section className="contact-hero-section" style={{
+        padding:'64px 24px 56px',
+        position:'relative',
+        overflow:'hidden',
+        background: `
+          radial-gradient(circle at 100% 100%, rgba(6,182,212,0.35), transparent 55%),
+          radial-gradient(circle at 80% 70%, rgba(0,102,255,0.20), transparent 60%),
+          linear-gradient(135deg, #ffffff 0%, #f0f7ff 25%, #d6ebff 55%, #b8defa 80%, #9bd3f5 100%)
+        `,
+        borderBottom: '1px solid rgba(0,102,255,0.10)',
+      }}>
+        {/* Floating decorative orbs — same recipe as Global Offices */}
+        <div style={{ position:'absolute', top:'15%', right:'-5%', width:380, height:380, borderRadius:'50%', background:'radial-gradient(circle, rgba(6,182,212,0.30), transparent 70%)', filter:'blur(50px)', animation:'heroFloat 8s ease-in-out infinite', pointerEvents:'none' }}/>
+        <div style={{ position:'absolute', bottom:'-15%', left:'-5%', width:300, height:300, borderRadius:'50%', background:'radial-gradient(circle, rgba(0,102,255,0.18), transparent 70%)', filter:'blur(50px)', animation:'heroFloat 11s ease-in-out infinite reverse', pointerEvents:'none' }}/>
+        <div style={{ position:'absolute', top:'40%', right:'25%', width:200, height:200, borderRadius:'50%', background:`radial-gradient(circle, ${CY.cyan}25, transparent 70%)`, filter:'blur(40px)', animation:'heroFloat 13s ease-in-out infinite 2s', pointerEvents:'none' }}/>
 
-        <div style={{ maxWidth:1280, margin:'0 auto', position:'relative', zIndex:1 }}>
-          <div className="contact-hero-g" style={{ display:'grid', gridTemplateColumns:'1fr 1.1fr', gap:48, alignItems:'center' }}>
+        <div style={{ maxWidth:1400, margin:'0 auto', position:'relative', zIndex:1 }}>
+          <div className="contact-hero-g" style={{ display:'grid', gridTemplateColumns:'0.7fr 1.3fr', gap:40, alignItems:'stretch', minHeight:480 }}>
 
-            <div>
-              <div style={{ display:'inline-flex', alignItems:'center', gap:9, background:'rgba(6,182,212,.10)', border:`1px solid ${CY.cyan}40`, borderRadius:50, padding:'7px 16px', fontSize:12, fontWeight:800, color:CY.cyanDark, marginBottom:24, letterSpacing:'.06em' }}>
+            <div style={{ display:'flex', flexDirection:'column', justifyContent:'center' }}>
+              <div style={{ display:'inline-flex', alignItems:'center', gap:9, background:'rgba(6,182,212,.10)', border:`1px solid ${CY.cyan}40`, borderRadius:50, padding:'7px 16px', fontSize:12, fontWeight:800, color:CY.cyanDark, marginBottom:22, letterSpacing:'.06em', alignSelf:'flex-start' }}>
                 <span className="live-status-dot"/> START THE CONVERSATION
               </div>
-              <h1 className="contact-h1" style={{ fontSize:'clamp(32px, 4.6vw, 54px)', fontWeight:900, color:C.text, lineHeight:1.08, marginBottom:20, fontFamily:"'Plus Jakarta Sans',sans-serif", letterSpacing:'-0.02em' }}>
+              <h1 className="contact-h1" style={{ fontSize:'clamp(26px, 3.4vw, 42px)', fontWeight:900, color:C.text, lineHeight:1.1, marginBottom:18, fontFamily:"'Plus Jakarta Sans',sans-serif", letterSpacing:'-0.02em' }}>
                 Tell us what's slowing you{' '}
                 <span style={{ background:`linear-gradient(135deg, ${CY.cyan}, ${CY.cyanDark})`, WebkitBackgroundClip:'text', WebkitTextFillColor:'transparent' }}>
                   <TypeWriter text="down." speed={120}/>
                 </span>
               </h1>
-              <p className="contact-sub" style={{ fontSize:16.5, color:C.textM, lineHeight:1.75, marginBottom:32, maxWidth:520 }}>
+              <p className="contact-sub" style={{ fontSize:15.5, color:C.textM, lineHeight:1.7, marginBottom:24, maxWidth:520 }}>
                 From repetitive workflows to system upgrades, share your challenge with a Microsoft-certified solution architect. We'll respond with a real plan — not a sales deck.
               </p>
 
@@ -519,8 +333,8 @@ export default function ContactPage({ navigate, openConsult }) {
               </div>
             </div>
 
-            <div id="m2aWrapAnchor" className="m2a-wrap" style={{ position:'relative', background:'transparent', width:'100%', alignSelf:'stretch' }}>
-              <ManualToAutomated/>
+            <div id="m2aWrapAnchor" className="m2a-wrap" style={{ position:'relative', background:'transparent', width:'100%', height:'100%' }}>
+              <ContactJohnHero/>
             </div>
           </div>
         </div>
@@ -533,8 +347,8 @@ export default function ContactPage({ navigate, openConsult }) {
           {/* LEFT: FORM */}
           <div className="rv">
             {status === 'sent' ? (
-              <div className="contact-card" style={{ padding:48, borderRadius:24, background:`linear-gradient(135deg, rgba(16,185,129,.08), #fff)`, border:'2px solid rgba(16,185,129,.35)', textAlign:'center', animation:'slideUp .4s ease' }}>
-                <div style={{ width:72, height:72, borderRadius:'50%', background:'#10b981', display:'flex', alignItems:'center', justifyContent:'center', margin:'0 auto 20px', boxShadow:'0 8px 32px rgba(16,185,129,.4)' }}>
+              <div className="contact-card" style={{ padding:48, borderRadius:24, background:`linear-gradient(135deg, rgba(6,182,212,.08), #fff)`, border:'2px solid rgba(6,182,212,.30)', textAlign:'center', animation:'slideUp .4s ease' }}>
+                <div style={{ width:72, height:72, borderRadius:'50%', background:CY.cyan, display:'flex', alignItems:'center', justifyContent:'center', margin:'0 auto 20px', boxShadow:'0 8px 32px rgba(6,182,212,.35)' }}>
                   <Ic n="Check" s={32} style={{ color:'#fff' }}/>
                 </div>
                 <h2 style={{ fontSize:26, fontWeight:900, color:C.text, fontFamily:"'Plus Jakarta Sans',sans-serif", marginBottom:8 }}>You're booked in!</h2>
@@ -543,14 +357,14 @@ export default function ContactPage({ navigate, openConsult }) {
                 </p>
                 <p style={{ color:C.textL, fontSize:13, marginBottom:28 }}>Check your inbox at <strong>{form.email}</strong></p>
                 <button onClick={() => { setStatus('idle'); setStep(0); setForm({ name:'',email:'',company:'',phone:'',interest:'',day:'',time:'',message:'' }) }}
-                  style={{ padding:'12px 26px', borderRadius:50, background:'#10b981', border:'none', color:'#fff', fontWeight:700, cursor:'pointer', fontSize:14, fontFamily:"'Plus Jakarta Sans',sans-serif" }}>
+                  style={{ padding:'12px 26px', borderRadius:50, background:CY.cyan, border:'none', color:'#fff', fontWeight:700, cursor:'pointer', fontSize:14, fontFamily:"'Plus Jakarta Sans',sans-serif" }}>
                   Submit Another Enquiry
                 </button>
               </div>
             ) : status === 'demo' ? (
-              <div className="contact-card" style={{ padding:40, borderRadius:24, background:'linear-gradient(135deg, #fffbeb, #fff)', border:'2px solid #fbbf24', textAlign:'left', animation:'slideUp .4s ease' }}>
+              <div className="contact-card" style={{ padding:40, borderRadius:24, background:'linear-gradient(135deg, #f0f9ff, #fff)', border:'2px solid '+CY.cyan, textAlign:'left', animation:'slideUp .4s ease' }}>
                 <div style={{ display:'flex', alignItems:'center', gap:12, marginBottom:16 }}>
-                  <div style={{ width:48, height:48, borderRadius:14, background:'#fbbf24', display:'flex', alignItems:'center', justifyContent:'center', flexShrink:0 }}>
+                  <div style={{ width:48, height:48, borderRadius:14, background:CY.cyan, display:'flex', alignItems:'center', justifyContent:'center', flexShrink:0 }}>
                     <Ic n="Brief" s={22} style={{ color:'#fff' }}/>
                   </div>
                   <div>
@@ -558,9 +372,9 @@ export default function ContactPage({ navigate, openConsult }) {
                     <p style={{ fontSize:13, color:'#92400e' }}>Email integration is not yet configured.</p>
                   </div>
                 </div>
-                <div style={{ background:'#fff', borderRadius:14, padding:'14px 18px', border:'1px solid #fde68a', marginBottom:18 }}>
+                <div style={{ background:'#fff', borderRadius:14, padding:'14px 18px', border:'1px solid rgba(6,182,212,0.25)', marginBottom:18 }}>
                   <p style={{ fontSize:13, color:'#78350f', lineHeight:1.7, marginBottom:8 }}>
-                    <strong>What happened:</strong> Your form data was captured but no email was actually sent — the EmailJS keys at the top of <code style={{ background:'#fef3c7', padding:'1px 5px', borderRadius:4 }}>ContactPage.js</code> are still placeholders.
+                    <strong>What happened:</strong> Your form data was captured but no email was actually sent — the EmailJS keys at the top of <code style={{ background:'rgba(6,182,212,0.12)', padding:'1px 5px', borderRadius:4 }}>ContactPage.js</code> are still placeholders.
                   </p>
                   <p style={{ fontSize:13, color:'#78350f', lineHeight:1.7, marginBottom:0 }}>
                     <strong>To fix:</strong> Add EmailJS credentials (or wire up your own backend), then real submissions will deliver. See the developer guide below.
@@ -586,8 +400,8 @@ export default function ContactPage({ navigate, openConsult }) {
                       <div style={{ display:'flex', flexDirection:'column', alignItems:'center', gap:5 }}>
                         <div style={{
                           width:40, height:40, borderRadius:'50%', display:'flex', alignItems:'center', justifyContent:'center',
-                          background: i < step ? '#10b981' : i === step ? `linear-gradient(135deg, ${CY.cyan}, ${CY.cyanDark})` : '#fff',
-                          border:    `2px solid ${i < step ? '#10b981' : i === step ? 'transparent' : C.border}`,
+                          background: i < step ? CY.cyan : i === step ? `linear-gradient(135deg, ${CY.cyan}, ${CY.cyanDark})` : '#fff',
+                          border:    `2px solid ${i < step ? CY.cyan : i === step ? 'transparent' : C.border}`,
                           boxShadow: i === step ? `0 4px 18px rgba(6,182,212,.45)` : 'none',
                           transition:'all .3s', cursor: i < step ? 'pointer' : 'default',
                         }}
@@ -597,10 +411,10 @@ export default function ContactPage({ navigate, openConsult }) {
                             : <Ic n={s.icon} s={16} style={{ color: i === step ? '#fff' : C.textL }}/>
                           }
                         </div>
-                        <span className="step-indicator-label" style={{ fontSize:10, fontWeight:700, color: i === step ? CY.cyanDark : i < step ? '#10b981' : C.textL, whiteSpace:'nowrap' }}>{s.label}</span>
+                        <span className="step-indicator-label" style={{ fontSize:10, fontWeight:700, color: i === step ? CY.cyanDark : i < step ? CY.cyan : C.textL, whiteSpace:'nowrap' }}>{s.label}</span>
                       </div>
                       {i < STEPS.length - 1 && (
-                        <div style={{ flex:1, height:2, margin:'0 8px', marginBottom:18, background: i < step ? '#10b981' : C.border, transition:'background .3s' }}/>
+                        <div style={{ flex:1, height:2, margin:'0 8px', marginBottom:18, background: i < step ? CY.cyan : C.border, transition:'background .3s' }}/>
                       )}
                     </div>
                   ))}
@@ -828,7 +642,7 @@ export default function ContactPage({ navigate, openConsult }) {
                     <div style={{ width:38, height:38, borderRadius:'50%', background:'rgba(255,255,255,.2)', display:'flex', alignItems:'center', justifyContent:'center' }}>
                       <Ic n="Megaphone" s={18} style={{ color:'#fff' }}/>
                     </div>
-                    <div style={{ position:'absolute', bottom:0, right:0, width:11, height:11, borderRadius:'50%', background:'#10b981', border:'2px solid white' }}/>
+                    <div style={{ position:'absolute', bottom:0, right:0, width:11, height:11, borderRadius:'50%', background:CY.cyan, border:'2px solid white' }}/>
                   </div>
                   <div style={{ flex:1 }}>
                     <div style={{ fontSize:14, fontWeight:700, color:'#fff' }}>DevinStratus Assistant</div>
@@ -925,16 +739,16 @@ export default function ContactPage({ navigate, openConsult }) {
       {!EMAILJS_CONFIGURED && (
         <section style={{ padding:'40px 24px', background:'transparent' }}>
           <div style={{ maxWidth:900, margin:'0 auto' }}>
-            <div style={{ background:'#fffbeb', border:'1.5px solid #fbbf24', borderRadius:16, padding:'18px 24px' }}>
+            <div style={{ background:'#f0f9ff', border:'1.5px solid '+CY.cyan, borderRadius:16, padding:'18px 24px' }}>
               <div style={{ display:'flex', alignItems:'flex-start', gap:12 }}>
-                <div style={{ width:36, height:36, borderRadius:10, background:'#fbbf24', display:'flex', alignItems:'center', justifyContent:'center', flexShrink:0 }}>
+                <div style={{ width:36, height:36, borderRadius:10, background:CY.cyan, display:'flex', alignItems:'center', justifyContent:'center', flexShrink:0 }}>
                   <Ic n="Brief" s={18} style={{ color:'#fff' }}/>
                 </div>
                 <div style={{ flex:1 }}>
                   <h3 style={{ fontSize:15, fontWeight:800, color:'#78350f', marginBottom:6 }}>Developer note: Activate real email delivery</h3>
                   <p style={{ fontSize:13, color:'#92400e', lineHeight:1.65, margin:0 }}>
                     The form is currently in <strong>Demo Mode</strong> — submissions are captured but no email is sent. To activate:
-                    (1) Sign up free at <strong>emailjs.com</strong> · (2) Add a service → copy SERVICE_ID · (3) Create a template with <code style={{ background:'#fef3c7', padding:'1px 5px', borderRadius:4 }}>{'{{name}}'} {'{{email}}'} {'{{company}}'} {'{{phone}}'} {'{{interest}}'} {'{{message}}'}</code> → copy TEMPLATE_ID · (4) Account → API Keys → copy PUBLIC_KEY · (5) Run <code style={{ background:'#fef3c7', padding:'1px 5px', borderRadius:4 }}>npm install @emailjs/browser</code>, replace the 3 constants at the top of <code>ContactPage.js</code>, and uncomment the real send block. This banner disappears automatically once configured.
+                    (1) Sign up free at <strong>emailjs.com</strong> · (2) Add a service → copy SERVICE_ID · (3) Create a template with <code style={{ background:'rgba(6,182,212,0.12)', padding:'1px 5px', borderRadius:4 }}>{'{{name}}'} {'{{email}}'} {'{{company}}'} {'{{phone}}'} {'{{interest}}'} {'{{message}}'}</code> → copy TEMPLATE_ID · (4) Account → API Keys → copy PUBLIC_KEY · (5) Run <code style={{ background:'rgba(6,182,212,0.12)', padding:'1px 5px', borderRadius:4 }}>npm install @emailjs/browser</code>, replace the 3 constants at the top of <code>ContactPage.js</code>, and uncomment the real send block. This banner disappears automatically once configured.
                   </p>
                 </div>
               </div>
