@@ -6,7 +6,7 @@ import logoFull from '../assets/DS_Logo_and_Text.png'
  * Footer — LIGHT THEME matching Global Offices / Contact hero recipe.
  * Background uses the exact same multi-gradient as the Company hero so the
  * page-to-footer transition is seamless. Text colors are dark slate. Section
- * headers use deep cyan (#0c4a6e). Hover states snap to brand blue/cyan.
+ * headers use brand navy (#003FB3). Hover states snap to brand blue/cyan.
  * The CTA banner keeps a dark cyan gradient as the focal anchor.
  * ───────────────────────────────────────────────────────────────────────── */
 export default function Footer({ navigate, openConsult }) {
@@ -28,9 +28,9 @@ export default function Footer({ navigate, openConsult }) {
       <div style={{ position:'absolute', top:'5%', right:'-3%', width:340, height:340, borderRadius:'50%', background:'radial-gradient(circle, rgba(6,182,212,0.22), transparent 70%)', filter:'blur(50px)', animation:'heroFloat 9s ease-in-out infinite', pointerEvents:'none' }}/>
       <div style={{ position:'absolute', bottom:'-10%', left:'10%', width:260, height:260, borderRadius:'50%', background:'radial-gradient(circle, rgba(0,102,255,0.14), transparent 70%)', filter:'blur(40px)', animation:'heroFloat 12s ease-in-out infinite reverse', pointerEvents:'none' }}/>
 
-      {/* CTA Banner — dark cyan gradient acts as focal anchor on the light footer */}
+      {/* CTA Banner — brand-blue gradient anchors the light footer */}
       <div style={{ maxWidth:1280, margin:'0 auto', padding:'64px 24px 56px', position:'relative', zIndex:1 }}>
-        <div className="foot-cta-card" style={{ borderRadius:28, background:'linear-gradient(135deg,#0c4a6e 0%,#155e75 50%,#06b6d4 100%)', padding:'52px 48px', display:'flex', alignItems:'center', justifyContent:'space-between', flexWrap:'wrap', gap:28, position:'relative', overflow:'hidden', boxShadow:'0 24px 64px -16px rgba(12,74,110,0.35)' }}>
+        <div className="foot-cta-card" style={{ borderRadius:28, background:'linear-gradient(135deg, #003FB3 0%, #0066FF 60%, #06b6d4 100%)', padding:'52px 48px', display:'flex', alignItems:'center', justifyContent:'space-between', flexWrap:'wrap', gap:28, position:'relative', overflow:'hidden', boxShadow:'0 24px 64px -16px rgba(0, 53, 128, 0.35)' }}>
           <div style={{ position:'absolute', top:-40, right:-40, width:220, height:220, borderRadius:'50%', background:'radial-gradient(circle, rgba(103,232,249,.4), transparent 70%)', filter:'blur(20px)', pointerEvents:'none' }}/>
           <div style={{ position:'absolute', bottom:-30, left:120, width:160, height:160, borderRadius:'50%', background:'radial-gradient(circle, rgba(255,255,255,.12), transparent 70%)', filter:'blur(20px)', pointerEvents:'none' }}/>
           <div style={{ position:'relative', zIndex:1, minWidth:0, flex:'1 1 280px', color:'#fff' }}>
@@ -38,7 +38,7 @@ export default function Footer({ navigate, openConsult }) {
             <div style={{ fontSize:15, opacity:.85, lineHeight:1.65, maxWidth:480 }}>Join 350+ businesses who chose DevinStratus for their Dynamics 365 journey.</div>
           </div>
           <div className="foot-cta-buttons" style={{ display:'flex', gap:12, position:'relative', zIndex:1, flexWrap:'wrap' }}>
-            <button onClick={openConsult} style={{ padding:'14px 28px', borderRadius:50, background:'#fff', color:'#0c4a6e', border:'none', fontSize:14, fontWeight:700, cursor:'pointer', fontFamily:"'Plus Jakarta Sans',sans-serif", transition:'all .2s', whiteSpace:'nowrap', boxShadow:'0 8px 20px rgba(0,0,0,0.15)' }}
+            <button onClick={openConsult} style={{ padding:'14px 28px', borderRadius:50, background:'#fff', color:'#003FB3', border:'none', fontSize:14, fontWeight:700, cursor:'pointer', fontFamily:"'Plus Jakarta Sans',sans-serif", transition:'all .2s', whiteSpace:'nowrap', boxShadow:'0 8px 20px rgba(0,0,0,0.15)' }}
               onMouseEnter={e=>e.currentTarget.style.transform='translateY(-2px)'}
               onMouseLeave={e=>e.currentTarget.style.transform='none'}>
               Free Consultation →
@@ -63,7 +63,7 @@ export default function Footer({ navigate, openConsult }) {
               <div style={{
                 width: 220,
                 height: 46,
-                background: 'linear-gradient(135deg, #003580 0%, #0066FF 30%, #06b6d4 65%, #0c4a6e 100%)',
+                background: 'linear-gradient(135deg, #003FB3 0%, #0066FF 45%, #06b6d4 100%)',
                 WebkitMaskImage: `url(${logoFull})`,
                 maskImage: `url(${logoFull})`,
                 WebkitMaskSize: 'contain',
@@ -83,7 +83,7 @@ export default function Footer({ navigate, openConsult }) {
                 <button key={n} className="soc-btn" style={{ width:36, height:36, borderRadius:9, background:'rgba(255,255,255,.7)', border:'1px solid rgba(0,102,255,0.18)', cursor:'pointer', display:'flex', alignItems:'center', justifyContent:'center', transition:'all .18s', backdropFilter:'blur(6px)' }}
                   onMouseEnter={e=>{ e.currentTarget.style.background='rgba(6,182,212,.18)'; e.currentTarget.style.borderColor='rgba(6,182,212,.5)' }}
                   onMouseLeave={e=>{ e.currentTarget.style.background='rgba(255,255,255,.7)'; e.currentTarget.style.borderColor='rgba(0,102,255,0.18)' }}>
-                  <Ic n={n} s={15} style={{ color:'#0c4a6e' }}/>
+                  <Ic n={n} s={15} style={{ color:'#003FB3' }}/>
                 </button>
               ))}
             </div>
@@ -97,7 +97,7 @@ export default function Footer({ navigate, openConsult }) {
 
           {/* Solutions — ERP filtered out */}
           <div>
-            <div style={{ fontSize:11, fontWeight:800, letterSpacing:'.14em', color:'#0c4a6e', marginBottom:18 }}>SOLUTIONS</div>
+            <div style={{ fontSize:11, fontWeight:800, letterSpacing:'.14em', color:'#003FB3', marginBottom:18 }}>SOLUTIONS</div>
             {SOLUTIONS.filter(s => s.slug !== 'erp').map(s => (
               <button key={s.slug} className="foot-link" onClick={() => go(`/solutions/${s.slug}`)}
                 style={{ display:'block', width:'100%', textAlign:'left', padding:'6px 0', background:'none', border:'none', cursor:'pointer', fontSize:13.5, color:'#475569', fontFamily:'Inter,sans-serif', transition:'color .16s' }}
@@ -110,7 +110,7 @@ export default function Footer({ navigate, openConsult }) {
 
           {/* Services */}
           <div>
-            <div style={{ fontSize:11, fontWeight:800, letterSpacing:'.14em', color:'#0c4a6e', marginBottom:18 }}>SERVICES</div>
+            <div style={{ fontSize:11, fontWeight:800, letterSpacing:'.14em', color:'#003FB3', marginBottom:18 }}>SERVICES</div>
             {SERVICES.map(s => (
               <button key={s.slug} className="foot-link" onClick={() => go(`/service/${s.slug}`)}
                 style={{ display:'block', width:'100%', textAlign:'left', padding:'6px 0', background:'none', border:'none', cursor:'pointer', fontSize:13.5, color:'#475569', fontFamily:'Inter,sans-serif', transition:'color .16s' }}
@@ -123,7 +123,7 @@ export default function Footer({ navigate, openConsult }) {
 
           {/* Company + Offices */}
           <div>
-            <div style={{ fontSize:11, fontWeight:800, letterSpacing:'.14em', color:'#0c4a6e', marginBottom:18 }}>COMPANY</div>
+            <div style={{ fontSize:11, fontWeight:800, letterSpacing:'.14em', color:'#003FB3', marginBottom:18 }}>COMPANY</div>
             {[['About Us','/company/about'],['Our Team','/company/team'],['Careers','/company/careers'],['Blog','/resources/blog'],['Contact','/contact']].map(([l,p]) => (
               <button key={l} className="foot-link" onClick={() => go(p)}
                 style={{ display:'block', width:'100%', textAlign:'left', padding:'6px 0', background:'none', border:'none', cursor:'pointer', fontSize:13.5, color:'#475569', fontFamily:'Inter,sans-serif', transition:'color .16s' }}
@@ -133,7 +133,7 @@ export default function Footer({ navigate, openConsult }) {
               </button>
             ))}
             <div style={{ marginTop:24 }}>
-              <div style={{ fontSize:11, fontWeight:800, letterSpacing:'.14em', color:'#0c4a6e', marginBottom:12 }}>GLOBAL OFFICES</div>
+              <div style={{ fontSize:11, fontWeight:800, letterSpacing:'.14em', color:'#003FB3', marginBottom:12 }}>GLOBAL OFFICES</div>
               {[['🇬🇧','London'],['🇺🇸','New York'],['🇮🇳','New Delhi'],['🇨🇦','Toronto']].map(([f,c]) => (
                 <div key={c} style={{ fontSize:13, color:'#475569', marginBottom:7, display:'flex', alignItems:'center', gap:7 }}>
                   <span>{f}</span><span>{c}</span>

@@ -31,57 +31,94 @@ export default function SolutionPage({ categorySlug, itemSlug, navigate, openCon
 
   return (
     <div className="page-fade">
-      {/* ── DARK HERO ── */}
-      <section style={{ background:'linear-gradient(135deg,#060d24 0%,#0d1a40 50%,#140828 100%)', paddingTop:68, position:'relative', overflow:'hidden' }}>
-        <div style={{ position:'absolute', top:-80, right:-60, width:400, height:400, borderRadius:'50%', background:category.color+'1a', animation:'heroFloat 9s ease-in-out infinite', pointerEvents:'none' }} />
-        <div style={{ position:'absolute', bottom:-60, left:-40, width:220, height:220, borderRadius:'50%', background:`${C.purple}14`, animation:'heroFloat 6s ease-in-out infinite reverse', pointerEvents:'none' }} />
 
-        <div style={{ maxWidth:1280, margin:'0 auto', padding:'56px 24px 0', position:'relative', zIndex:1 }}>
+      {/* ─── Page-specific responsive CSS ─────────────────── */}
+      <style dangerouslySetInnerHTML={{__html:`
+        @media (max-width: 1023px) {
+          .sp-hero-g { grid-template-columns: 1fr !important; gap: 36px !important; padding-bottom: 56px !important; }
+          .sp-stats-card { max-width: 540px; margin: 0 auto; }
+        }
+        @media (max-width: 767px) {
+          .sp-hero-wrap { padding: 32px 18px 0 !important; }
+          .sp-hero-g { padding-bottom: 48px !important; }
+          .sp-hero-g h1 { font-size: clamp(28px, 6.5vw, 40px) !important; }
+          .sp-stats-card { padding: 22px !important; }
+          .sp-cta-section { padding: 72px 20px !important; }
+          .sp-cta-section h2 { font-size: clamp(24px, 6vw, 36px) !important; }
+          .sp-cta-section p { font-size: 15px !important; }
+          .sp-cta-buttons { width: 100%; flex-direction: column !important; align-items: stretch !important; }
+          .sp-cta-buttons > * { width: 100%; justify-content: center; }
+        }
+        @media (max-width: 480px) {
+          .sp-hero-g h1 { font-size: clamp(26px, 8vw, 34px) !important; }
+        }
+      `}}/>
+
+      {/* ── LIGHT HERO (Global Offices recipe) ── */}
+      <section style={{
+        paddingTop:68, position:'relative', overflow:'hidden',
+        background: `
+          radial-gradient(circle at 100% 100%, rgba(6, 182, 212, 0.35), transparent 55%),
+          radial-gradient(circle at 80% 70%, rgba(0, 102, 255, 0.20), transparent 60%),
+          linear-gradient(135deg, #ffffff 0%, #f0f7ff 25%, #d6ebff 55%, #b8defa 80%, #9bd3f5 100%)
+        `
+      }}>
+        {/* Floating orbs */}
+        <div style={{ position:'absolute', top:-100, right:-80, width:380, height:380, borderRadius:'50%', background:'radial-gradient(circle, rgba(6,182,212,0.32), transparent 70%)', filter:'blur(48px)', animation:'heroFloat 9s ease-in-out infinite', pointerEvents:'none' }} />
+        <div style={{ position:'absolute', bottom:-80, left:-60, width:300, height:300, borderRadius:'50%', background:'radial-gradient(circle, rgba(0,102,255,0.20), transparent 70%)', filter:'blur(56px)', animation:'heroFloat 7s ease-in-out infinite reverse', pointerEvents:'none' }} />
+        <div style={{ position:'absolute', top:'40%', right:'18%', width:200, height:200, borderRadius:'50%', background:'radial-gradient(circle, rgba(103,232,249,0.30), transparent 70%)', filter:'blur(40px)', animation:'heroFloat 11s ease-in-out infinite', pointerEvents:'none' }} />
+
+        <div className="sp-hero-wrap" style={{ maxWidth:1280, margin:'0 auto', padding:'48px 24px 0', position:'relative', zIndex:1 }}>
           {/* Breadcrumb */}
           <div style={{ display:'flex', alignItems:'center', gap:8, marginBottom:28, flexWrap:'wrap' }}>
-            <button onClick={() => navigate('/')} style={{ background:'none', border:'none', cursor:'pointer', fontSize:13, color:'rgba(255,255,255,.45)' }}>Home</button>
-            <Ic n="ChevR" s={12} style={{ color:'rgba(255,255,255,.25)' }}/>
-            <button onClick={() => navigate(`/solutions/${category.slug}`)} style={{ background:'none', border:'none', cursor:'pointer', fontSize:13, color:'rgba(255,255,255,.45)' }}>{category.heading}</button>
-            <Ic n="ChevR" s={12} style={{ color:'rgba(255,255,255,.25)' }}/>
-            <span style={{ fontSize:13, color:'rgba(255,255,255,.85)', fontWeight:600 }}>{item.t}</span>
+            <button onClick={() => navigate('/')} style={{ background:'none', border:'none', cursor:'pointer', fontSize:13, color:'#475569' }}>Home</button>
+            <Ic n="ChevR" s={12} style={{ color:'#94a3b8' }}/>
+            <button onClick={() => navigate('/solutions')} style={{ background:'none', border:'none', cursor:'pointer', fontSize:13, color:'#475569' }}>Solutions</button>
+            <Ic n="ChevR" s={12} style={{ color:'#94a3b8' }}/>
+            <button onClick={() => navigate(`/solutions/${category.slug}`)} style={{ background:'none', border:'none', cursor:'pointer', fontSize:13, color:'#475569' }}>{category.heading}</button>
+            <Ic n="ChevR" s={12} style={{ color:'#94a3b8' }}/>
+            <span style={{ fontSize:13, color:'#0a0a14', fontWeight:600 }}>{item.t}</span>
           </div>
 
-          <div style={{ display:'grid', gridTemplateColumns:'1fr 420px', gap:56, alignItems:'center', paddingBottom:64 }}>
+          <div className="sp-hero-g" style={{ display:'grid', gridTemplateColumns:'1fr 420px', gap:56, alignItems:'center', paddingBottom:72 }}>
             <div>
-              <div style={{ display:'inline-flex', alignItems:'center', gap:8, background:category.color+'22', border:`1px solid ${category.color}44`, borderRadius:50, padding:'6px 14px', fontSize:12, fontWeight:700, color:category.color, marginBottom:20 }}>
+              <div style={{ display:'inline-flex', alignItems:'center', gap:8, background:`${category.color}18`, border:`1px solid ${category.color}40`, borderRadius:50, padding:'7px 16px', fontSize:12, fontWeight:800, color:category.color, marginBottom:22, letterSpacing:'.04em' }}>
                 <Ic n={category.icon} s={13} style={{ color:category.color }}/>
-                {category.heading}
-                {item.tag && <span style={{ background:C.orange, color:'#fff', borderRadius:50, padding:'2px 8px', fontSize:10, fontWeight:800, marginLeft:4 }}>{item.tag}</span>}
+                {category.heading.toUpperCase()}
+                {item.tag && <span style={{ background:'#06b6d4', color:'#fff', borderRadius:50, padding:'2px 9px', fontSize:10, fontWeight:800, marginLeft:6, letterSpacing:'.04em' }}>{item.tag.toUpperCase()}</span>}
               </div>
-              <h1 style={{ fontSize:'clamp(32px,5vw,52px)', fontWeight:900, color:'#fff', lineHeight:1.1, marginBottom:20, fontFamily:"'Plus Jakarta Sans',sans-serif" }}>
+              <h1 style={{ fontSize:'clamp(32px,5vw,52px)', fontWeight:900, color:'#0a0a14', lineHeight:1.08, marginBottom:20, fontFamily:"'Plus Jakarta Sans',sans-serif", letterSpacing:'-0.02em' }}>
                 {item.t}
               </h1>
-              <p style={{ fontSize:17, color:'rgba(255,255,255,.72)', lineHeight:1.8, marginBottom:36, maxWidth:560 }}>
+              <p style={{ fontSize:17, color:'#334155', lineHeight:1.75, marginBottom:36, maxWidth:560 }}>
                 {item.hero}
               </p>
               <div style={{ display:'flex', gap:12, flexWrap:'wrap' }}>
-                <Btn onClick={openConsult}>Get a Free Consultation <Ic n="Arrow" s={14} style={{ color:'#fff' }}/></Btn>
-                <Btn variant="ghost" onClick={() => navigate(`/solutions/${category.slug}`)}>View all {category.heading}</Btn>
+                <Btn onClick={openConsult}>Talk to a Solution Architect <Ic n="Arrow" s={14} style={{ color:'#fff' }}/></Btn>
+                <button onClick={() => navigate(`/solutions/${category.slug}`)}
+                  style={{ display:'inline-flex', alignItems:'center', gap:10, padding:'14px 26px', borderRadius:50, background:'rgba(255,255,255,0.65)', border:'1.5px solid rgba(0,102,255,0.30)', backdropFilter:'blur(10px)', cursor:'pointer', fontSize:15, fontWeight:700, color:'#0a0a14', fontFamily:"'Plus Jakarta Sans',sans-serif" }}>
+                  View all {category.heading} <Ic n="ChevR" s={13} style={{ color:'#0066FF' }}/>
+                </button>
               </div>
             </div>
 
-            {/* Stats card */}
-            <div style={{ background:'rgba(255,255,255,.06)', border:'1.5px solid rgba(255,255,255,.12)', borderRadius:24, padding:28, backdropFilter:'blur(12px)' }}>
-              <div style={{ fontSize:11, fontWeight:800, letterSpacing:'.14em', color:'rgba(255,255,255,.4)', marginBottom:18 }}>KEY RESULTS</div>
+            {/* Stats card — light glassmorphic */}
+            <div className="sp-stats-card" style={{ background:'rgba(255,255,255,0.65)', border:'1.5px solid rgba(0,102,255,0.18)', borderRadius:24, padding:28, backdropFilter:'blur(14px)', boxShadow:'0 14px 36px rgba(0,53,128,0.10)' }}>
+              <div style={{ fontSize:11, fontWeight:800, letterSpacing:'.14em', color:category.color, marginBottom:18 }}>KEY RESULTS</div>
               <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:14, marginBottom:18 }}>
                 {(item.benefits||[]).map((b,i) => (
-                  <div key={i} style={{ background: i===0 ? category.color+'22' : 'rgba(255,255,255,.05)', borderRadius:14, padding:'16px 14px', border:`1px solid ${i===0?category.color+'44':'rgba(255,255,255,.08)'}` }}>
-                    <div style={{ fontSize:26, fontWeight:900, color: i===0 ? category.color : '#fff', fontFamily:"'Plus Jakarta Sans',sans-serif", lineHeight:1 }}>
+                  <div key={i} style={{ background: i===0 ? category.color+'18' : 'rgba(255,255,255,0.85)', borderRadius:14, padding:'16px 14px', border:`1px solid ${i===0?category.color+'40':'rgba(0,102,255,0.10)'}` }}>
+                    <div style={{ fontSize:26, fontWeight:900, color: i===0 ? category.color : '#0a0a14', fontFamily:"'Plus Jakarta Sans',sans-serif", lineHeight:1 }}>
                       {b.v}<span style={{ fontSize:13 }}>{b.u}</span>
                     </div>
-                    <div style={{ fontSize:11.5, color:'rgba(255,255,255,.55)', marginTop:6 }}>{b.l}</div>
+                    <div style={{ fontSize:11.5, color:'#475569', marginTop:6, lineHeight:1.3 }}>{b.l}</div>
                   </div>
                 ))}
               </div>
-              <div style={{ background:category.color+'22', border:`1px solid ${category.color}33`, borderRadius:12, padding:'13px 16px', display:'flex', alignItems:'center', gap:10 }}>
+              <div style={{ background:category.color+'12', border:`1px solid ${category.color}28`, borderRadius:12, padding:'13px 16px', display:'flex', alignItems:'center', gap:10 }}>
                 <Ic n="CheckCircle" s={18} style={{ color:category.color, flexShrink:0 }}/>
-                <div style={{ fontSize:12.5, color:category.color, fontWeight:600, lineHeight:1.4 }}>
-                  Delivered by certified Microsoft Dynamics 365 specialists
+                <div style={{ fontSize:12.5, color:category.color, fontWeight:700, lineHeight:1.4 }}>
+                  Delivered by Microsoft Inner Circle consultants
                 </div>
               </div>
             </div>
@@ -173,14 +210,25 @@ export default function SolutionPage({ categorySlug, itemSlug, navigate, openCon
         </section>
       )}
 
-      {/* CTA */}
-      <section style={{ padding:'80px 24px', background:`linear-gradient(135deg,${C.blue},${C.purple})` }}>
-        <div style={{ maxWidth:800, margin:'0 auto', textAlign:'center' }}>
-          <h2 style={{ fontSize:36, fontWeight:800, color:'#fff', fontFamily:"'Plus Jakarta Sans',sans-serif", marginBottom:14 }}>Ready to explore {item.t}?</h2>
-          <p style={{ fontSize:16, color:'rgba(255,255,255,.85)', marginBottom:36, lineHeight:1.7 }}>Talk to a specialist who has implemented this exact solution dozens of times.</p>
-          <div style={{ display:'flex', gap:16, justifyContent:'center', flexWrap:'wrap' }}>
-            <Btn onClick={openConsult} style={{ background:'#fff', color:C.blue }}>Book Free Consultation <Ic n="Arrow" s={14} style={{ color:C.blue }}/></Btn>
-            <Btn variant="ghost" onClick={() => navigate('/')}>Explore all solutions</Btn>
+      {/* CTA — premium 3-stop brand gradient */}
+      <section className="sp-cta-section" style={{ padding:'90px 32px', background:'linear-gradient(135deg, #003FB3 0%, #0066FF 60%, #06b6d4 100%)', position:'relative', overflow:'hidden' }}>
+        <div style={{ position:'absolute', top:-100, right:-80, width:400, height:400, borderRadius:'50%', background:'radial-gradient(circle, rgba(255,255,255,0.10), transparent 70%)', pointerEvents:'none' }}/>
+        <div style={{ position:'absolute', bottom:-80, left:-60, width:300, height:300, borderRadius:'50%', background:'radial-gradient(circle, rgba(103,232,249,0.18), transparent 70%)', pointerEvents:'none' }}/>
+
+        <div style={{ maxWidth:880, margin:'0 auto', textAlign:'center', position:'relative', zIndex:1 }}>
+          <div style={{ display:'inline-flex', alignItems:'center', gap:8, background:'rgba(255,255,255,0.15)', border:'1px solid rgba(255,255,255,0.30)', borderRadius:50, padding:'7px 16px', fontSize:11.5, fontWeight:800, color:'#fff', letterSpacing:'.14em', marginBottom:22, backdropFilter:'blur(10px)' }}>
+            <span style={{ width:8, height:8, borderRadius:'50%', background:'#67e8f9' }}/>
+            READY TO START?
+          </div>
+          <h2 style={{ fontSize:'clamp(28px, 4.5vw, 42px)', fontWeight:900, color:'#fff', fontFamily:"'Plus Jakarta Sans',sans-serif", marginBottom:16, lineHeight:1.15, letterSpacing:'-0.02em' }}>
+            Let's talk about {item.t}.
+          </h2>
+          <p style={{ fontSize:16, color:'rgba(255,255,255,0.85)', marginBottom:32, lineHeight:1.7, maxWidth:680, margin:'0 auto 32px' }}>
+            30-minute call with a Solution Architect who has implemented this exact solution dozens of times. We'll map your specific scenario and give you a fixed-price scope before any commitment.
+          </p>
+          <div className="sp-cta-buttons" style={{ display:'flex', gap:14, justifyContent:'center', flexWrap:'wrap' }}>
+            <Btn onClick={openConsult} style={{ background:'#fff', color:'#003FB3' }}>Book Solution Architect Call <Ic n="Arrow" s={14} style={{ color:'#003FB3' }}/></Btn>
+            <Btn variant="ghost" onClick={() => navigate(`/solutions/${category.slug}`)} style={{ borderColor:'rgba(255,255,255,0.4)', color:'#fff' }}>View all {category.heading}</Btn>
           </div>
         </div>
       </section>
