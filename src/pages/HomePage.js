@@ -693,37 +693,45 @@ function ImpactNumbers() {
 }
 
 /* ══════════════════════════════════════════════════════
-   SECTION 4 — SOLUTIONS (interactive hover)
+   SECTION 4 — SOLUTIONS (5 categories + architect-CTA card)
    ══════════════════════════════════════════════════════ */
-function Solutions({ navigate }) {
+function Solutions({ navigate, openConsult }) {
   const [sRef, on] = useOnScreen()
-  const filtered = SOLUTIONS.filter(s => s.slug !== 'erp')
+
   return (
     <section ref={sRef} className="ds-section" style={{ padding: '100px 32px', background: 'transparent', position: 'relative', overflow: 'hidden' }}>
       {/* One subtle drifting orb */}
       <div style={{ position: 'absolute', top: '20%', right: '-8%', width: 380, height: 380, borderRadius: '50%', background: 'radial-gradient(circle, rgba(0,102,255,0.08), transparent 70%)', filter: 'blur(60px)', pointerEvents: 'none', animation: 'sectionOrbA 22s ease-in-out infinite' }} />
       <div style={{ maxWidth: 1300, margin: '0 auto', position: 'relative', zIndex: 1 }}>
+
+        {/* ── Section header ────────────────────────────────────────────── */}
         <div className="ds-section-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: 56, flexWrap: 'wrap', gap: 20 }}>
-          <div>
-            <div style={{ fontSize: 11, fontWeight: 800, letterSpacing: '.18em', color: '#0066FF', marginBottom: 12, textTransform: 'uppercase' }}>PLATFORM SOLUTIONS</div>
+          <div style={{ maxWidth: 760 }}>
+            <div style={{ fontSize: 11, fontWeight: 800, letterSpacing: '.18em', color: '#0066FF', marginBottom: 12, textTransform: 'uppercase' }}>ENTERPRISE SOLUTIONS · INNER CIRCLE PARTNER</div>
             <h2 style={{ fontSize: 'clamp(1.8rem,3.5vw,2.8rem)', fontWeight: 900, color: '#0f172a', fontFamily: "'Plus Jakarta Sans',sans-serif", lineHeight: 1.15, margin: 0 }}>
-              Every tool your business needs,<br />
-              <span className="grad-text" style={{ background: 'linear-gradient(135deg,#0066FF,#003FB3)' }}>unified on one platform</span>
+              30 enterprise capabilities,<br />
+              <span className="grad-text" style={{ background: 'linear-gradient(135deg,#0066FF,#003FB3)' }}>engineered on Microsoft.</span>
             </h2>
+            <p style={{ fontSize: 15.5, color: '#475569', lineHeight: 1.65, marginTop: 18, maxWidth: 640 }}>
+              From AI and automation to data and modern workplace — every capability is grounded in your Microsoft estate and delivered by Inner Circle consultants. <span style={{ color: '#0a0a14', fontWeight: 600 }}>350+ implementations · 96% on-time · zero failed projects.</span>
+            </p>
           </div>
           <button className="ds-view-all-btn" onClick={() => navigate('/solutions')} style={{ display: 'flex', alignItems: 'center', gap: 8, padding: '12px 24px', borderRadius: 50, background: '#f8fafc', border: '1.5px solid #e2e8f0', color: '#475569', fontSize: 14, fontWeight: 700, cursor: 'pointer', transition: 'all .2s', whiteSpace: 'nowrap' }}
             onMouseEnter={e => e.currentTarget.style.borderColor = '#0066FF'}
             onMouseLeave={e => e.currentTarget.style.borderColor = '#e2e8f0'}>
-            View all solutions <Ic n="Arrow" s={14} style={{ color: '#0066FF' }} />
+            Browse all solutions <Ic n="Arrow" s={14} style={{ color: '#0066FF' }} />
           </button>
         </div>
+
+        {/* ── 5 category cards + 1 architect-CTA card ───────────────────── */}
         <div className="axis-sol-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: 22 }}>
-          {filtered.map((s, i) => (
+
+          {SOLUTIONS.map((s, i) => (
             <button key={s.slug} className="sol-card-premium" onClick={() => navigate(`/solutions/${s.slug}`)}
               style={{
                 '--card-color': s.color,
                 '--card-bg': s.bg,
-                display: 'flex', flexDirection: 'column', padding: '32px 30px',
+                display: 'flex', flexDirection: 'column', padding: '30px 28px 26px',
                 borderRadius: 22,
                 border: '1px solid rgba(0, 102, 255, 0.10)',
                 background: 'linear-gradient(180deg, #ffffff 0%, #fafcff 100%)',
@@ -731,20 +739,39 @@ function Solutions({ navigate }) {
                 cursor: 'pointer', textAlign: 'left', position: 'relative', overflow: 'hidden',
                 opacity: on ? 1 : 0, transform: on ? 'none' : 'translateY(24px)',
                 transition: `all .55s cubic-bezier(.22,1,.36,1) ${i * 80}ms`,
-                minHeight: 240
+                minHeight: 380
               }}>
               {/* Animated gradient border on hover */}
               <div className="sol-card-glow" style={{ position: 'absolute', inset: -1, borderRadius: 22, padding: 1, background: `linear-gradient(135deg, ${s.color}, transparent 60%)`, opacity: 0, transition: 'opacity .35s', WebkitMask: 'linear-gradient(#000,#000) content-box, linear-gradient(#000,#000)', WebkitMaskComposite: 'xor', maskComposite: 'exclude', pointerEvents: 'none' }} />
               {/* Subtle corner blob */}
               <div style={{ position: 'absolute', top: -50, right: -50, width: 180, height: 180, borderRadius: '50%', background: `radial-gradient(circle, ${s.color}22, transparent 70%)`, pointerEvents: 'none' }} />
-              {/* Icon tile with gradient + glow */}
-              <div style={{ width: 56, height: 56, borderRadius: 16, background: `linear-gradient(135deg, ${s.color}, ${s.color}cc)`, display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: 22, position: 'relative', zIndex: 1, boxShadow: `0 8px 22px ${s.color}38, inset 0 1px 0 rgba(255,255,255,0.25)` }}>
-                <Ic n={s.icon} s={26} style={{ color: '#fff' }} />
+
+              {/* Header: icon + index */}
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 18, position: 'relative', zIndex: 1 }}>
+                <div style={{ width: 52, height: 52, borderRadius: 15, background: `linear-gradient(135deg, ${s.color}, ${s.color}cc)`, display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: `0 8px 22px ${s.color}38, inset 0 1px 0 rgba(255,255,255,0.25)` }}>
+                  <Ic n={s.icon} s={24} style={{ color: '#fff' }} />
+                </div>
+                <span style={{ fontSize: 10.5, fontWeight: 800, letterSpacing: '.14em', color: '#94a3b8', fontFamily: "'JetBrains Mono', monospace" }}>0{i + 1}</span>
               </div>
-              <h3 style={{ fontSize: 20, fontWeight: 800, color: '#0a0a14', fontFamily: "'Plus Jakarta Sans',sans-serif", marginBottom: 10, position: 'relative', zIndex: 1, letterSpacing: '-0.01em' }}>{s.heading}</h3>
-              <p style={{ fontSize: 14, color: '#475569', lineHeight: 1.65, marginBottom: 24, flex: 1, position: 'relative', zIndex: 1 }}>{s.tagline}</p>
-              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', position: 'relative', zIndex: 1, paddingTop: 16, borderTop: `1px solid ${s.color}15` }}>
-                <span style={{ display: 'inline-flex', alignItems: 'center', gap: 6, padding: '6px 14px', borderRadius: 50, background: `${s.color}12`, fontSize: 12.5, fontWeight: 700, color: s.color, letterSpacing: '.01em' }}>
+
+              {/* Title + tagline */}
+              <h3 style={{ fontSize: 19, fontWeight: 800, color: '#0a0a14', fontFamily: "'Plus Jakarta Sans',sans-serif", marginBottom: 10, position: 'relative', zIndex: 1, letterSpacing: '-0.01em', lineHeight: 1.25 }}>{s.heading}</h3>
+              <p style={{ fontSize: 13.5, color: '#475569', lineHeight: 1.6, marginBottom: 18, position: 'relative', zIndex: 1 }}>{s.tagline}</p>
+
+              {/* Top 3 sub-items as a preview list */}
+              <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: 9, marginBottom: 20, position: 'relative', zIndex: 1 }}>
+                {s.items.slice(0, 3).map((it, idx) => (
+                  <div key={it.slug} style={{ display: 'flex', alignItems: 'center', gap: 10, fontSize: 12.5, color: '#475569', lineHeight: 1.35 }}>
+                    <span style={{ width: 5, height: 5, borderRadius: '50%', background: s.color, flexShrink: 0, opacity: 0.9 - (idx * 0.15) }} />
+                    <span style={{ fontWeight: 600, color: '#0a0a14' }}>{it.t}</span>
+                  </div>
+                ))}
+                <div style={{ fontSize: 11.5, color: s.color, fontWeight: 700, marginTop: 4 }}>+ {s.items.length - 3} more capabilities</div>
+              </div>
+
+              {/* Footer: items badge + arrow */}
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', position: 'relative', zIndex: 1, paddingTop: 14, borderTop: `1px solid ${s.color}15` }}>
+                <span style={{ display: 'inline-flex', alignItems: 'center', gap: 6, padding: '6px 13px', borderRadius: 50, background: `${s.color}12`, fontSize: 12, fontWeight: 700, color: s.color, letterSpacing: '.01em' }}>
                   <span style={{ width: 5, height: 5, borderRadius: '50%', background: s.color }} />
                   {s.items.length} solutions
                 </span>
@@ -754,6 +781,63 @@ function Solutions({ navigate }) {
               </div>
             </button>
           ))}
+
+          {/* ── Architect CTA card (slot 6) ──────────────────────────────── */}
+          <button onClick={openConsult} className="sol-card-premium"
+            style={{
+              display: 'flex', flexDirection: 'column', padding: '30px 28px 26px',
+              borderRadius: 22,
+              border: '1px solid rgba(0, 102, 255, 0.22)',
+              background: 'linear-gradient(165deg, #0066FF 0%, #003FB3 100%)',
+              boxShadow: '0 12px 36px rgba(0, 53, 128, 0.22), inset 0 1px 0 rgba(255, 255, 255, 0.18)',
+              cursor: 'pointer', textAlign: 'left', position: 'relative', overflow: 'hidden',
+              opacity: on ? 1 : 0, transform: on ? 'none' : 'translateY(24px)',
+              transition: `all .55s cubic-bezier(.22,1,.36,1) ${5 * 80}ms`,
+              minHeight: 380
+            }}>
+            {/* Decorative orbs */}
+            <div style={{ position: 'absolute', top: -90, right: -60, width: 250, height: 250, borderRadius: '50%', background: 'radial-gradient(circle, rgba(255,255,255,0.18), transparent 70%)', pointerEvents: 'none' }} />
+            <div style={{ position: 'absolute', bottom: -60, left: -40, width: 200, height: 200, borderRadius: '50%', background: 'radial-gradient(circle, rgba(103,232,249,0.20), transparent 70%)', pointerEvents: 'none' }} />
+
+            {/* Icon */}
+            <div style={{ width: 52, height: 52, borderRadius: 15, background: 'rgba(255, 255, 255, 0.18)', backdropFilter: 'blur(10px)', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: 18, border: '1px solid rgba(255, 255, 255, 0.25)', position: 'relative', zIndex: 1 }}>
+              <Ic n="Target" s={24} style={{ color: '#fff' }} />
+            </div>
+
+            {/* Eyebrow */}
+            <div style={{ fontSize: 10.5, fontWeight: 800, letterSpacing: '.14em', color: 'rgba(255,255,255,0.65)', marginBottom: 10, textTransform: 'uppercase', position: 'relative', zIndex: 1 }}>NOT SURE WHERE TO START?</div>
+
+            {/* Title */}
+            <h3 style={{ fontSize: 22, fontWeight: 800, color: '#fff', fontFamily: "'Plus Jakarta Sans',sans-serif", marginBottom: 14, position: 'relative', zIndex: 1, letterSpacing: '-0.01em', lineHeight: 1.2 }}>Talk to a solution architect.</h3>
+
+            {/* Description */}
+            <p style={{ fontSize: 14, color: 'rgba(255,255,255,0.82)', lineHeight: 1.7, marginBottom: 22, flex: 1, position: 'relative', zIndex: 1 }}>
+              Tell us what's slowing your business down. We'll map your priorities to the right Microsoft capabilities — and give you a fixed-price scope before we touch anything.
+            </p>
+
+            {/* Trust signals */}
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 7, marginBottom: 22, position: 'relative', zIndex: 1 }}>
+              {[
+                'Solution architect on first call',
+                '30-minute discovery — no obligation',
+                'Fixed-price scope before commitment',
+              ].map((t, idx) => (
+                <div key={idx} style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 12.5, color: 'rgba(255,255,255,0.92)' }}>
+                  <Ic n="CheckCircle" s={14} style={{ color: '#67e8f9', flexShrink: 0 }} />
+                  <span>{t}</span>
+                </div>
+              ))}
+            </div>
+
+            {/* CTA pill */}
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', position: 'relative', zIndex: 1, paddingTop: 14, borderTop: '1px solid rgba(255,255,255,0.15)' }}>
+              <span style={{ fontSize: 13.5, fontWeight: 700, color: '#fff' }}>Book a 30-min call</span>
+              <span className="sol-card-arrow" style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', width: 32, height: 32, borderRadius: '50%', background: 'rgba(255,255,255,0.18)', transition: 'all .25s' }}>
+                <Ic n="Arrow" s={14} style={{ color: '#fff' }} />
+              </span>
+            </div>
+          </button>
+
         </div>
       </div>
     </section>
@@ -940,7 +1024,7 @@ export default function HomePage({ navigate, openConsult, openDemo }) {
       <Hero openConsult={openConsult} openDemo={openDemo} navigate={navigate} />
       <Trust />
       <ImpactNumbers />
-      <Solutions navigate={navigate} />
+      <Solutions navigate={navigate} openConsult={openConsult} />
       <HowWeDeliver navigate={navigate} />
       <Testimonials />
     </div>

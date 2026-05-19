@@ -1326,7 +1326,7 @@ export const SOLUTIONS = [
         ],
       },
       {
-        slug:"internal-business-portals", n:"Building", t:"Internal Business Portals",
+        slug:"internal-business-portals", n:"Globe", t:"Internal Business Portals",
         d:"Intranets, hubs & employee experience platforms",
         hero:"Modern intranets and employee experience hubs on SharePoint Online + Microsoft Viva — company news, leadership videos, departmental sites, search, knowledge bases, and personalised homepages. Mobile-friendly, accessible (WCAG AA), branded to your company, and built for engagement, not just information transfer.",
         problem:"Old intranets are graveyards: nobody updates them, nobody visits them, nobody finds anything. Modern intranets become genuine connecting tissue — broadcasting culture, surfacing knowledge, supporting employees through their day.",

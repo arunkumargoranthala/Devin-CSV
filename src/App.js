@@ -5,6 +5,7 @@ import Footer from './components/Footer'
 import HomePage from './pages/HomePage'
 import SolutionPage from './pages/SolutionPage'
 import SolutionCategoryPage from './pages/SolutionCategoryPage'
+import SolutionsIndexPage from './pages/SolutionsIndexPage'
 import ServicePage from './pages/ServicePage'
 import ServicesListPage from './pages/ServicesListPage'
 import IndustriesPage from './pages/IndustriesPage'
@@ -102,6 +103,8 @@ export default function App() {
 
   if (parts.length === 0) {
     page = <HomePage navigate={navigate} openConsult={openConsult} openDemo={openDemo} />
+  } else if (parts[0] === 'solutions' && !parts[1]) {
+    page = <SolutionsIndexPage navigate={navigate} openConsult={openConsult} />
   } else if (parts[0] === 'solutions' && parts[1]) {
     page = <SolutionCategoryPage categorySlug={parts[1]} navigate={navigate} openConsult={openConsult} />
   } else if (parts[0] === 'solution' && parts[1] && parts[2]) {
