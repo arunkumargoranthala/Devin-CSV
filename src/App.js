@@ -13,6 +13,8 @@ import IndustriesIndexPage from './pages/IndustriesIndexPage'
 import IndustryCategoryPage from './pages/IndustryCategoryPage'
 import IndustryPage from './pages/IndustryPage'
 import UseCasesIndexPage from './pages/UseCasesIndexPage'
+import UseCaseCategoryPage from './pages/UseCaseCategoryPage'
+import UseCasePage from './pages/UseCasePage'
 import CompanyPage from './pages/CompanyPage'
 import ResourcesPage from './pages/ResourcesPage'
 import ContactPage from './pages/ContactPage'
@@ -126,9 +128,9 @@ export default function App() {
   } else if (parts[0] === 'use-cases' && !parts[1]) {
     page = <UseCasesIndexPage navigate={navigate} openConsult={openConsult} />
   } else if (parts[0] === 'use-cases' && parts[1]) {
-    page = <UseCasesIndexPage navigate={navigate} categorySlug={parts[1]} openConsult={openConsult} />
+    page = <UseCaseCategoryPage categorySlug={parts[1]} navigate={navigate} openConsult={openConsult} />
   } else if (parts[0] === 'use-case' && parts[1] && parts[2]) {
-    page = <UseCasesIndexPage navigate={navigate} categorySlug={parts[1]} itemSlug={parts[2]} openConsult={openConsult} />
+    page = <UseCasePage categorySlug={parts[1]} itemSlug={parts[2]} navigate={navigate} openConsult={openConsult} />
   } else if (parts[0] === 'contact') {
     page = <ContactPage navigate={navigate} openConsult={openConsult} />
   } else if (parts[0] === 'resources') {
