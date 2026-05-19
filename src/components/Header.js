@@ -35,8 +35,7 @@ export default function Header({ navigate, openConsult }) {
   const [mob, setMob] = useState(false)
   const [mobSection, setMobSection] = useState(null)
   const [open, setOpen] = useState(null)
-  const FILTERED_SOLUTIONS = SOLUTIONS.filter(s => s.slug !== 'erp') // ERP hidden — remove filter to re-enable
-  const [activeSlug, setActiveSlug] = useState(SOLUTIONS.filter(s => s.slug !== 'erp')[0]?.slug)
+  const [activeSlug, setActiveSlug] = useState(SOLUTIONS[0]?.slug)
   const timers = useRef({})
 
   useEffect(() => {
@@ -112,12 +111,12 @@ export default function Header({ navigate, openConsult }) {
   const onCH = (e,c) => { e.currentTarget.style.borderColor=c+'66'; e.currentTarget.style.boxShadow=`inset 0 1px 0 rgba(255,255,255,0.9), 0 8px 24px ${c}22`; e.currentTarget.style.transform='translateY(-2px)'; e.currentTarget.style.background='linear-gradient(180deg, rgba(255,255,255,0.95) 0%, rgba(240, 247, 255, 0.85) 100%)' }
   const offCH = e => { e.currentTarget.style.borderColor='rgba(0, 102, 255, 0.08)'; e.currentTarget.style.boxShadow='inset 0 1px 0 rgba(255,255,255,0.8), 0 1px 2px rgba(0,53,128,0.04)'; e.currentTarget.style.transform='none'; e.currentTarget.style.background='linear-gradient(180deg, rgba(255,255,255,0.65) 0%, rgba(232, 242, 255, 0.45) 100%)' }
 
-  const sec = FILTERED_SOLUTIONS.find(s => s.slug === activeSlug) || FILTERED_SOLUTIONS[0]
+  const sec = SOLUTIONS.find(s => s.slug === activeSlug) || SOLUTIONS[0]
 
   // ── Mobile accordion sections ──
   // NOTE: Industries hidden for now — uncomment the industries entry below to re-enable it in mobile nav
   const MOB_SECTIONS = [
-    { key:'solutions',  label:'Solutions',  icon:'Package', items: FILTERED_SOLUTIONS.map(s => ({ label:s.heading, path:`/solutions/${s.slug}`, color:s.color, icon:s.icon })) },
+    { key:'solutions',  label:'Solutions',  icon:'Package', items: SOLUTIONS.map(s => ({ label:s.heading, path:`/solutions/${s.slug}`, color:s.color, icon:s.icon })) },
     { key:'services',   label:'Services',   icon:'Wrench',  items: SERVICES.map(s =>  ({ label:s.t,       path:`/service/${s.slug}`,   color:s.color, icon:s.n    })) },
     // { key:'industries', label:'Industries', icon:'Globe',   items: NAV_INDUSTRIES.map(i => ({ label:i.t, path:`/industries/${i.slug}`, color:i.c, icon:i.n })) }, // HIDDEN — uncomment to re-enable
     { key:'resources',  label:'Resources',  icon:'BookOpen',items: NAV_RESOURCES.map(r  => ({ label:r.t, path:`/resources/${r.slug}`,  color:r.c, icon:r.n })) },
@@ -155,8 +154,7 @@ export default function Header({ navigate, openConsult }) {
               <div style={{ display:'grid', gridTemplateColumns:'220px 1fr' }}>
                 <div style={{ background:'rgba(0, 102, 255, 0.04)', borderRight:'1px solid rgba(0, 102, 255, 0.08)', padding:'14px 10px', display:'flex', flexDirection:'column', gap:2, maxHeight:460, overflowY:'auto', scrollbarWidth:'thin' }}>
                   <div style={{ fontSize:9, fontWeight:800, letterSpacing:'.14em', color:C.textL, padding:'4px 8px 8px', textTransform:'uppercase' }}>All Solutions</div>
-                  {/* ERP Solutions hidden — remove filter in FILTERED_SOLUTIONS above to re-enable */}
-                  {FILTERED_SOLUTIONS.map((s) => (
+                  {SOLUTIONS.map((s) => (
                     <button key={s.slug} className={`sol-cat-btn ${activeSlug===s.slug?'sol-active':''}`} onMouseEnter={() => setActiveSlug(s.slug)} onClick={() => go(`/solutions/${s.slug}`)}>
                       <div style={{ width:32, height:32, borderRadius:9, flexShrink:0, background:activeSlug===s.slug?s.bg:C.bgAlt, display:'flex', alignItems:'center', justifyContent:'center' }}>
                         <Ic n={s.icon} s={14} style={{ color:activeSlug===s.slug?s.color:C.textL }} />
@@ -208,7 +206,7 @@ export default function Header({ navigate, openConsult }) {
                 </div>
               </div>
               <div style={{ padding:'10px 20px', background:'rgba(0, 102, 255, 0.04)', borderTop:'1px solid rgba(0, 102, 255, 0.08)', display:'flex', justifyContent:'space-between', alignItems:'center' }}>
-                <span style={{ fontSize:11.5, color:C.textM }}><span style={{ fontWeight:700, color:C.text }}>{FILTERED_SOLUTIONS.length} categories</span> · Browse full portfolio</span>
+                <span style={{ fontSize:11.5, color:C.textM }}><span style={{ fontWeight:700, color:C.text }}>{SOLUTIONS.length} categories</span> · Browse full portfolio</span>
                 <button onClick={() => go('/solutions')} style={{ display:'flex', alignItems:'center', gap:5, fontSize:12, fontWeight:700, color:C.blue, background:'none', border:'none', cursor:'pointer' }}>View all <Ic n="Arrow" s={12} /></button>
               </div>
             </div>
