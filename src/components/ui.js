@@ -127,6 +127,7 @@ export function GS() {
   return (
     <style>{`
       *{box-sizing:border-box;margin:0;padding:0}
+      html,body{overflow-x:hidden;max-width:100vw}
       body{font-family:'Inter',sans-serif;color:${C.text};background:#fff;-webkit-font-smoothing:antialiased}
       h1,h2,h3,h4,h5,h6{font-family:'Plus Jakarta Sans',sans-serif}
       button{font-family:'Inter',sans-serif}
