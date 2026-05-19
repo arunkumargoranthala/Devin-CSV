@@ -1,16 +1,13 @@
 import { useState, useEffect, useRef } from 'react'
 import { C, Ic } from './ui'
 import { SOLUTIONS, SERVICES } from '../data/content'
+import { INDUSTRIES } from '../data/industries'
 import logoFull from '../assets/DS_Logo_and_Text.png'
 
-const NAV_INDUSTRIES = [
-  { n:'Truck',    t:'Manufacturing',         d:'Smart factory & production ops',        c:C.blue,   bg:C.blueL,   slug:'manufacturing'  },
-  { n:'Cart',     t:'Retail & Commerce',     d:'Omnichannel retail & eCommerce',        c:C.orange, bg:C.orangeL, slug:'retail'         },
-  { n:'Shield',   t:'Financial Services',    d:'Compliance, risk & banking',            c:C.purple, bg:C.purpleL, slug:'financial'      },
-  { n:'Brief',    t:'Professional Services', d:'Project billing & delivery',            c:C.teal,   bg:C.tealL,   slug:'professional'   },
-  { n:'Users',    t:'Healthcare',            d:'Patient ops & regulatory mgmt',         c:C.green,  bg:C.greenL,  slug:'healthcare'     },
-  { n:'Globe',    t:'Logistics & Transport', d:'Fleet, freight & supply tracking',      c:C.blue,   bg:C.blueL,   slug:'logistics'      },
-]
+/* NAV_INDUSTRIES — derived from INDUSTRIES data so the menu always stays in sync */
+const NAV_INDUSTRIES = INDUSTRIES.map(ind => ({
+  n: ind.icon, t: ind.heading, d: ind.desc, c: ind.color, bg: ind.bg, slug: ind.slug,
+}))
 const NAV_RESOURCES = [
   // { n:'FileText', t:'Case Studies',      d:'Real results from real clients',       c:C.blue,   bg:C.blueL,   slug:'case-studies'   }, // HIDDEN — uncomment when content is ready
   // { n:'BookOpen', t:'White Papers',      d:'Deep-dive technical guides',           c:C.purple, bg:C.purpleL, slug:'white-papers'   }, // HIDDEN — uncomment when content is ready
@@ -118,7 +115,7 @@ export default function Header({ navigate, openConsult }) {
   const MOB_SECTIONS = [
     { key:'solutions',  label:'Solutions',  icon:'Package', items: SOLUTIONS.map(s => ({ label:s.heading, path:`/solutions/${s.slug}`, color:s.color, icon:s.icon })) },
     { key:'services',   label:'Services',   icon:'Wrench',  items: SERVICES.map(s =>  ({ label:s.t,       path:`/service/${s.slug}`,   color:s.color, icon:s.n    })) },
-    // { key:'industries', label:'Industries', icon:'Globe',   items: NAV_INDUSTRIES.map(i => ({ label:i.t, path:`/industries/${i.slug}`, color:i.c, icon:i.n })) }, // HIDDEN — uncomment to re-enable
+    { key:'industries', label:'Industries', icon:'Globe',   items: NAV_INDUSTRIES.map(i => ({ label:i.t, path:`/industries/${i.slug}`, color:i.c, icon:i.n })) },
     { key:'resources',  label:'Resources',  icon:'BookOpen',items: NAV_RESOURCES.map(r  => ({ label:r.t, path:`/resources/${r.slug}`,  color:r.c, icon:r.n })) },
     { key:'company',    label:'Company',    icon:'Award',   items: NAV_COMPANY.map(c    => ({ label:c.t, path: `/company/${c.slug}`,    color:c.c, icon:c.n })) },
   ]
@@ -242,24 +239,25 @@ export default function Header({ navigate, openConsult }) {
             </div>
           </NavItem>
 
-          {/* INDUSTRIES — hidden for now, uncomment the NavItem block below to re-enable */}
-          {/* <NavItem label="Industries" k="industries">
-            <div style={mega(620,'right')}>
+          {/* INDUSTRIES */}
+          <NavItem label="Industries" k="industries">
+            <div style={mega(720,'right')}>
               <div style={{ padding:'18px 16px' }}>
                 <div style={{ display:'flex', justifyContent:'space-between', alignItems:'center', marginBottom:14 }}>
                   <div style={{ fontSize:10, fontWeight:800, letterSpacing:'.14em', color:C.teal }}>INDUSTRIES WE SERVE</div>
-                  <span style={{ fontSize:11, color:C.textL }}>40% faster go-live with accelerators</span>
+                  <span style={{ fontSize:11, color:C.textL }}>18 industry-specific solutions</span>
                 </div>
                 <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:8 }}>
-                  {NAV_INDUSTRIES.map(ind => (
-                    <button key={ind.t} onClick={() => go(`/industries/${ind.slug}`)} style={cardBtn(ind.c)} onMouseEnter={e=>onCH(e,ind.c)} onMouseLeave={offCH}>
-                      <div style={{ position:'absolute', left:0, top:0, bottom:0, width:3, background:`linear-gradient(180deg,${ind.c},${ind.c}55)`, borderRadius:'13px 0 0 13px' }} />
+                  {INDUSTRIES.map(ind => (
+                    <button key={ind.slug} onClick={() => go(`/industries/${ind.slug}`)} style={cardBtn(ind.color)} onMouseEnter={e=>onCH(e,ind.color)} onMouseLeave={offCH}>
+                      <div style={{ position:'absolute', left:0, top:0, bottom:0, width:3, background:`linear-gradient(180deg,${ind.color},${ind.color}55)`, borderRadius:'13px 0 0 13px' }} />
                       <div style={{ width:38, height:38, borderRadius:10, background:ind.bg, display:'flex', alignItems:'center', justifyContent:'center', flexShrink:0, marginLeft:4 }}>
-                        <Ic n={ind.n} s={17} style={{ color:ind.c }} />
+                        <Ic n={ind.icon} s={17} style={{ color:ind.color }} />
                       </div>
                       <div style={{ flex:1, minWidth:0 }}>
-                        <div style={{ fontSize:13, fontWeight:700, color:C.text, marginBottom:2 }}>{ind.t}</div>
-                        <div style={{ fontSize:11, color:C.textL }}>{ind.d}</div>
+                        <div style={{ fontSize:13, fontWeight:700, color:C.text, marginBottom:2 }}>{ind.heading}</div>
+                        <div style={{ fontSize:11, color:C.textL, marginBottom:4 }}>{ind.desc}</div>
+                        <div style={{ fontSize:10.5, color:ind.color, fontWeight:700, letterSpacing:'.02em' }}>{ind.items.length} solutions →</div>
                       </div>
                     </button>
                   ))}
@@ -270,7 +268,7 @@ export default function Header({ navigate, openConsult }) {
                 <button onClick={() => go('/industries')} style={{ display:'flex', alignItems:'center', gap:5, fontSize:12, fontWeight:700, color:C.blue, background:'none', border:'none', cursor:'pointer' }}>All industries <Ic n="Arrow" s={12} /></button>
               </div>
             </div>
-          </NavItem> */}
+          </NavItem>
 
           {/* RESOURCES */}
           <NavItem label="Resources" k="resources">

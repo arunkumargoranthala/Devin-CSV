@@ -9,6 +9,9 @@ import SolutionsIndexPage from './pages/SolutionsIndexPage'
 import ServicePage from './pages/ServicePage'
 import ServicesListPage from './pages/ServicesListPage'
 import IndustriesPage from './pages/IndustriesPage'
+import IndustriesIndexPage from './pages/IndustriesIndexPage'
+import IndustryCategoryPage from './pages/IndustryCategoryPage'
+import IndustryPage from './pages/IndustryPage'
 import CompanyPage from './pages/CompanyPage'
 import ResourcesPage from './pages/ResourcesPage'
 import ContactPage from './pages/ContactPage'
@@ -113,8 +116,12 @@ export default function App() {
     page = <ServicesListPage navigate={navigate} openConsult={openConsult} />
   } else if (parts[0] === 'service' && parts[1]) {
     page = <ServicePage serviceSlug={parts[1]} navigate={navigate} openConsult={openConsult} />
-  } else if (parts[0] === 'industries') {
-    page = <IndustriesPage navigate={navigate} slug={parts[1] || null} openConsult={openConsult} />
+  } else if (parts[0] === 'industries' && !parts[1]) {
+    page = <IndustriesIndexPage navigate={navigate} openConsult={openConsult} />
+  } else if (parts[0] === 'industries' && parts[1]) {
+    page = <IndustryCategoryPage industrySlug={parts[1]} navigate={navigate} openConsult={openConsult} />
+  } else if (parts[0] === 'industry' && parts[1] && parts[2]) {
+    page = <IndustryPage industrySlug={parts[1]} itemSlug={parts[2]} navigate={navigate} openConsult={openConsult} />
   } else if (parts[0] === 'contact') {
     page = <ContactPage navigate={navigate} openConsult={openConsult} />
   } else if (parts[0] === 'resources') {
