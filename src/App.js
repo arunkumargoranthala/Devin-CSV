@@ -17,6 +17,14 @@ import UseCaseCategoryPage from './pages/UseCaseCategoryPage'
 import UseCasePage from './pages/UseCasePage'
 import CompanyPage from './pages/CompanyPage'
 import ResourcesPage from './pages/ResourcesPage'
+import ResourcesIndexPage from './pages/ResourcesIndexPage'
+import ResourceCategoryPage from './pages/ResourceCategoryPage'
+import CaseStudyPage from './pages/CaseStudyPage'
+import DemoPage from './pages/DemoPage'
+import InsightPage from './pages/InsightPage'
+import PlaybookPage from './pages/PlaybookPage'
+import ROIAssessmentPage from './pages/ROIAssessmentPage'
+import { RESOURCES } from './data/resources'
 import ContactPage from './pages/ContactPage'
 
 // ── Consultation Modal ─────────────────────────────────────────────────────────
@@ -133,8 +141,22 @@ export default function App() {
     page = <UseCasePage categorySlug={parts[1]} itemSlug={parts[2]} navigate={navigate} openConsult={openConsult} />
   } else if (parts[0] === 'contact') {
     page = <ContactPage navigate={navigate} openConsult={openConsult} />
-  } else if (parts[0] === 'resources') {
-    page = <ResourcesPage navigate={navigate} slug={parts[1]||null} openConsult={openConsult} />
+  } else if (parts[0] === 'resources' && !parts[1]) {
+    page = <ResourcesIndexPage navigate={navigate} openConsult={openConsult} />
+  } else if (parts[0] === 'resources' && parts[1]) {
+    page = <ResourceCategoryPage categorySlug={parts[1]} navigate={navigate} openConsult={openConsult} />
+  } else if (parts[0] === 'resource' && parts[1] && parts[2]) {
+    // Dispatch resource detail page by resourceType
+    const resourceCat = RESOURCES.find(c => c.slug === parts[1])
+    const RESOURCE_COMP = {
+      'case-study': CaseStudyPage,
+      'demo':       DemoPage,
+      'insight':    InsightPage,
+      'tool':       ROIAssessmentPage,
+      'playbook':   PlaybookPage,
+    }
+    const ResourceDetail = RESOURCE_COMP[resourceCat?.resourceType] || ResourcesIndexPage
+    page = <ResourceDetail categorySlug={parts[1]} itemSlug={parts[2]} navigate={navigate} openConsult={openConsult} />
   } else if (parts[0] === 'company') {
     page = <CompanyPage navigate={navigate} slug={parts[1]||null} openConsult={openConsult} />
   } else {

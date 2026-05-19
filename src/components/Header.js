@@ -1,8 +1,9 @@
 import { useState, useEffect, useRef } from 'react'
 import { C, Ic } from './ui'
-import { SOLUTIONS, SERVICES } from '../data/content'
+import { SOLUTIONS } from '../data/content'
 import { INDUSTRIES } from '../data/industries'
 import { USECASES } from '../data/usecases'
+import { RESOURCES } from '../data/resources'
 import logoFull from '../assets/DS_Logo_and_Text.png'
 
 /* NAV_INDUSTRIES — derived from INDUSTRIES data so the menu always stays in sync */
@@ -14,16 +15,11 @@ const NAV_INDUSTRIES = INDUSTRIES.map(ind => ({
 const NAV_USECASES = USECASES.map(uc => ({
   n: uc.icon, t: uc.heading, d: uc.desc, c: uc.color, bg: uc.bg, slug: uc.slug,
 }))
-const NAV_RESOURCES = [
-  // { n:'FileText', t:'Case Studies',      d:'Real results from real clients',       c:C.blue,   bg:C.blueL,   slug:'case-studies'   }, // HIDDEN — uncomment when content is ready
-  // { n:'BookOpen', t:'White Papers',      d:'Deep-dive technical guides',           c:C.purple, bg:C.purpleL, slug:'white-papers'   }, // HIDDEN — uncomment when content is ready
-  // { n:'Video',    t:'Webinars & Events', d:'Live & on-demand sessions',            c:C.teal,   bg:C.tealL,   slug:'webinars'       }, // HIDDEN — uncomment when content is ready
-  { n:'Chart',    t:'Blog & Insights',      d:'Expert tips, news & trends',           c:C.orange, bg:C.orangeL, slug:'blog'           },
-  { n:'Calc',     t:'ROI Calculator',       d:'Model your business case',             c:C.green,  bg:C.greenL,  slug:'roi-calculator' },
-  { n:'Award',    t:'MS Certifications',    d:'Our Gold Partner credentials',         c:C.blue,   bg:C.blueL,   slug:'certifications' },
-  // { n:'Users',    t:'Partner Programme',  d:'Become a referral partner',            c:C.purple, bg:C.purpleL, slug:'partner'        }, // HIDDEN — uncomment when content is ready
-  { n:'Globe',    t:'Documentation Hub',    d:'Technical docs & integration guides',  c:C.teal,   bg:C.tealL,   slug:'docs'           },
-]
+
+/* NAV_RESOURCES — derived from RESOURCES data */
+const NAV_RESOURCES = RESOURCES.map(r => ({
+  n: r.icon, t: r.heading, d: r.desc, c: r.color, bg: r.bg, slug: r.slug,
+}))
 const NAV_COMPANY = [
   { n:'Award',     t:'About DevinStratus', d:'Our story, mission & values',    c:C.blue,   bg:C.blueL,   slug:'about'   },
   { n:'Users',     t:'Our Team',           d:'120+ certified consultants',     c:C.purple, bg:C.purpleL, slug:'team'    },
@@ -120,10 +116,8 @@ export default function Header({ navigate, openConsult }) {
   // NOTE: Industries hidden for now — uncomment the industries entry below to re-enable it in mobile nav
   const MOB_SECTIONS = [
     { key:'solutions',  label:'Solutions',  icon:'Package', items: SOLUTIONS.map(s => ({ label:s.heading, path:`/solutions/${s.slug}`, color:s.color, icon:s.icon })) },
-    { key:'services',   label:'Services',   icon:'Wrench',  items: SERVICES.map(s =>  ({ label:s.t,       path:`/service/${s.slug}`,   color:s.color, icon:s.n    })) },
     { key:'industries', label:'Industries', icon:'Globe',   items: NAV_INDUSTRIES.map(i => ({ label:i.t, path:`/industries/${i.slug}`, color:i.c, icon:i.n })) },
     { key:'usecases',   label:'Use Cases',  icon:'Target',  items: NAV_USECASES.map(u => ({ label:u.t, path:`/use-cases/${u.slug}`, color:u.c, icon:u.n })) },
-    { key:'usecases',   label:'Use Cases',  icon:'Target',  items: USECASES.map(u => ({ label:u.heading, path:`/use-cases/${u.slug}`, color:u.color, icon:u.icon })) },
     { key:'resources',  label:'Resources',  icon:'BookOpen',items: NAV_RESOURCES.map(r  => ({ label:r.t, path:`/resources/${r.slug}`,  color:r.c, icon:r.n })) },
     { key:'company',    label:'Company',    icon:'Award',   items: NAV_COMPANY.map(c    => ({ label:c.t, path: `/company/${c.slug}`,    color:c.c, icon:c.n })) },
   ]
@@ -217,36 +211,6 @@ export default function Header({ navigate, openConsult }) {
             </div>
           </NavItem>
 
-          {/* SERVICES */}
-          <NavItem label="Services" k="services">
-            <div style={mega(660,'right')}>
-              <div style={{ padding:'18px 16px' }}>
-                <div style={{ display:'flex', justifyContent:'space-between', alignItems:'center', marginBottom:14 }}>
-                  <div style={{ fontSize:10, fontWeight:800, letterSpacing:'.14em', color:C.blue }}>8 SPECIALIST SERVICES</div>
-                  <span style={{ fontSize:11, color:C.textL }}>Full D365 lifecycle coverage</span>
-                </div>
-                <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:8 }}>
-                  {SERVICES.map(s => (
-                    <button key={s.slug} onClick={() => go(`/service/${s.slug}`)} style={cardBtn(s.color)} onMouseEnter={e=>onCH(e,s.color)} onMouseLeave={offCH}>
-                      <div style={{ position:'absolute', left:0, top:0, bottom:0, width:3, background:`linear-gradient(180deg,${s.color},${s.color}55)`, borderRadius:'13px 0 0 13px' }} />
-                      <div style={{ width:38, height:38, borderRadius:10, background:s.bg, display:'flex', alignItems:'center', justifyContent:'center', flexShrink:0, marginLeft:4 }}>
-                        <Ic n={s.n} s={17} style={{ color:s.color }} />
-                      </div>
-                      <div style={{ flex:1, minWidth:0 }}>
-                        <div style={{ fontSize:13, fontWeight:700, color:C.text, marginBottom:2 }}>{s.t}</div>
-                        <div style={{ fontSize:11, color:C.textL, overflow:'hidden', textOverflow:'ellipsis', whiteSpace:'nowrap' }}>{s.tagline.split('—')[0].trim()}</div>
-                      </div>
-                    </button>
-                  ))}
-                </div>
-              </div>
-              <div style={{ padding:'10px 20px', background:'rgba(0, 102, 255, 0.04)', borderTop:'1px solid rgba(0, 102, 255, 0.08)', display:'flex', justifyContent:'space-between', alignItems:'center' }}>
-                <span style={{ fontSize:11.5, color:C.textM }}>Implementation through managed support</span>
-                <button onClick={() => go('/services')} style={{ display:'flex', alignItems:'center', gap:5, fontSize:12, fontWeight:700, color:C.blue, background:'none', border:'none', cursor:'pointer' }}>All services <Ic n="Arrow" s={12} /></button>
-              </div>
-            </div>
-          </NavItem>
-
           {/* INDUSTRIES */}
           <NavItem label="Industries" k="industries">
             <div style={mega(720,'right')}>
@@ -311,29 +275,30 @@ export default function Header({ navigate, openConsult }) {
 
           {/* RESOURCES */}
           <NavItem label="Resources" k="resources">
-            <div style={mega(620,'right')}>
+            <div style={mega(720,'right')}>
               <div style={{ padding:'18px 16px' }}>
                 <div style={{ display:'flex', justifyContent:'space-between', alignItems:'center', marginBottom:14 }}>
-                  <div style={{ fontSize:10, fontWeight:800, letterSpacing:'.14em', color:C.orange }}>KNOWLEDGE HUB</div>
-                  <span style={{ fontSize:11, color:C.textL }}>Free resources to evaluate & plan</span>
+                  <div style={{ fontSize:10, fontWeight:800, letterSpacing:'.14em', color:C.teal }}>KNOWLEDGE HUB</div>
+                  <span style={{ fontSize:11, color:C.textL }}>21 resources · case studies · demos · playbooks</span>
                 </div>
                 <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:8 }}>
-                  {NAV_RESOURCES.map(r => (
-                    <button key={r.t} onClick={() => go(`/resources/${r.slug}`)} style={cardBtn(r.c)} onMouseEnter={e=>onCH(e,r.c)} onMouseLeave={offCH}>
-                      <div style={{ position:'absolute', left:0, top:0, bottom:0, width:3, background:`linear-gradient(180deg,${r.c},${r.c}55)`, borderRadius:'13px 0 0 13px' }} />
+                  {RESOURCES.map(r => (
+                    <button key={r.slug} onClick={() => go(`/resources/${r.slug}`)} style={cardBtn(r.color)} onMouseEnter={e=>onCH(e,r.color)} onMouseLeave={offCH}>
+                      <div style={{ position:'absolute', left:0, top:0, bottom:0, width:3, background:`linear-gradient(180deg,${r.color},${r.color}55)`, borderRadius:'13px 0 0 13px' }} />
                       <div style={{ width:38, height:38, borderRadius:10, background:r.bg, display:'flex', alignItems:'center', justifyContent:'center', flexShrink:0, marginLeft:4 }}>
-                        <Ic n={r.n} s={17} style={{ color:r.c }} />
+                        <Ic n={r.icon} s={17} style={{ color:r.color }} />
                       </div>
                       <div style={{ flex:1, minWidth:0 }}>
-                        <div style={{ fontSize:13, fontWeight:700, color:C.text, marginBottom:2 }}>{r.t}</div>
-                        <div style={{ fontSize:11, color:C.textL }}>{r.d}</div>
+                        <div style={{ fontSize:13, fontWeight:700, color:C.text, marginBottom:2 }}>{r.heading}</div>
+                        <div style={{ fontSize:11, color:C.textL, marginBottom:4 }}>{r.desc}</div>
+                        <div style={{ fontSize:10.5, color:r.color, fontWeight:700, letterSpacing:'.02em' }}>{r.items.length} {r.items.length === 1 ? 'resource' : 'resources'} →</div>
                       </div>
                     </button>
                   ))}
                 </div>
               </div>
               <div style={{ padding:'10px 20px', background:'rgba(0, 102, 255, 0.04)', borderTop:'1px solid rgba(0, 102, 255, 0.08)', display:'flex', justifyContent:'space-between', alignItems:'center' }}>
-                <span style={{ fontSize:11.5, color:C.textM }}>Guides, webinars & expert insights</span>
+                <span style={{ fontSize:11.5, color:C.textM }}>Free to access · No registration required</span>
                 <button onClick={() => go('/resources')} style={{ display:'flex', alignItems:'center', gap:5, fontSize:12, fontWeight:700, color:C.blue, background:'none', border:'none', cursor:'pointer' }}>All resources <Ic n="Arrow" s={12} /></button>
               </div>
             </div>
