@@ -2,11 +2,17 @@ import { useState, useEffect, useRef } from 'react'
 import { C, Ic } from './ui'
 import { SOLUTIONS, SERVICES } from '../data/content'
 import { INDUSTRIES } from '../data/industries'
+import { USECASES } from '../data/usecases'
 import logoFull from '../assets/DS_Logo_and_Text.png'
 
 /* NAV_INDUSTRIES — derived from INDUSTRIES data so the menu always stays in sync */
 const NAV_INDUSTRIES = INDUSTRIES.map(ind => ({
   n: ind.icon, t: ind.heading, d: ind.desc, c: ind.color, bg: ind.bg, slug: ind.slug,
+}))
+
+/* NAV_USECASES — derived from USECASES data */
+const NAV_USECASES = USECASES.map(uc => ({
+  n: uc.icon, t: uc.heading, d: uc.desc, c: uc.color, bg: uc.bg, slug: uc.slug,
 }))
 const NAV_RESOURCES = [
   // { n:'FileText', t:'Case Studies',      d:'Real results from real clients',       c:C.blue,   bg:C.blueL,   slug:'case-studies'   }, // HIDDEN — uncomment when content is ready
@@ -116,6 +122,8 @@ export default function Header({ navigate, openConsult }) {
     { key:'solutions',  label:'Solutions',  icon:'Package', items: SOLUTIONS.map(s => ({ label:s.heading, path:`/solutions/${s.slug}`, color:s.color, icon:s.icon })) },
     { key:'services',   label:'Services',   icon:'Wrench',  items: SERVICES.map(s =>  ({ label:s.t,       path:`/service/${s.slug}`,   color:s.color, icon:s.n    })) },
     { key:'industries', label:'Industries', icon:'Globe',   items: NAV_INDUSTRIES.map(i => ({ label:i.t, path:`/industries/${i.slug}`, color:i.c, icon:i.n })) },
+    { key:'usecases',   label:'Use Cases',  icon:'Target',  items: NAV_USECASES.map(u => ({ label:u.t, path:`/use-cases/${u.slug}`, color:u.c, icon:u.n })) },
+    { key:'usecases',   label:'Use Cases',  icon:'Target',  items: USECASES.map(u => ({ label:u.heading, path:`/use-cases/${u.slug}`, color:u.color, icon:u.icon })) },
     { key:'resources',  label:'Resources',  icon:'BookOpen',items: NAV_RESOURCES.map(r  => ({ label:r.t, path:`/resources/${r.slug}`,  color:r.c, icon:r.n })) },
     { key:'company',    label:'Company',    icon:'Award',   items: NAV_COMPANY.map(c    => ({ label:c.t, path: `/company/${c.slug}`,    color:c.c, icon:c.n })) },
   ]
@@ -266,6 +274,37 @@ export default function Header({ navigate, openConsult }) {
               <div style={{ padding:'10px 20px', background:'rgba(0, 102, 255, 0.04)', borderTop:'1px solid rgba(0, 102, 255, 0.08)', display:'flex', justifyContent:'space-between', alignItems:'center' }}>
                 <span style={{ fontSize:11.5, color:C.textM }}>Purpose-built for your sector</span>
                 <button onClick={() => go('/industries')} style={{ display:'flex', alignItems:'center', gap:5, fontSize:12, fontWeight:700, color:C.blue, background:'none', border:'none', cursor:'pointer' }}>All industries <Ic n="Arrow" s={12} /></button>
+              </div>
+            </div>
+          </NavItem>
+
+          {/* USE CASES */}
+          <NavItem label="Use Cases" k="usecases">
+            <div style={mega(720,'right')}>
+              <div style={{ padding:'18px 16px' }}>
+                <div style={{ display:'flex', justifyContent:'space-between', alignItems:'center', marginBottom:14 }}>
+                  <div style={{ fontSize:10, fontWeight:800, letterSpacing:'.14em', color:C.teal }}>BY USE CASE</div>
+                  <span style={{ fontSize:11, color:C.textL }}>22 enterprise use cases</span>
+                </div>
+                <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:8 }}>
+                  {USECASES.map(uc => (
+                    <button key={uc.slug} onClick={() => go(`/use-cases/${uc.slug}`)} style={cardBtn(uc.color)} onMouseEnter={e=>onCH(e,uc.color)} onMouseLeave={offCH}>
+                      <div style={{ position:'absolute', left:0, top:0, bottom:0, width:3, background:`linear-gradient(180deg,${uc.color},${uc.color}55)`, borderRadius:'13px 0 0 13px' }} />
+                      <div style={{ width:38, height:38, borderRadius:10, background:uc.bg, display:'flex', alignItems:'center', justifyContent:'center', flexShrink:0, marginLeft:4 }}>
+                        <Ic n={uc.icon} s={17} style={{ color:uc.color }} />
+                      </div>
+                      <div style={{ flex:1, minWidth:0 }}>
+                        <div style={{ fontSize:13, fontWeight:700, color:C.text, marginBottom:2 }}>{uc.heading}</div>
+                        <div style={{ fontSize:11, color:C.textL, marginBottom:4 }}>{uc.desc}</div>
+                        <div style={{ fontSize:10.5, color:uc.color, fontWeight:700, letterSpacing:'.02em' }}>{uc.items.length} use cases →</div>
+                      </div>
+                    </button>
+                  ))}
+                </div>
+              </div>
+              <div style={{ padding:'10px 20px', background:'rgba(0, 102, 255, 0.04)', borderTop:'1px solid rgba(0, 102, 255, 0.08)', display:'flex', justifyContent:'space-between', alignItems:'center' }}>
+                <span style={{ fontSize:11.5, color:C.textM }}>Enterprise buyers think in use cases</span>
+                <button onClick={() => go('/use-cases')} style={{ display:'flex', alignItems:'center', gap:5, fontSize:12, fontWeight:700, color:C.blue, background:'none', border:'none', cursor:'pointer' }}>All use cases <Ic n="Arrow" s={12} /></button>
               </div>
             </div>
           </NavItem>
