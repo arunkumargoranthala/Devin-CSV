@@ -190,8 +190,8 @@ export default function AnimatedMap({ locations = MAP_LOCATIONS }) {
         </g>
       </svg>
 
-      {/* Global Status Pill */}
-      <div style={{ position: 'absolute', top: 0, left: 0, zIndex: 10 }}>
+      {/* Global Status Pill — bottom-left, never overlaps the nav */}
+      <div style={{ position: 'absolute', bottom: 20, left: 20, zIndex: 10 }}>
         <div style={{ 
           display: 'inline-flex', alignItems: 'center', gap: 8, 
           padding: '8px 16px', borderRadius: 50, 

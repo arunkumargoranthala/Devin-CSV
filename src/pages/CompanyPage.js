@@ -75,13 +75,13 @@ function AnimatedStat({ valueStr, label }) {
 
 // ── Content data ────────────────────────────────────────────────────────────────
 const TIMELINE = [
-  { year: '2009', title: 'Founded in London', desc: 'DevinStratus Technologies incorporated as a Microsoft Dynamics partner, starting with a team of 4 consultants in the City of London.' },
-  { year: '2012', title: 'Microsoft Gold Partner', desc: 'Achieved Microsoft Gold Partner status after delivering 50+ successful Dynamics AX and NAV implementations across the UK.' },
-  { year: '2015', title: 'New York Office Opens', desc: 'Expanded to North America with a Manhattan office, serving mid-market and enterprise clients across the eastern seaboard.' },
-  { year: '2017', title: 'Dynamics 365 Launch Partner', desc: 'Selected as a Microsoft Dynamics 365 Launch Partner — one of only 12 firms globally — for the cloud ERP & CRM rollout.' },
-  { year: '2019', title: 'India & Canada Expansion', desc: 'Opened delivery centres in New Delhi and Toronto, enabling 24/7 support coverage and significantly expanding capacity.' },
+  { year: '2009', title: 'Founded in Ontario, Canada', desc: 'DevinStratus Technologies incorporated in Ontario as a Microsoft Dynamics partner, starting with a team of four consultants focused on mid-market ERP implementations.' },
+  { year: '2012', title: 'Microsoft Gold Partner', desc: 'Achieved Microsoft Gold Partner status after delivering 50+ successful Dynamics AX and NAV implementations for North American clients.' },
+  { year: '2015', title: 'First Enterprise Wins', desc: 'Landed first multi-entity enterprise clients across manufacturing and financial services — the engagements that would define our practice for the next decade.' },
+  { year: '2017', title: 'Dynamics 365 Launch Partner', desc: 'Selected as a Microsoft Dynamics 365 Launch Partner — one of only twelve firms globally — for the cloud ERP & CRM rollout.' },
+  { year: '2019', title: 'Hyderabad Delivery Center Opens', desc: 'Opened our Hyderabad delivery center, doubling consultant capacity and unlocking the 12-hour timezone overlap with Ontario that powers our follow-the-sun delivery model today.' },
   { year: '2021', title: 'Microsoft Inner Circle', desc: 'Inducted into the Microsoft Business Applications Inner Circle — a recognition given to the top 1% of Microsoft partners globally.' },
-  { year: '2023', title: '500+ Deployments', desc: 'Surpassed 500 Dynamics 365 deployments across 28 countries, with a client retention rate of 94% over 5 years.' },
+  { year: '2023', title: '500+ Deployments', desc: 'Surpassed 500 Dynamics 365 deployments across 28 countries, with a client retention rate of 94% over five years.' },
   { year: '2025', title: 'AI & Copilot Practice Launched', desc: 'Launched a dedicated Microsoft Copilot & AI practice, helping clients embed AI into finance, sales and operations workflows.' },
 ]
 
@@ -107,31 +107,31 @@ const TEAM = [
   },
   {
     name: 'Manideepa', role: 'Director of Finance & HR', loc: 'Hyderabad, IN', exp: '16 yrs', cert: 'CA · MBA-HR', initials: 'MD', color: C.purple,
-    about: 'Manideepa leads finance, people operations, and corporate governance across DevinStratus. She manages financial planning, compliance, and the talent strategy that has scaled the firm to 120+ certified consultants across four continents.',
+    about: 'Manideepa leads finance, people operations, and corporate governance across DevinStratus. She manages financial planning, compliance, and the talent strategy that has scaled the firm to 120+ certified consultants across our Ontario and Hyderabad offices.',
     linkedin: 'https://linkedin.com'
   },
   {
-    name: 'Vineeth', role: 'Director of Sales & Marketing', loc: 'London, UK', exp: '14 yrs', cert: 'MB-910 · Salesforce', initials: 'VN', color: C.teal,
-    about: 'Vineeth heads global sales and marketing, owning revenue growth, brand positioning, and strategic account development. He has built DevinStratus\' enterprise pipeline across North America, Europe, and APAC over the past decade.',
+    name: 'Vineeth', role: 'Director of Sales & Marketing', loc: 'Ontario, CA', exp: '14 yrs', cert: 'MB-910 · Salesforce', initials: 'VN', color: C.teal,
+    about: 'Vineeth heads global sales and marketing, owning revenue growth, brand positioning, and strategic account development. He has built DevinStratus\' enterprise pipeline across North America and EMEA over the past decade.',
     linkedin: 'https://linkedin.com'
   },
   {
-    name: 'Anil Kapoor', role: 'Head of Delivery, APAC', loc: 'New Delhi, IN', exp: '13 yrs', cert: 'MB-800 · AZ-900', initials: 'AK', color: C.green,
-    about: 'Anil heads our India delivery centre and APAC client operations, specialising in Business Central and supply chain implementations for manufacturing and logistics clients.',
+    name: 'Anil Kapoor', role: 'Head of Delivery', loc: 'Hyderabad, IN', exp: '13 yrs', cert: 'MB-800 · AZ-900', initials: 'AK', color: C.green,
+    about: 'Anil heads our Hyderabad delivery center and global client operations, specialising in Business Central and supply chain implementations for manufacturing and logistics clients.',
     linkedin: 'https://linkedin.com'
   },
   {
-    name: 'Natalie Girard', role: 'VP Sales & Partnerships', loc: 'Toronto, CA', exp: '11 yrs', cert: 'MB-910 · Salesforce', initials: 'NG', color: C.blue,
+    name: 'Natalie Girard', role: 'VP Sales & Partnerships', loc: 'Ontario, CA', exp: '11 yrs', cert: 'MB-910 · Salesforce', initials: 'NG', color: C.blue,
     about: 'Natalie drives our global sales strategy and partner ecosystem. She has built long-term relationships with over 200 enterprise clients across North America and Europe.',
     linkedin: 'https://linkedin.com'
   },
   {
-    name: 'David Park', role: 'AI & Copilot Practice Lead', loc: 'New York, USA', exp: '9 yrs', cert: 'AI-102 · MB-1002', initials: 'DP', color: C.purple,
+    name: 'David Park', role: 'AI & Copilot Practice Lead', loc: 'Hyderabad, IN', exp: '9 yrs', cert: 'AI-102 · MB-1002', initials: 'DP', color: C.purple,
     about: 'David leads our dedicated Microsoft Copilot & AI practice, helping clients embed artificial intelligence into finance, sales, and operations workflows across the Dynamics 365 platform.',
     linkedin: 'https://linkedin.com'
   },
   {
-    name: 'Emma Rhodes', role: 'Head of Finance Practice', loc: 'London, UK', exp: '15 yrs', cert: 'ACCA · MB-310', initials: 'ER', color: C.teal,
+    name: 'Emma Rhodes', role: 'Head of Finance Practice', loc: 'Hyderabad, IN', exp: '15 yrs', cert: 'ACCA · MB-310', initials: 'ER', color: C.teal,
     about: 'Emma is a qualified accountant and D365 Finance specialist. She leads our finance transformation engagements, helping CFOs close faster, consolidate entities, and automate reporting.',
     linkedin: 'https://linkedin.com'
   },
@@ -151,27 +151,27 @@ const AWARDS = [
 ]
 
 const JOBS = [
-  { title: 'Senior Dynamics 365 Finance Consultant', loc: 'London / Remote', type: 'Full-time', dept: 'Delivery', color: C.blue },
-  { title: 'Power Platform Developer', loc: 'New Delhi / Remote', type: 'Full-time', dept: 'Technical', color: C.purple },
-  { title: 'D365 CRM Functional Consultant', loc: 'New York / Hybrid', type: 'Full-time', dept: 'Delivery', color: C.teal },
-  { title: 'Azure Integration Architect', loc: 'London / Remote', type: 'Full-time', dept: 'Technical', color: C.orange },
-  { title: 'Business Development Manager', loc: 'Toronto / Hybrid', type: 'Full-time', dept: 'Sales', color: C.green },
+  { title: 'Senior Dynamics 365 Finance Consultant', loc: 'Hyderabad / Remote', type: 'Full-time', dept: 'Delivery', color: C.blue },
+  { title: 'Power Platform Developer', loc: 'Hyderabad / Remote', type: 'Full-time', dept: 'Technical', color: C.purple },
+  { title: 'D365 CRM Functional Consultant', loc: 'Hyderabad / Remote', type: 'Full-time', dept: 'Delivery', color: C.teal },
+  { title: 'Azure Integration Architect', loc: 'Hyderabad / Remote', type: 'Full-time', dept: 'Technical', color: C.orange },
+  { title: 'Business Development Manager', loc: 'Ontario / Hybrid', type: 'Full-time', dept: 'Sales', color: C.green },
   { title: 'Microsoft Copilot Solution Architect', loc: 'Remote (Any)', type: 'Full-time', dept: 'AI Practice', color: C.blue },
 ]
 
 const PRESS = [
   { date: 'Jan 2025', title: 'DevinStratus Named to Microsoft\'s 2025 Business Applications Inner Circle', source: 'Microsoft Partner Blog', color: C.blue },
   { date: 'Nov 2024', title: 'ERP Specialist DevinStratus Launches Dedicated AI & Copilot Practice', source: 'Computing Magazine', color: C.purple },
-  { date: 'Sep 2024', title: 'How DevinStratus Cut Month-End Close by 70% for a UK Manufacturer', source: 'ERP Today', color: C.teal },
-  { date: 'Jun 2024', title: 'DevinStratus Expands Toronto Office to Meet North American Demand', source: 'TechCrunch Canada', color: C.orange },
+  { date: 'Sep 2024', title: 'How DevinStratus Cut Month-End Close by 70% for a Mid-Market Manufacturer', source: 'ERP Today', color: C.teal },
+  { date: 'Jun 2024', title: 'DevinStratus Expands Hyderabad Delivery Center to Meet Growing Demand', source: 'YourStory', color: C.orange },
   { date: 'Mar 2024', title: 'Q&A: Why AI Is the Next Frontier in ERP with DevinStratus CTO', source: 'InfoWorld', color: C.green },
 ]
 
 // ── Shared Hero ─────────────────────────────────────────────────────────────────
 function CompanyHero({ section, navigate }) {
   const cfg = {
-    about: { color: C.blue, title: 'About DevinStratus', sub: 'Our story, mission & 16-year track record', img: Aboutus_Img, alt: 'DevinStratus team at work', stat1Icon: 'Award', stat1Color: C.blue, stat1Title: 'Gold Partner', stat1Sub: 'Microsoft Certified', stat2Icon: 'Users', stat2Color: C.teal, stat2Title: '120+ Consultants', stat2Sub: 'Across 4 Continents' },
-    team: { color: C.purple, title: 'Meet Our Team', sub: '120+ certified consultants across 4 continents', img: Team_Img, alt: 'Diverse professional team collaborating', stat1Icon: 'Award', stat1Color: C.purple, stat1Title: 'Certified Experts', stat1Sub: 'Deep Industry Knowledge', stat2Icon: 'Target', stat2Color: C.blue, stat2Title: 'Dedicated Consultants', stat2Sub: 'Focused on Success' },
+    about: { color: C.blue, title: 'About DevinStratus', sub: 'Our story, mission & 16-year track record', img: Aboutus_Img, alt: 'DevinStratus team at work', stat1Icon: 'Award', stat1Color: C.blue, stat1Title: 'Gold Partner', stat1Sub: 'Microsoft Certified', stat2Icon: 'Users', stat2Color: C.teal, stat2Title: '120+ Consultants', stat2Sub: 'Ontario · Hyderabad' },
+    team: { color: C.purple, title: 'Meet Our Team', sub: '120+ certified consultants · Ontario & Hyderabad', img: Team_Img, alt: 'Diverse professional team collaborating', stat1Icon: 'Award', stat1Color: C.purple, stat1Title: 'Certified Experts', stat1Sub: 'Deep Industry Knowledge', stat2Icon: 'Target', stat2Color: C.blue, stat2Title: 'Dedicated Consultants', stat2Sub: 'Focused on Success' },
     global: { color: C.teal, title: 'Global Offices', sub: 'Ontario · Hyderabad', animatedMap: true },
     awards: { color: C.orange, title: 'Awards & Recognition', sub: 'Recognised excellence, year after year' },
     careers: { color: C.green, title: 'Careers at DevinStratus', sub: 'Shape global ERP solutions with a fast-growing team', animatedCareers: true, stat1Icon: 'Brief', stat1Color: C.green, stat1Title: 'Fast Growth', stat1Sub: 'Rapid Career Progression', stat2Icon: 'Globe', stat2Color: C.orange, stat2Title: 'Remote Options', stat2Sub: 'Work From Anywhere' },
@@ -411,7 +411,7 @@ function AboutSection({ navigate, openConsult }) {
               We are a Microsoft Gold Partner specialising exclusively in the Dynamics 365 platform — finance, operations, CRM, supply chain, and the Power Platform ecosystem that connects them. Our focus means our consultants are deeper, faster, and more effective than generalist firms.
             </p>
             <p style={{ fontSize: 15.5, color: C.textM, lineHeight: 1.85, marginBottom: 32 }}>
-              With 120+ certified consultants across London, New York, New Delhi and Toronto, we serve mid-market and enterprise businesses in manufacturing, retail, financial services, healthcare, logistics and professional services.
+              With 120+ certified consultants between Ontario (head of operations) and Hyderabad (delivery centre), we serve mid-market and enterprise businesses in manufacturing, retail, financial services, healthcare, logistics and professional services.
             </p>
             <button onClick={openConsult} style={{ display: 'flex', alignItems: 'center', gap: 8, padding: '13px 28px', borderRadius: 50, background: `linear-gradient(135deg,${C.blue},${C.purple})`, border: 'none', color: '#fff', fontSize: 14, fontWeight: 700, cursor: 'pointer', fontFamily: "'Plus Jakarta Sans',sans-serif", boxShadow: `0 8px 24px ${C.blue}33`, transition: 'all .2s' }}
               onMouseEnter={e => { e.currentTarget.style.transform = 'translateY(-2px)'; e.currentTarget.style.boxShadow = `0 14px 32px ${C.blue}44` }}
@@ -750,7 +750,6 @@ function GlobalSection({ navigate }) {
   useReveal()
   const ontario = OFFICES.find(o => o.slug === 'ontario')
   const hyderabad = OFFICES.find(o => o.slug === 'hyderabad')
-  const totalStaff = OFFICES.reduce((sum, o) => sum + (parseInt(o.headcount, 10) || 0), 0)
 
   return (
     <>
@@ -847,7 +846,7 @@ function GlobalSection({ navigate }) {
             {[
               { v:'2009',           l:'Founded',                   s:'Microsoft partner since day one' },
               { v:'2',              l:'Global offices',             s:'Ontario · Hyderabad' },
-              { v:`${totalStaff}+`, l:'Certified consultants',     s:'Microsoft MCT · MVP · MCSE' },
+              { v:'120+',           l:'Certified consultants',     s:'Microsoft MCT · MVP · MCSE' },
               { v:'24 hr',          l:'Coverage window',           s:'12-hour overlap, follow-the-sun' },
             ].map((s,i) => (
               <div key={i} style={{ display:'flex', flexDirection:'column', position:'relative', paddingLeft:i===0?0:24, borderLeft:i===0?'none':'1px solid #e2e8f0' }}>
@@ -1308,7 +1307,7 @@ export default function CompanyPage({ navigate, slug, openConsult }) {
 
   const SECTIONS_INDEX = [
     { slug: 'about', title: 'About Us', icon: 'Award', color: C.blue, desc: 'Our story, mission and 16-year track record' },
-    { slug: 'team', title: 'Our Team', icon: 'Users', color: C.purple, desc: '120+ certified consultants worldwide' },
+    { slug: 'team', title: 'Our Team', icon: 'Users', color: C.purple, desc: '120+ consultants · Ontario & Hyderabad' },
     { slug: 'global', title: 'Global Offices', icon: 'Globe', color: C.teal, desc: 'Ontario · Hyderabad · 12-hour overlap' },
     // { slug:'awards',  title:'Awards',      icon:'Star',      color:C.orange, desc:'Recognised by Microsoft & industry' }, // HIDDEN — uncomment to show
     { slug: 'careers', title: 'Careers', icon: 'Brief', color: C.green, desc: 'Join a team that grows with you' },
