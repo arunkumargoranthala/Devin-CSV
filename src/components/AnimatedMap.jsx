@@ -6,8 +6,8 @@ import { Ic, C } from './ui';
 
 // Actual coordinates: [Longitude, Latitude]
 const MAP_LOCATIONS = [
-  { id: 'canada', name: 'Ontario, Canada', subtitle: 'North America Hub', coords: [-79.3832, 43.6532] }, // Toronto
-  { id: 'india', name: 'Hyderabad, India', subtitle: 'APAC Delivery Center', coords: [78.4867, 17.3850] },
+  { id: 'canada', name: 'Ontario, Canada', subtitle: 'Head of Operations', coords: [-79.3832, 43.6532] }, // Toronto coords
+  { id: 'india',  name: 'Hyderabad, India', subtitle: 'Delivery Center',   coords: [78.4867, 17.3850] },
 ];
 
 export default function AnimatedMap({ locations = MAP_LOCATIONS }) {

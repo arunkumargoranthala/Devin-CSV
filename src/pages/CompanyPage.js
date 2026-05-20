@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from 'react'
 import { createPortal } from 'react-dom'
 import { C, Ic } from '../components/ui'
+import { OFFICES } from '../data/offices'
 import Leader_1 from '../assets/Leader_1.png'
 import Leader_2 from '../assets/Leader_2.jpg'
 import Leader_3 from '../assets/Leader_3.jpg'
@@ -136,12 +137,7 @@ const TEAM = [
   },
 ]
 
-const OFFICES = [
-  { flag: '🇨🇦', city: 'Ontario, Canada', addr: '181 Bay Street, Suite 1800, M5J 2T3', phone: '+1 778 381 5388', email: 'canada@devinstratus.com', tz: 'EST/EDT', headcount: '18 staff', founded: '2019' },
-  { flag: '🇮🇳', city: 'Hyderabad, India', addr: 'Plot 5, Sector 44, HITEC City 500081', phone: '+91 96503 01529', email: 'india@devinstratus.com', tz: 'IST (+5:30)', headcount: '48 staff', founded: '2019' },
-  // { flag:'🇬🇧', city:'London, UK', addr:'30 St Mary Axe, EC3A 8EP', phone:'+44 207 193 2502', email:'london@devinstratus.com', tz:'GMT/BST', headcount:'62 staff', founded:'2009' },
-  // { flag:'🇺🇸', city:'New York, USA', addr:'1700 Broadway, 28th Floor, NY 10019', phone:'+1 800 938 7929', email:'usa@devinstratus.com', tz:'EST/EDT', headcount:'31 staff', founded:'2015' },
-]
+// OFFICES now imported from shared data — see top of file
 
 const AWARDS = [
   { year: '2025', award: 'Microsoft Business Applications Inner Circle', issuer: 'Microsoft Corporation', icon: 'Award', color: C.blue },
@@ -306,13 +302,13 @@ function SectionVisual({ section, color }) {
   const visuals = {
     global: {
       icon: 'Globe',
-      title: '4 Global Offices',
-      subtitle: '120+ certified consultants',
+      title: 'Two Offices · One Team',
+      subtitle: '72 consultants · 12-hour overlap',
       items: [
-        { icon: 'Pin', label: 'London, UK', sub: 'Headquarters · 38 staff' },
-        { icon: 'Pin', label: 'New York, USA', sub: 'Americas · 32 staff' },
-        { icon: 'Pin', label: 'New Delhi, IN', sub: 'APAC delivery · 35 staff' },
-        { icon: 'Pin', label: 'Toronto, CA', sub: 'North America · 15 staff' },
+        { icon: 'Pin', label: 'Ontario, Canada', sub: 'Head of Operations · 24 staff' },
+        { icon: 'Pin', label: 'Hyderabad, India', sub: 'Delivery Center · 48 staff' },
+        { icon: 'Clock', label: 'EST + IST overlap', sub: '12 hours of joint working time' },
+        { icon: 'Globe', label: '24-hour coverage', sub: 'Follow-the-sun for Managed clients' },
       ],
     },
     awards: {
@@ -752,63 +748,305 @@ function Portrait({ member, variant }) {
 
 function GlobalSection({ navigate }) {
   useReveal()
+  const ontario = OFFICES.find(o => o.slug === 'ontario')
+  const hyderabad = OFFICES.find(o => o.slug === 'hyderabad')
+  const totalStaff = OFFICES.reduce((sum, o) => sum + (parseInt(o.headcount, 10) || 0), 0)
+
   return (
-    <section className="company-section" style={{ padding: '72px 24px', background: '#fff' }}>
-      <div style={{ maxWidth: 1280, margin: '0 auto' }}>
-        <div className="rv" style={{ marginBottom: 48 }}>
-          <div style={{ width: 4, height: 40, borderRadius: 4, background: `linear-gradient(180deg,${C.teal},${C.blue})`, marginBottom: 16 }} />
-          <h2 style={{ fontSize: 32, fontWeight: 800, color: C.text, fontFamily: "'Plus Jakarta Sans',sans-serif", marginBottom: 8 }}>We're Global — and Local</h2>
-          <p style={{ color: C.textM, fontSize: 16, maxWidth: 560 }}>Four offices, 24/7 support coverage, and consultants who understand your local market, timezone, and business culture.</p>
-        </div>
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill,minmax(300px,1fr))', gap: 24 }}>
-          {OFFICES.map((o, i) => (
-            <div key={o.city} className="rv" style={{ borderRadius: 22, overflow: 'hidden', border: `1.5px solid ${C.border}`, background: '#fff', transition: 'all .25s', animation: `fadeUp .4s ease both ${i * 70}ms` }}
-              onMouseEnter={e => { e.currentTarget.style.boxShadow = `0 16px 48px rgba(0,87,184,.1)`; e.currentTarget.style.transform = 'translateY(-4px)'; e.currentTarget.style.borderColor = C.blue + '44' }}
-              onMouseLeave={e => { e.currentTarget.style.boxShadow = 'none'; e.currentTarget.style.transform = 'none'; e.currentTarget.style.borderColor = C.border }}>
-              <div style={{ padding: '24px 24px 0', background: `linear-gradient(135deg,${C.bgSoft},#fff)` }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: 14, marginBottom: 16 }}>
-                  <div style={{ fontSize: 36, lineHeight: 1 }}>{o.flag}</div>
-                  <div>
-                    <h3 style={{ fontSize: 19, fontWeight: 800, color: C.text, fontFamily: "'Plus Jakarta Sans',sans-serif", marginBottom: 2 }}>{o.city}</h3>
-                    <div style={{ fontSize: 12, color: C.textM }}>Est. {o.founded} · {o.headcount}</div>
-                  </div>
-                </div>
-              </div>
-              <div style={{ padding: '0 24px 24px' }}>
-                {[
-                  [Ic, 'Pin', o.addr],
-                  [Ic, 'Phone', o.phone],
-                  [Ic, 'Mail', o.email],
-                  [Ic, 'Clock', `Timezone: ${o.tz}`],
-                ].map(([Icon, icon, val]) => (
-                  <div key={val} style={{ display: 'flex', gap: 10, alignItems: 'flex-start', marginBottom: 10 }}>
-                    <Icon n={icon} s={13} style={{ color: C.textL, flexShrink: 0, marginTop: 2 }} />
-                    <span style={{ fontSize: 13, color: C.textM }}>{val}</span>
-                  </div>
-                ))}
-                <button onClick={() => navigate('/contact')} style={{ marginTop: 14, display: 'flex', alignItems: 'center', gap: 6, fontSize: 13, fontWeight: 700, color: C.blue, background: C.blueL, border: 'none', borderRadius: 50, padding: '8px 18px', cursor: 'pointer' }}>
-                  Get in touch <Ic n="Arrow" s={12} style={{ color: C.blue }} />
-                </button>
-              </div>
+    <>
+      {/* ──── Global responsive overrides ─────────────────────────────────
+          The company hero uses position:absolute for AnimatedMap/AnimatedCareers
+          on desktop (width: 55vw). Below 1024px we flip it to flow inline so
+          the animation drops BELOW the text instead of overlapping. */}
+      <style>{`
+        @media (max-width: 1023px) {
+          .company-hero-grid {
+            grid-template-columns: 1fr !important;
+            height: auto !important;
+            padding-top: 64px !important;
+            padding-bottom: 32px !important;
+            gap: 28px !important;
+          }
+          .company-hero-image {
+            position: relative !important;
+            width: 100% !important;
+            max-width: 720px !important;
+            margin: 0 auto !important;
+            top: auto !important;
+            right: auto !important;
+            bottom: auto !important;
+            height: 320px !important;
+            pointer-events: auto !important;
+          }
+        }
+        @media (max-width: 767px) {
+          .company-hero-grid {
+            padding-top: 48px !important;
+            padding-left: 18px !important;
+            padding-right: 18px !important;
+          }
+          .company-hero-image { height: 260px !important; }
+        }
+        @media (max-width: 480px) {
+          .company-hero-image { height: 220px !important; }
+        }
+
+        /* GlobalSection-specific responsive */
+        @media (max-width: 1023px) {
+          .gs-stats-g { grid-template-columns: repeat(2, 1fr) !important; }
+          .gs-cards-g { grid-template-columns: 1fr !important; }
+          .gs-split-g { grid-template-columns: 1fr !important; gap: 18px !important; }
+          .gs-sun-g { flex-direction: column !important; gap: 24px !important; align-items: flex-start !important; }
+        }
+        @media (max-width: 767px) {
+          .gs-section { padding: 56px 18px !important; }
+          .gs-stats-g { gap: 16px !important; row-gap: 28px !important; }
+          .gs-stats-g > div { padding-left: 0 !important; border-left: none !important; }
+          .gs-stats-g > div:nth-child(3),
+          .gs-stats-g > div:nth-child(4) { padding-top: 22px !important; border-top: 1px solid #e2e8f0; }
+          .gs-stats-g .stat-v { font-size: 32px !important; }
+          .gs-sun-times { gap: 18px !important; flex-wrap: wrap; }
+          .gs-cta-g { flex-direction: column !important; align-items: stretch !important; }
+          .gs-cta-g > * { width: 100% !important; justify-content: center !important; }
+        }
+        @media (max-width: 480px) {
+          .gs-stats-g { grid-template-columns: 1fr !important; }
+          .gs-stats-g > div:nth-child(n) { padding-top: 18px; border-top: 1px solid #e2e8f0; }
+          .gs-stats-g > div:nth-child(1) { padding-top: 0; border-top: none; }
+        }
+      `}</style>
+
+      {/* ════════════════════════════════════════════════════
+         1.  SECTION HEADING
+         ════════════════════════════════════════════════════ */}
+      <section className="company-section gs-section" style={{ padding: '72px 24px 48px', background: '#fff' }}>
+        <div style={{ maxWidth: 1280, margin: '0 auto' }}>
+          <div className="rv" style={{ marginBottom: 36, maxWidth: 760 }}>
+            <div style={{ width: 4, height: 40, borderRadius: 4, background: `linear-gradient(180deg,${C.teal},${C.blue})`, marginBottom: 16 }} />
+            <div style={{ display:'inline-flex', alignItems:'center', gap:8, background:'rgba(6,182,212,0.10)', border:'1px solid rgba(6,182,212,0.30)', borderRadius:50, padding:'5px 13px', fontSize:11, fontWeight:800, color:'#003FB3', letterSpacing:'.14em', marginBottom:16 }}>
+              <Ic n="Globe" s={12} style={{ color:'#06b6d4' }}/>
+              WHERE WE OPERATE
             </div>
-          ))}
-        </div>
-        <div className="rv" style={{ marginTop: 48, padding: '32px', borderRadius: 22, background: `linear-gradient(135deg,${C.blue},${C.purple})`, color: '#fff', display: 'flex', gap: 40, flexWrap: 'wrap', alignItems: 'center', justifyContent: 'space-between' }}>
-          <div>
-            <h3 style={{ fontSize: 22, fontWeight: 800, fontFamily: "'Plus Jakarta Sans',sans-serif", marginBottom: 6 }}>Follow-the-Sun Support</h3>
-            <p style={{ opacity: .85, fontSize: 15 }}>With offices across 4 time zones, we offer 24/5 coverage for Managed Support clients — your named consultant is always within 4 hours of waking up.</p>
+            <h2 style={{ fontSize:'clamp(26px, 3.6vw, 36px)', fontWeight: 800, color: C.text, fontFamily: "'Plus Jakarta Sans',sans-serif", marginBottom: 12, lineHeight:1.2, letterSpacing:'-0.01em' }}>
+              Two offices. One team. <span style={{ background:'linear-gradient(135deg, #06b6d4, #0066FF)', WebkitBackgroundClip:'text', backgroundClip:'text', WebkitTextFillColor:'transparent' }}>Always-on delivery.</span>
+            </h2>
+            <p style={{ color: C.textM, fontSize: 16, lineHeight:1.7, maxWidth: 640 }}>
+              Operations in Ontario, delivery from Hyderabad. The 12-hour overlap between EST and IST means work continues around the clock — and your team always has someone ready to pick up where the last shift left off.
+            </p>
           </div>
-          <div style={{ display: 'flex', gap: 16, flexShrink: 0 }}>
-            {['🇬🇧 GMT', '🇺🇸 EST', '🇮🇳 IST', '🇨🇦 EST'].map(tz => (
-              <div key={tz} style={{ textAlign: 'center' }}>
-                <div style={{ fontSize: 18, marginBottom: 4 }}>{tz.split(' ')[0]}</div>
-                <div style={{ fontSize: 12, opacity: .75 }}>{tz.split(' ')[1]}</div>
+        </div>
+      </section>
+
+
+      {/* ════════════════════════════════════════════════════
+         2.  TRUST STRIP
+         ════════════════════════════════════════════════════ */}
+      <section style={{ padding:'48px 24px', background:'#fff', borderTop:'1px solid #e2e8f0', borderBottom:'1px solid #e2e8f0' }}>
+        <div style={{ maxWidth:1280, margin:'0 auto' }}>
+          <div className="rv gs-stats-g" style={{ display:'grid', gridTemplateColumns:'repeat(4, 1fr)', gap:32 }}>
+            {[
+              { v:'2009',           l:'Founded',                   s:'Microsoft partner since day one' },
+              { v:'2',              l:'Global offices',             s:'Ontario · Hyderabad' },
+              { v:`${totalStaff}+`, l:'Certified consultants',     s:'Microsoft MCT · MVP · MCSE' },
+              { v:'24 hr',          l:'Coverage window',           s:'12-hour overlap, follow-the-sun' },
+            ].map((s,i) => (
+              <div key={i} style={{ display:'flex', flexDirection:'column', position:'relative', paddingLeft:i===0?0:24, borderLeft:i===0?'none':'1px solid #e2e8f0' }}>
+                <div className="stat-v" style={{ fontSize:38, fontWeight:900, color:'#0a0a14', fontFamily:"'Plus Jakarta Sans',sans-serif", lineHeight:1, marginBottom:8, background:'linear-gradient(135deg, #0066FF, #003FB3)', WebkitBackgroundClip:'text', backgroundClip:'text', WebkitTextFillColor:'transparent' }}>{s.v}</div>
+                <div style={{ fontSize:13.5, fontWeight:700, color:'#0a0a14', marginBottom:4 }}>{s.l}</div>
+                <div style={{ fontSize:12.5, color:'#64748b', lineHeight:1.45 }}>{s.s}</div>
               </div>
             ))}
           </div>
         </div>
-      </div>
-    </section>
+      </section>
+
+
+      {/* ════════════════════════════════════════════════════
+         3.  OFFICE CARDS
+         ════════════════════════════════════════════════════ */}
+      <section className="company-section gs-section" style={{ padding: '72px 24px', background: '#fff' }}>
+        <div style={{ maxWidth: 1280, margin: '0 auto' }}>
+          <div className="rv gs-cards-g" style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: 24 }}>
+            {OFFICES.map((o, i) => (
+              <div key={o.slug} className="rv" style={{
+                borderRadius: 22, overflow: 'hidden',
+                border: `1.5px solid ${C.border}`, background: '#fff',
+                transition: 'all .25s',
+                animation: `fadeUp .4s ease both ${i * 90}ms`,
+                position:'relative',
+              }}
+                onMouseEnter={e => { e.currentTarget.style.boxShadow = `0 16px 48px rgba(0,87,184,.12)`; e.currentTarget.style.transform = 'translateY(-4px)'; e.currentTarget.style.borderColor = (o.isHQ ? C.blue : C.teal) + '55' }}
+                onMouseLeave={e => { e.currentTarget.style.boxShadow = 'none'; e.currentTarget.style.transform = 'none'; e.currentTarget.style.borderColor = C.border }}>
+
+                {/* Top accent strip */}
+                <div style={{ position:'absolute', top:0, left:0, right:0, height:4, background: o.isHQ ? `linear-gradient(90deg, ${C.blue}, ${C.teal})` : `linear-gradient(90deg, ${C.teal}, ${C.blue})` }} />
+
+                <div style={{ padding: '28px 26px 0', background: `linear-gradient(135deg, ${o.isHQ ? '#f0f7ff' : '#ecfeff'}, #fff)` }}>
+                  <div style={{ display:'flex', justifyContent:'space-between', alignItems:'flex-start', marginBottom:18 }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
+                      <div style={{ fontSize: 44, lineHeight: 1 }}>{o.flag}</div>
+                      <div>
+                        <h3 style={{ fontSize: 22, fontWeight: 800, color: C.text, fontFamily: "'Plus Jakarta Sans',sans-serif", marginBottom: 4, letterSpacing:'-0.005em' }}>{o.full}</h3>
+                        <div style={{ fontSize: 12.5, color: C.textM }}>Est. {o.founded} · {o.headcount}</div>
+                      </div>
+                    </div>
+                    <span style={{ fontSize:10.5, fontWeight:800, padding:'5px 11px', borderRadius:50, background: o.isHQ ? '#0066FF' : '#06b6d4', color:'#fff', letterSpacing:'.06em', whiteSpace:'nowrap' }}>
+                      {o.role.toUpperCase()}
+                    </span>
+                  </div>
+                </div>
+
+                <div style={{ padding: '4px 26px 26px' }}>
+                  {[
+                    [Ic, 'Pin',   o.addr],
+                    [Ic, 'Phone', o.phone],
+                    [Ic, 'Mail',  o.email],
+                    [Ic, 'Clock', `Timezone: ${o.tz}`],
+                  ].map(([Icon, icon, val]) => (
+                    <div key={val} style={{ display: 'flex', gap: 11, alignItems: 'flex-start', marginBottom: 11 }}>
+                      <Icon n={icon} s={13} style={{ color: C.textL, flexShrink: 0, marginTop: 3 }} />
+                      <span style={{ fontSize: 13.5, color: C.textM, lineHeight:1.5 }}>{val}</span>
+                    </div>
+                  ))}
+                  <button onClick={() => navigate('/contact')}
+                    style={{ marginTop: 18, display: 'inline-flex', alignItems: 'center', gap: 7, fontSize: 13.5, fontWeight: 700, color: C.blue, background: C.blueL, border: 'none', borderRadius: 50, padding: '10px 20px', cursor: 'pointer' }}>
+                    Get in touch <Ic n="Arrow" s={12} style={{ color: C.blue }} />
+                  </button>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+
+      {/* ════════════════════════════════════════════════════
+         4.  HOW WE WORK ACROSS TWO OFFICES
+         ════════════════════════════════════════════════════ */}
+      <section className="company-section gs-section" style={{ padding: '72px 24px', background: 'linear-gradient(180deg, #f8fafc 0%, #f0f7ff 100%)' }}>
+        <div style={{ maxWidth: 1180, margin: '0 auto' }}>
+          <div className="rv" style={{ textAlign:'center', marginBottom: 40, maxWidth: 720, margin:'0 auto 40px' }}>
+            <div style={{ display:'inline-flex', alignItems:'center', gap:8, background:'#0066FF15', border:'1px solid #0066FF30', borderRadius:50, padding:'5px 13px', fontSize:11, fontWeight:800, color:'#003FB3', letterSpacing:'.14em', marginBottom:14 }}>
+              HOW WE WORK
+            </div>
+            <h3 style={{ fontSize:'clamp(22px, 3vw, 30px)', fontWeight: 800, color: C.text, fontFamily: "'Plus Jakarta Sans',sans-serif", marginBottom: 12, lineHeight:1.2 }}>
+              Operations in Canada, delivery in India
+            </h3>
+            <p style={{ color: C.textM, fontSize: 15, lineHeight:1.7 }}>
+              Two offices, clear responsibilities. North American account ownership and architecture leadership from Ontario; delivery, engineering, and consultant capacity from Hyderabad. The 12-hour overlap is when teams collaborate live.
+            </p>
+          </div>
+
+          <div className="rv gs-split-g" style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap: 20 }}>
+            {[
+              { color: C.blue, accent:'#003FB3', flag:'🇨🇦', city:'Ontario', role:'Head of Operations',
+                points: [
+                  'Client relationships and account ownership',
+                  'Solution architecture and discovery calls',
+                  'North American sales and partnerships',
+                  'Microsoft partner ecosystem co-ordination',
+                ]
+              },
+              { color: C.teal, accent:'#0EA5E9', flag:'🇮🇳', city:'Hyderabad', role:'Delivery Center',
+                points: [
+                  'Engineering, build, and configuration teams',
+                  'Day-to-day project delivery',
+                  'Microsoft-certified consultant pool',
+                  'Managed Support and platform operations',
+                ]
+              },
+            ].map((b, i) => (
+              <div key={b.city} style={{ padding:'30px 28px', borderRadius:22, background:'#fff', border:`1.5px solid ${b.color}25`, position:'relative', overflow:'hidden' }}>
+                <div style={{ position:'absolute', top:0, left:0, right:0, height:3, background: `linear-gradient(90deg, ${b.color}, ${b.accent})` }} />
+                <div style={{ position:'absolute', top:-50, right:-50, width:180, height:180, borderRadius:'50%', background:`radial-gradient(circle, ${b.color}18, transparent 70%)`, pointerEvents:'none' }}/>
+
+                <div style={{ display:'flex', alignItems:'center', gap:14, marginBottom:18, position:'relative', zIndex:1 }}>
+                  <div style={{ fontSize:34, lineHeight:1 }}>{b.flag}</div>
+                  <div>
+                    <div style={{ fontSize:11, fontWeight:800, letterSpacing:'.10em', color:b.color, marginBottom:3 }}>{b.role.toUpperCase()}</div>
+                    <div style={{ fontSize:18, fontWeight:800, color:C.text, fontFamily:"'Plus Jakarta Sans',sans-serif", letterSpacing:'-0.005em' }}>{b.city}</div>
+                  </div>
+                </div>
+
+                <ul style={{ listStyle:'none', padding:0, margin:0, display:'flex', flexDirection:'column', gap:10, position:'relative', zIndex:1 }}>
+                  {b.points.map((p, j) => (
+                    <li key={j} style={{ display:'flex', alignItems:'flex-start', gap:10, fontSize:13.5, color:C.textM, lineHeight:1.55 }}>
+                      <Ic n="CheckCircle" s={15} style={{ color:b.color, flexShrink:0, marginTop:2 }}/>
+                      <span style={{ color:'#0a0a14' }}>{p}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+
+      {/* ════════════════════════════════════════════════════
+         5.  FOLLOW-THE-SUN SUPPORT
+         ════════════════════════════════════════════════════ */}
+      <section className="company-section gs-section" style={{ padding: '64px 24px', background: '#fff' }}>
+        <div style={{ maxWidth: 1180, margin: '0 auto' }}>
+          <div className="rv gs-sun-g" style={{ padding:'36px 36px', borderRadius: 22, background: `linear-gradient(135deg, ${C.blue}, ${C.purple})`, color: '#fff', display: 'flex', gap: 40, flexWrap: 'wrap', alignItems: 'center', justifyContent: 'space-between', position:'relative', overflow:'hidden', boxShadow:'0 20px 50px rgba(0, 102, 255, 0.25)' }}>
+            <div style={{ position:'absolute', top:-100, right:-80, width:380, height:380, borderRadius:'50%', background:'radial-gradient(circle, rgba(255,255,255,0.10), transparent 70%)', pointerEvents:'none' }}/>
+            <div style={{ position:'absolute', bottom:-80, left:-60, width:280, height:280, borderRadius:'50%', background:'radial-gradient(circle, rgba(103,232,249,0.18), transparent 70%)', pointerEvents:'none' }}/>
+
+            <div style={{ position:'relative', zIndex:1, maxWidth: 560 }}>
+              <div style={{ display:'inline-flex', alignItems:'center', gap:8, background:'rgba(255,255,255,0.15)', border:'1px solid rgba(255,255,255,0.30)', borderRadius:50, padding:'5px 13px', fontSize:11, fontWeight:800, color:'#fff', letterSpacing:'.14em', marginBottom:14, backdropFilter:'blur(10px)' }}>
+                <Ic n="Clock" s={12} style={{ color:'#67e8f9' }}/>
+                24-HOUR COVERAGE
+              </div>
+              <h3 style={{ fontSize: 24, fontWeight: 800, fontFamily: "'Plus Jakarta Sans',sans-serif", marginBottom: 10, letterSpacing:'-0.01em' }}>Follow-the-Sun Support</h3>
+              <p style={{ opacity: .90, fontSize: 14.5, lineHeight:1.65 }}>
+                EST and IST give us a 12-hour collaborative overlap and round-the-clock coverage for Managed Support clients. Your named consultant is always within four hours of waking up.
+              </p>
+            </div>
+
+            <div className="gs-sun-times" style={{ display: 'flex', gap: 28, flexShrink: 0, position:'relative', zIndex:1 }}>
+              {[
+                { flag:'🇨🇦', tz:'EST', city:'Ontario', hours:'09:00 – 18:00' },
+                { flag:'🇮🇳', tz:'IST', city:'Hyderabad', hours:'09:00 – 18:00' },
+              ].map(t => (
+                <div key={t.tz} style={{ textAlign:'center', padding:'14px 18px', borderRadius:14, background:'rgba(255,255,255,0.12)', border:'1px solid rgba(255,255,255,0.20)', backdropFilter:'blur(10px)', minWidth:120 }}>
+                  <div style={{ fontSize: 24, marginBottom: 6 }}>{t.flag}</div>
+                  <div style={{ fontSize: 15, fontWeight:800, marginBottom:2, fontFamily:"'Plus Jakarta Sans',sans-serif" }}>{t.tz}</div>
+                  <div style={{ fontSize: 11, opacity: .80, marginBottom:6 }}>{t.city}</div>
+                  <div style={{ fontSize: 10.5, color:'#67e8f9', fontWeight:700, fontFamily:"'JetBrains Mono', monospace" }}>{t.hours}</div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
+
+
+      {/* ════════════════════════════════════════════════════
+         6.  CTA
+         ════════════════════════════════════════════════════ */}
+      <section className="company-section gs-section" style={{ padding: '72px 24px 80px', background: '#fff' }}>
+        <div style={{ maxWidth: 880, margin: '0 auto', textAlign:'center' }}>
+          <div className="rv">
+            <h3 style={{ fontSize:'clamp(24px, 3.4vw, 32px)', fontWeight: 800, color: C.text, fontFamily: "'Plus Jakarta Sans',sans-serif", marginBottom: 14, lineHeight:1.2, letterSpacing:'-0.01em' }}>
+              Want to talk to someone in your timezone?
+            </h3>
+            <p style={{ color: C.textM, fontSize: 15.5, lineHeight:1.7, marginBottom: 28, maxWidth:620, margin:'0 auto 28px' }}>
+              Book a 30-minute call with the Solution Architect closest to your working hours. We'll route to Ontario or Hyderabad based on your timezone — first call is always with an architect, never a salesperson.
+            </p>
+            <div className="gs-cta-g" style={{ display:'flex', gap:14, justifyContent:'center', flexWrap:'wrap' }}>
+              <button onClick={() => navigate('/contact')}
+                style={{ display:'inline-flex', alignItems:'center', gap:10, padding:'14px 28px', borderRadius:50, background:'linear-gradient(135deg, #0066FF, #003FB3)', border:'none', cursor:'pointer', fontSize:14.5, fontWeight:700, color:'#fff', fontFamily:"'Plus Jakarta Sans',sans-serif", boxShadow:'0 10px 26px rgba(0,102,255,0.30)' }}>
+                Book a discovery call <Ic n="Arrow" s={14} style={{ color:'#fff' }}/>
+              </button>
+              <button onClick={() => navigate('/resources/case-studies')}
+                style={{ display:'inline-flex', alignItems:'center', gap:10, padding:'14px 24px', borderRadius:50, background:'#fff', border:'1.5px solid #e2e8f0', cursor:'pointer', fontSize:14, fontWeight:700, color:'#0a0a14', fontFamily:"'Plus Jakarta Sans',sans-serif" }}>
+                Read case studies
+              </button>
+            </div>
+          </div>
+        </div>
+      </section>
+    </>
   )
 }
 
@@ -1071,7 +1309,7 @@ export default function CompanyPage({ navigate, slug, openConsult }) {
   const SECTIONS_INDEX = [
     { slug: 'about', title: 'About Us', icon: 'Award', color: C.blue, desc: 'Our story, mission and 16-year track record' },
     { slug: 'team', title: 'Our Team', icon: 'Users', color: C.purple, desc: '120+ certified consultants worldwide' },
-    { slug: 'global', title: 'Global Offices', icon: 'Globe', color: C.teal, desc: '4 offices across 4 time zones' },
+    { slug: 'global', title: 'Global Offices', icon: 'Globe', color: C.teal, desc: 'Ontario · Hyderabad · 12-hour overlap' },
     // { slug:'awards',  title:'Awards',      icon:'Star',      color:C.orange, desc:'Recognised by Microsoft & industry' }, // HIDDEN — uncomment to show
     { slug: 'careers', title: 'Careers', icon: 'Brief', color: C.green, desc: 'Join a team that grows with you' },
     // { slug:'press',   title:'Press & Media', icon:'Megaphone', color:C.purple, desc:'News, announcements & expert commentary' }, // HIDDEN — uncomment to show
