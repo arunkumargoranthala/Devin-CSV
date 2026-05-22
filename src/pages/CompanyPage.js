@@ -1111,8 +1111,8 @@ function CareersSection({ navigate }) {
 
   /* Helper: derive a brand-aligned accent color per job based on its location */
   const getLocColor = (loc) => {
-    if (/Ontario/i.test(loc)) return C.blue
-    if (/Hyderabad/i.test(loc)) return C.teal
+    if (/Barrie|Ontario|Canada/i.test(loc)) return C.blue
+    if (/Hyderabad|India/i.test(loc)) return C.teal
     return C.purple   /* Remote / Any */
   }
 
@@ -1122,12 +1122,12 @@ function CareersSection({ navigate }) {
       {/* ════════════════════════════════════════════════════
          STATS STRIP — quick credibility right after hero
          ════════════════════════════════════════════════════ */}
-      <section style={{ padding: '48px 24px', background: '#fff', borderTop: '1px solid #e2e8f0', borderBottom: '1px solid #e2e8f0' }}>
+      <section className="careers-sec" style={{ padding: '48px 24px', background: '#fff', borderTop: '1px solid #e2e8f0', borderBottom: '1px solid #e2e8f0' }}>
         <div style={{ maxWidth: 1280, margin: '0 auto' }}>
           <div className="rv cs-stats-g" style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 32 }}>
             {[
               { v: `${JOBS.length}`, l: 'Open roles',           s: 'Across delivery, sales, and AI practice' },
-              { v: '2',              l: 'Global offices',        s: 'Ontario + Hyderabad' },
+              { v: '2',              l: 'Global offices',        s: 'Barrie + Hyderabad' },
               { v: '18 hrs',         l: 'Daily coverage',        s: 'Hand-off model · live overlap window' },
               { v: '100%',           l: 'Cert fees covered',     s: 'MS exams · training · re-attempts' },
             ].map((s, i) => (
@@ -1145,7 +1145,7 @@ function CareersSection({ navigate }) {
       {/* ════════════════════════════════════════════════════
          STORYTELLING + JOB LISTINGS — sticky-left two-column
          ════════════════════════════════════════════════════ */}
-      <section className="company-section" style={{ padding: '72px 24px', background: '#fff' }}>
+      <section className="company-section careers-sec" style={{ padding: '72px 24px', background: '#fff' }}>
         <div className="svc-body-g" style={{ maxWidth: 1280, margin: '0 auto', display: 'grid', gridTemplateColumns: '1fr 1.2fr', gap: 64, alignItems: 'start' }}>
 
           {/* Left Column: Storytelling */}
@@ -1167,7 +1167,7 @@ function CareersSection({ navigate }) {
 
             <div className="company-values-g" style={{ display: 'grid', gridTemplateColumns: '1fr', gap: 14, marginBottom: 28, background: 'linear-gradient(135deg, rgba(6,182,212,0.06), rgba(0,102,255,0.04))', border: '1px solid rgba(0,102,255,0.10)', padding: 24, borderRadius: 20 }}>
               {[
-                { icon: 'Star',   text: 'Glassdoor 4.7/5 employer rating' },
+                { icon: 'Star',   text: 'Founder-led · direct access to the people who decide' },
                 { icon: 'Globe',  text: 'Remote-friendly · most roles flex location' },
                 { icon: 'Award',  text: 'Microsoft cert fees fully covered (including re-attempts)' },
                 { icon: 'Users',  text: 'Real mentorship from senior architects on Day 1' },
@@ -1259,14 +1259,14 @@ function CareersSection({ navigate }) {
       {/* ════════════════════════════════════════════════════
          WHY PEOPLE STAY — 3-card retention section
          ════════════════════════════════════════════════════ */}
-      <section className="company-section" style={{ padding: '90px 24px', background: '#fff' }}>
+      <section className="company-section careers-sec" style={{ padding: '90px 24px', background: '#fff' }}>
         <div style={{ maxWidth: 1180, margin: '0 auto' }}>
           <div className="rv" style={{ textAlign: 'center', marginBottom: 48, maxWidth: 720, margin: '0 auto 48px' }}>
             <div style={{ display: 'inline-flex', alignItems: 'center', gap: 8, background: '#0066FF15', border: '1px solid #0066FF30', borderRadius: 50, padding: '5px 13px', fontSize: 11, fontWeight: 800, color: '#003FB3', letterSpacing: '.14em', marginBottom: 14 }}>
               WHY PEOPLE STAY
             </div>
             <h2 style={{ fontSize: 'clamp(26px, 3.4vw, 34px)', fontWeight: 800, color: C.text, fontFamily: "'Plus Jakarta Sans',sans-serif", marginBottom: 12, lineHeight: 1.2, letterSpacing: '-0.01em' }}>
-              Our average tenure beats the industry by 2 years.
+              The work is the reason people join.
             </h2>
             <p style={{ color: C.textM, fontSize: 15, lineHeight: 1.7 }}>
               Three things separate us from the body shops and the Big 4 alternatives.
@@ -1280,7 +1280,7 @@ function CareersSection({ navigate }) {
               { icon: 'Users',  color: C.teal, accent: '#0EA5E9', title: 'Ownership, not staff augmentation',
                 desc: 'Every consultant owns scope, decisions, and client relationship from day one. No timesheet babysitting. No 6-layer org chart between you and the customer.' },
               { icon: 'Globe',  color: C.green, accent: '#003FB3', title: 'Two-office, one-team culture',
-                desc: 'Ontario and Hyderabad collaborate live during the daily overlap window. Not "us and them" — same delivery standards, same comp bands, same career paths.' },
+                desc: 'Barrie and Hyderabad collaborate live during the daily overlap window. Not "us and them" — same delivery standards, same comp bands, same career paths.' },
             ].map((r, i) => (
               <div key={i} style={{ padding: '28px 26px', borderRadius: 20, background: 'linear-gradient(180deg, #fff, #fafcff)', border: `1.5px solid ${r.color}20`, position: 'relative', overflow: 'hidden' }}>
                 <div style={{ position: 'absolute', top: 0, left: 0, right: 0, height: 3, background: `linear-gradient(90deg, ${r.color}, ${r.accent})` }} />
@@ -1300,7 +1300,7 @@ function CareersSection({ navigate }) {
       {/* ════════════════════════════════════════════════════
          FINAL CTA
          ════════════════════════════════════════════════════ */}
-      <section style={{ padding: '90px 24px', background: 'linear-gradient(135deg, #003FB3 0%, #0066FF 60%, #06b6d4 100%)', position: 'relative', overflow: 'hidden' }}>
+      <section className="careers-sec" style={{ padding: '90px 24px', background: 'linear-gradient(135deg, #003FB3 0%, #0066FF 60%, #06b6d4 100%)', position: 'relative', overflow: 'hidden' }}>
         <div style={{ position: 'absolute', top: -100, right: -80, width: 400, height: 400, borderRadius: '50%', background: 'radial-gradient(circle, rgba(255,255,255,0.10), transparent 70%)', pointerEvents: 'none' }} />
         <div style={{ position: 'absolute', bottom: -80, left: -60, width: 300, height: 300, borderRadius: '50%', background: 'radial-gradient(circle, rgba(103,232,249,0.18), transparent 70%)', pointerEvents: 'none' }} />
 
@@ -1315,13 +1315,13 @@ function CareersSection({ navigate }) {
           <p style={{ fontSize: 16, color: 'rgba(255,255,255,0.85)', marginBottom: 32, lineHeight: 1.7, maxWidth: 640, margin: '0 auto 32px' }}>
             Send your CV and a few lines about what you're looking for. We'll respond within 5 working days — every application reviewed by a human.
           </p>
-          <div style={{ display: 'flex', gap: 14, justifyContent: 'center', flexWrap: 'wrap' }}>
+          <div className="cs-cta-row" style={{ display: 'flex', gap: 14, justifyContent: 'center', flexWrap: 'wrap' }}>
             <a href="mailto:careers@devinstratus.com?subject=Application"
-              style={{ display: 'inline-flex', alignItems: 'center', gap: 10, padding: '14px 28px', borderRadius: 50, background: '#fff', color: '#003FB3', fontSize: 14.5, fontWeight: 800, textDecoration: 'none', fontFamily: "'Plus Jakarta Sans',sans-serif" }}>
+              style={{ display: 'inline-flex', alignItems: 'center', gap: 10, padding: '14px 28px', borderRadius: 50, background: '#fff', color: '#003FB3', fontSize: 14.5, fontWeight: 800, textDecoration: 'none', fontFamily: "'Plus Jakarta Sans',sans-serif", justifyContent: 'center' }}>
               Email careers@devinstratus.com <Ic n="Arrow" s={14} style={{ color: '#003FB3' }} />
             </a>
             <button onClick={() => navigate('/company/team')}
-              style={{ display: 'inline-flex', alignItems: 'center', gap: 10, padding: '14px 24px', borderRadius: 50, background: 'transparent', color: '#fff', fontSize: 14, fontWeight: 700, border: '1.5px solid rgba(255,255,255,0.40)', cursor: 'pointer', fontFamily: "'Plus Jakarta Sans',sans-serif" }}>
+              style={{ display: 'inline-flex', alignItems: 'center', gap: 10, padding: '14px 24px', borderRadius: 50, background: 'transparent', color: '#fff', fontSize: 14, fontWeight: 700, border: '1.5px solid rgba(255,255,255,0.40)', cursor: 'pointer', fontFamily: "'Plus Jakarta Sans',sans-serif", justifyContent: 'center' }}>
               Meet the team first
             </button>
           </div>
@@ -1329,15 +1329,6 @@ function CareersSection({ navigate }) {
       </section>
 
       <style>{`
-        .careers-cta-btn {
-          animation: ctaPulse 2s infinite;
-        }
-        @keyframes ctaPulse {
-          0% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.4); }
-          70% { box-shadow: 0 0 0 15px rgba(16, 185, 129, 0); }
-          100% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); }
-        }
-        
         .job-card-interactive:hover {
           transform: translateY(-4px) !important;
           box-shadow: 0 20px 40px rgba(0, 102, 255, 0.08) !important;
@@ -1370,6 +1361,11 @@ function CareersSection({ navigate }) {
           .cs-stats-g > div:nth-child(n+2) { padding-top: 22px; border-top: 1px solid #e2e8f0; }
           .cs-stats-g .stat-v { font-size: 32px !important; }
           .cs-why-g { grid-template-columns: 1fr !important; }
+          /* tighten heavy section padding on phones */
+          .careers-sec { padding-top: 52px !important; padding-bottom: 52px !important; padding-left: 18px !important; padding-right: 18px !important; }
+          /* full-width stacked CTA buttons */
+          .cs-cta-row { flex-direction: column !important; }
+          .cs-cta-row > * { width: 100% !important; }
         }
         @media (max-width: 480px) {
           .cs-stats-g { grid-template-columns: 1fr !important; }
