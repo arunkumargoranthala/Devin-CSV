@@ -439,10 +439,8 @@ const NAV = {
     {n:"LifeBuoy",t:"Partner Program",section:"contact"},
   ],
   offices:[
-    {flag:"🇬🇧",city:"London, UK",phone:"+44 207 193 2502"},
-    {flag:"🇺🇸",city:"New York, USA",phone:"+1 800 938 7929"},
-    {flag:"🇨🇦",city:"Toronto, CA",phone:"+1 778 381 5388"},
-    {flag:"🇮🇳",city:"New Delhi, IN",phone:"+91 96503 01529"},
+    {flag:"🇨🇦",city:"Barrie, Canada",phone:"+1 705 241 6260"},
+    {flag:"🇮🇳",city:"Hyderabad, India",phone:"+91 81792 97878"},
   ],
 }
 

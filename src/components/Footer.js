@@ -1,5 +1,6 @@
 import { Ic } from './ui'
-import { SOLUTIONS, SERVICES } from '../data/content'
+import { SOLUTIONS } from '../data/content'
+import { RESOURCES } from '../data/resources'
 import logoFull from '../assets/DS_Logo_and_Text.png'
 
 /* ─────────────────────────────────────────────────────────────────────────────
@@ -89,7 +90,7 @@ export default function Footer({ navigate, openConsult }) {
             </div>
             {/* Trust badges */}
             <div style={{ display:'flex', gap:8, flexWrap:'wrap' }}>
-              {['ISO 27001','GDPR Compliant','MS Gold Partner'].map(b => (
+              {['GDPR Compliant','Microsoft Partner','Azure AI'].map(b => (
                 <div key={b} style={{ padding:'4px 10px', borderRadius:6, background:'rgba(255,255,255,.6)', border:'1px solid rgba(0,102,255,0.15)', fontSize:10.5, color:'#475569', fontWeight:600, backdropFilter:'blur(4px)' }}>{b}</div>
               ))}
             </div>
@@ -108,15 +109,15 @@ export default function Footer({ navigate, openConsult }) {
             ))}
           </div>
 
-          {/* Services */}
+          {/* Resources */}
           <div>
-            <div style={{ fontSize:11, fontWeight:800, letterSpacing:'.14em', color:'#003FB3', marginBottom:18 }}>SERVICES</div>
-            {SERVICES.map(s => (
-              <button key={s.slug} className="foot-link" onClick={() => go(`/service/${s.slug}`)}
+            <div style={{ fontSize:11, fontWeight:800, letterSpacing:'.14em', color:'#003FB3', marginBottom:18 }}>RESOURCES</div>
+            {RESOURCES.map(r => (
+              <button key={r.slug} className="foot-link" onClick={() => go(`/resources/${r.slug}`)}
                 style={{ display:'block', width:'100%', textAlign:'left', padding:'6px 0', background:'none', border:'none', cursor:'pointer', fontSize:13.5, color:'#475569', fontFamily:'Inter,sans-serif', transition:'color .16s' }}
                 onMouseEnter={e=>e.currentTarget.style.color='#0066FF'}
                 onMouseLeave={e=>e.currentTarget.style.color='#475569'}>
-                {s.t}
+                {r.heading}
               </button>
             ))}
           </div>
@@ -134,7 +135,7 @@ export default function Footer({ navigate, openConsult }) {
             ))}
             <div style={{ marginTop:24 }}>
               <div style={{ fontSize:11, fontWeight:800, letterSpacing:'.14em', color:'#003FB3', marginBottom:12 }}>GLOBAL OFFICES</div>
-              {[['🇬🇧','London'],['🇺🇸','New York'],['🇮🇳','New Delhi'],['🇨🇦','Toronto']].map(([f,c]) => (
+              {[['🇨🇦','Barrie, Canada'],['🇮🇳','Hyderabad, India']].map(([f,c]) => (
                 <div key={c} style={{ fontSize:13, color:'#475569', marginBottom:7, display:'flex', alignItems:'center', gap:7 }}>
                   <span>{f}</span><span>{c}</span>
                 </div>
@@ -146,7 +147,7 @@ export default function Footer({ navigate, openConsult }) {
 
       {/* Bottom bar */}
       <div style={{ borderTop:'1px solid rgba(0,102,255,0.10)', padding:'18px 24px', maxWidth:1280, margin:'0 auto', display:'flex', justifyContent:'space-between', alignItems:'center', flexWrap:'wrap', gap:12, position:'relative', zIndex:1 }}>
-        <div style={{ fontSize:12.5, color:'#64748b' }}>© 2025 DevinStratus Technologies Ltd. All rights reserved.</div>
+        <div style={{ fontSize:12.5, color:'#64748b' }}>© 2026 DevinStratus Technologies Inc. All rights reserved.</div>
         <div style={{ display:'flex', gap:20, flexWrap:'wrap' }}>
           {['Privacy Policy','Terms of Service','Cookie Policy'].map(l => (
             <button key={l} style={{ background:'none', border:'none', cursor:'pointer', fontSize:12.5, color:'#64748b', fontFamily:'Inter,sans-serif', transition:'color .15s' }}

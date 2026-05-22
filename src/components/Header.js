@@ -22,9 +22,8 @@ const NAV_RESOURCES = RESOURCES.map(r => ({
 }))
 const NAV_COMPANY = [
   { n:'Award',     t:'About DevinStratus', d:'Our story, mission & values',    c:C.blue,   bg:C.blueL,   slug:'about'   },
-  { n:'Users',     t:'Our Team',           d:'120+ certified consultants',     c:C.purple, bg:C.purpleL, slug:'team'    },
-  { n:'Globe',     t:'Global Offices',     d:'London · NYC · Toronto · Delhi', c:C.teal,   bg:C.tealL,   slug:'global'  },
-  // { n:'Star',   t:'Awards',             d:'Microsoft Inner Circle 2025',    c:C.orange, bg:C.orangeL, slug:'awards'  }, // HIDDEN — uncomment to show
+  { n:'Users',     t:'Our Team',           d:'AI engineering team · Canada & India',     c:C.purple, bg:C.purpleL, slug:'team'    },
+  { n:'Globe',     t:'Global Offices',     d:'Barrie · Hyderabad', c:C.teal,   bg:C.tealL,   slug:'global'  },
   { n:'Brief',     t:'Careers',            d:'Join our growing practice',      c:C.green,  bg:C.greenL,  slug:'careers' },
   // { n:'Megaphone', t:'Press & Media',   d:'News, announcements & PR',       c:C.purple, bg:C.purpleL, slug:'press'   }, // HIDDEN — uncomment to show
 ]
@@ -310,7 +309,7 @@ export default function Header({ navigate, openConsult }) {
               <div style={{ padding:'18px 16px' }}>
                 <div style={{ display:'flex', justifyContent:'space-between', alignItems:'center', marginBottom:14 }}>
                   <div style={{ fontSize:10, fontWeight:800, letterSpacing:'.14em', color:C.purple }}>OUR COMPANY</div>
-                  <span style={{ fontSize:11, color:C.textL }}>Microsoft Gold Partner since 2009</span>
+                  <span style={{ fontSize:11, color:C.textL }}>Microsoft Technology Partner</span>
                 </div>
                 <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:8, marginBottom:12 }}>
                   {NAV_COMPANY.map(r => (
@@ -327,7 +326,7 @@ export default function Header({ navigate, openConsult }) {
                   ))}
                 </div>
                 <div style={{ background:`linear-gradient(135deg,${C.blue},${C.purple})`, borderRadius:12, padding:'12px 16px', display:'grid', gridTemplateColumns:'1fr 1fr', gap:6 }}>
-                  {[['🇬🇧','London'],['🇺🇸','New York'],['🇮🇳','New Delhi'],['🇨🇦','Toronto']].map(([f,city]) => (
+                  {[['🇨🇦','Barrie'],['🇮🇳','Hyderabad']].map(([f,city]) => (
                     <div key={city} style={{ display:'flex', alignItems:'center', gap:7 }}>
                       <span style={{ fontSize:16 }}>{f}</span>
                       <span style={{ fontSize:12, fontWeight:600, color:'rgba(255,255,255,.9)' }}>{city}</span>

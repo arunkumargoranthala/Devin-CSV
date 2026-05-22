@@ -93,75 +93,46 @@ const VALUES = [
 
 const TEAM = [
   {
-    name: 'Deepakteja', role: 'Founder & CTO', loc: 'Ontario, CA', exp: '20 yrs', cert: 'MBA · MC-900', initials: 'DT', color: C.blue,
-    about: 'Deepakteja founded DevinStratus in 2023 with a vision to make enterprise AI deliver real, measurable business outcomes. He sets company strategy, leads client relationships, and drives the Microsoft technology partnerships at the core of the firm.',
+    name: 'Deepakteja', role: 'Founder & CTO', loc: 'Barrie, CA', exp: 'AI Architecture', cert: 'AI-102 · DP-600', initials: 'DT', color: C.blue,
+    about: 'Deepakteja founded DevinStratus in 2023 with a vision to make enterprise AI deliver real, measurable business outcomes. He sets technical strategy, designs the AI orchestration architectures at the heart of every engagement, and leads the Microsoft technology partnerships the firm is built on.',
     linkedin: 'https://linkedin.com'
   },
   {
-    name: 'Vinay Kumar', role: 'Co-Founder & COO', loc: 'Ontario, CA', exp: '20 yrs', cert: 'MBA · PMP', initials: 'VK', color: C.green,
-    about: 'Vinay Kumar co-founded DevinStratus in 2023 alongside Deepakteja. As Chief Operating Officer he runs day-to-day operations, delivery governance, and customer success — ensuring every engagement lands on time, on budget, and on outcome.',
+    name: 'Vinay Kumar', role: 'Co-Founder & COO', loc: 'Barrie, CA', exp: 'Operations', cert: 'SC-300 · AB-103', initials: 'VK', color: C.green,
+    about: 'Vinay Kumar co-founded DevinStratus in 2023 alongside Deepakteja. As Chief Operating Officer he runs delivery governance, security and access architecture, and customer success — ensuring every engagement lands on time, on budget, and on outcome.',
     linkedin: 'https://linkedin.com'
   },
   {
-    name: 'Manideepa', role: 'Director of Finance & HR', loc: 'Hyderabad, IN', exp: '16 yrs', cert: 'CA · MBA-HR', initials: 'MD', color: C.purple,
+    name: 'Manideepa', role: 'Director of Finance & HR', loc: 'Hyderabad, IN', exp: 'Finance & People', cert: 'CA · MBA-HR', initials: 'MD', color: C.purple,
     about: 'Manideepa leads finance, people operations, and corporate governance across DevinStratus. She manages financial planning, compliance, and the talent strategy that has grown the firm into a focused AI engineering team across our Canada and India offices.',
     linkedin: 'https://linkedin.com'
   },
   {
-    name: 'Vineeth', role: 'Director of Sales & Marketing', loc: 'Ontario, CA', exp: '14 yrs', cert: 'MB-910 · Salesforce', initials: 'VN', color: C.teal,
-    about: 'Vineeth heads global sales and marketing, owning revenue growth, brand positioning, and strategic account development. He has built DevinStratus\' enterprise pipeline across North America and EMEA over the past decade.',
+    name: 'Vineeth', role: 'Director of Sales & Marketing', loc: 'Barrie, CA', exp: 'Growth', cert: 'AB-103 · AI-900', initials: 'VN', color: C.teal,
+    about: 'Vineeth heads sales and marketing, owning revenue growth, brand positioning, and strategic account development. He translates the firm\'s deep AI engineering capability into outcomes enterprise buyers can act on.',
     linkedin: 'https://linkedin.com'
   },
-  {
-    name: 'Anil Kapoor', role: 'Head of Delivery', loc: 'Hyderabad, IN', exp: '13 yrs', cert: 'MB-800 · AZ-900', initials: 'AK', color: C.green,
-    about: 'Anil heads our Hyderabad delivery center and global client operations, specialising in Business Central and supply chain implementations for manufacturing and logistics clients.',
-    linkedin: 'https://linkedin.com'
-  },
-  {
-    name: 'Natalie Girard', role: 'VP Sales & Partnerships', loc: 'Ontario, CA', exp: '11 yrs', cert: 'MB-910 · Salesforce', initials: 'NG', color: C.blue,
-    about: 'Natalie drives our global sales strategy and partner ecosystem. She has built long-term relationships with over 200 enterprise clients across North America and Europe.',
-    linkedin: 'https://linkedin.com'
-  },
-  {
-    name: 'David Park', role: 'AI & Copilot Practice Lead', loc: 'Hyderabad, IN', exp: '9 yrs', cert: 'AI-102 · MB-1002', initials: 'DP', color: C.purple,
-    about: 'David leads our dedicated Microsoft Copilot & AI practice, helping clients embed artificial intelligence into finance, sales, and operations workflows across the Dynamics 365 platform.',
-    linkedin: 'https://linkedin.com'
-  },
-  {
-    name: 'Emma Rhodes', role: 'Head of Finance Practice', loc: 'Hyderabad, IN', exp: '15 yrs', cert: 'ACCA · MB-310', initials: 'ER', color: C.teal,
-    about: 'Emma is a qualified accountant and D365 Finance specialist. She leads our finance transformation engagements, helping CFOs close faster, consolidate entities, and automate reporting.',
-    linkedin: 'https://linkedin.com'
-  },
+]
+
+// ── Microsoft certifications held across the team (real codes, client-confirmed) ──
+const CERTIFICATIONS = [
+  { code: 'DP-600', name: 'Fabric Analytics Engineer',        tier: 'Associate', icon: 'BarChart', color: C.blue },
+  { code: 'AI-102', name: 'Azure AI Engineer',                tier: 'Associate', icon: 'Brain',    color: C.purple },
+  { code: 'AB-103', name: 'Azure AI Apps & Agents Developer', tier: 'Associate', icon: 'Cpu',      color: C.teal },
+  { code: 'SC-300', name: 'Identity & Access Administrator',  tier: 'Associate', icon: 'Shield',   color: C.orange },
+  { code: 'AB-731', name: 'Microsoft Certified Specialist',   tier: 'Specialist', icon: 'Award',   color: C.green },
+  { code: 'AB-100', name: 'Microsoft Certified',              tier: 'Fundamentals', icon: 'CheckCircle', color: C.blue },
 ]
 
 // OFFICES now imported from shared data — see top of file
 
-const AWARDS = [
-  { year: '2025', award: 'Microsoft Business Applications Inner Circle', issuer: 'Microsoft Corporation', icon: 'Award', color: C.blue },
-  { year: '2025', award: 'UK Cloud ERP Partner of the Year', issuer: 'Cloud Industry Forum', icon: 'Star', color: C.purple },
-  { year: '2024', award: 'Top 50 Microsoft Dynamics Partners Globally', issuer: 'Dynamics Communities', icon: 'Globe', color: C.teal },
-  { year: '2024', award: 'Best Digital Transformation Firm — Mid-Market', issuer: 'ERP Today Awards', icon: 'Zap', color: C.orange },
-  { year: '2023', award: 'Microsoft Gold Partner — Business Applications', issuer: 'Microsoft', icon: 'Award', color: C.blue },
-  { year: '2023', award: 'Glassdoor Top 50 UK Tech Employer', issuer: 'Glassdoor', icon: 'Users', color: C.green },
-  { year: '2022', award: 'Best ERP Implementation of the Year', issuer: 'Computing Technology Awards', icon: 'Package', color: C.purple },
-  { year: '2022', award: 'Microsoft FastTrack Recognised Partner', issuer: 'Microsoft', icon: 'Rocket', color: C.teal },
-]
-
 const JOBS = [
-  { title: 'Senior Dynamics 365 Finance Consultant', loc: 'Hyderabad / Remote', type: 'Full-time', dept: 'Delivery', color: C.blue },
+  { title: 'Senior AI Solutions Engineer (Azure AI)', loc: 'Hyderabad / Remote', type: 'Full-time', dept: 'AI Practice', color: C.blue },
   { title: 'Power Platform Developer', loc: 'Hyderabad / Remote', type: 'Full-time', dept: 'Technical', color: C.purple },
-  { title: 'D365 CRM Functional Consultant', loc: 'Hyderabad / Remote', type: 'Full-time', dept: 'Delivery', color: C.teal },
-  { title: 'Azure Integration Architect', loc: 'Hyderabad / Remote', type: 'Full-time', dept: 'Technical', color: C.orange },
-  { title: 'Business Development Manager', loc: 'Ontario / Hybrid', type: 'Full-time', dept: 'Sales', color: C.green },
+  { title: 'Dynamics 365 Functional Consultant', loc: 'Hyderabad / Remote', type: 'Full-time', dept: 'Delivery', color: C.teal },
+  { title: 'Azure Integration & Orchestration Architect', loc: 'Hyderabad / Remote', type: 'Full-time', dept: 'Technical', color: C.orange },
+  { title: 'Business Development Manager', loc: 'Barrie / Hybrid', type: 'Full-time', dept: 'Sales', color: C.green },
   { title: 'Microsoft Copilot Solution Architect', loc: 'Remote (Any)', type: 'Full-time', dept: 'AI Practice', color: C.blue },
-]
-
-const PRESS = [
-  { date: 'Jan 2025', title: 'DevinStratus Named to Microsoft\'s 2025 Business Applications Inner Circle', source: 'Microsoft Partner Blog', color: C.blue },
-  { date: 'Nov 2024', title: 'ERP Specialist DevinStratus Launches Dedicated AI & Copilot Practice', source: 'Computing Magazine', color: C.purple },
-  { date: 'Sep 2024', title: 'How DevinStratus Cut Month-End Close by 70% for a Mid-Market Manufacturer', source: 'ERP Today', color: C.teal },
-  { date: 'Jun 2024', title: 'DevinStratus Expands Hyderabad Delivery Center to Meet Growing Demand', source: 'YourStory', color: C.orange },
-  { date: 'Mar 2024', title: 'Q&A: Why AI Is the Next Frontier in ERP with DevinStratus CTO', source: 'InfoWorld', color: C.green },
 ]
 
 // ── Shared Hero ─────────────────────────────────────────────────────────────────
@@ -169,10 +140,8 @@ function CompanyHero({ section, navigate }) {
   const cfg = {
     about: { color: C.blue, title: 'About DevinStratus', sub: 'Enterprise AI orchestration, built on Microsoft', img: Aboutus_Img, alt: 'DevinStratus team at work', stat1Icon: 'Award', stat1Color: C.blue, stat1Title: 'Microsoft Partner', stat1Sub: 'Power Platform · Azure AI', stat2Icon: 'Users', stat2Color: C.teal, stat2Title: 'Canada · India', stat2Sub: 'Two-Country Team' },
     team: { color: C.purple, title: 'Meet Our Team', sub: 'A focused AI engineering team across Canada & India', img: Team_Img, alt: 'Diverse professional team collaborating', stat1Icon: 'Award', stat1Color: C.purple, stat1Title: 'Certified Experts', stat1Sub: 'Microsoft Stack', stat2Icon: 'Target', stat2Color: C.blue, stat2Title: 'AI Engineers', stat2Sub: 'Orchestration-First' },
-    global: { color: C.teal, title: 'Global Offices', sub: 'Ontario · Hyderabad', animatedMap: true },
-    awards: { color: C.orange, title: 'Awards & Recognition', sub: 'Recognised excellence, year after year' },
-    careers: { color: C.green, title: 'Where you work matters less than when.', sub: 'Two offices · one team · 18+ hours of daily coverage', animatedCareers: true, stat1Icon: 'Globe', stat1Color: C.green, stat1Title: 'Ontario · Hyderabad', stat1Sub: 'Two-Office Model', stat2Icon: 'Clock', stat2Color: C.orange, stat2Title: 'Follow-the-Sun', stat2Sub: 'Always-On Delivery' },
-    press: { color: C.purple, title: 'Press & Media', sub: 'News, announcements and expert commentary' },
+    global: { color: C.teal, title: 'Global Offices', sub: 'Barrie · Hyderabad', animatedMap: true },
+    careers: { color: C.green, title: 'Where you work matters less than when.', sub: 'Two offices · one team · 18+ hours of daily coverage', animatedCareers: true, stat1Icon: 'Globe', stat1Color: C.green, stat1Title: 'Canada · India', stat1Sub: 'Two-Office Model', stat2Icon: 'Clock', stat2Color: C.orange, stat2Title: 'Follow-the-Sun', stat2Sub: 'Always-On Delivery' },
   }[section] || { color: C.blue, title: 'Company', sub: '' }
 
   return (
@@ -308,37 +277,15 @@ function SectionVisual({ section, color }) {
         { icon: 'Globe', label: '24-hour coverage', sub: 'Follow-the-sun for Managed clients' },
       ],
     },
-    awards: {
-      icon: 'Award',
-      title: 'Recognised Excellence',
-      subtitle: '12 industry awards · 2022–2025',
-      items: [
-        { icon: 'Award', label: 'Microsoft Inner Circle', sub: 'Top 1% global partners' },
-        { icon: 'Star', label: 'Partner of the Year', sub: 'Business Applications · 2024' },
-        { icon: 'Shield', label: 'ISO 27001 Certified', sub: 'Information security' },
-        { icon: 'Award', label: 'Gartner Recognised', sub: 'D365 Implementation Specialist' },
-      ],
-    },
     careers: {
       icon: 'Users',
       title: "We're Hiring",
-      subtitle: '14 open positions · global remote',
+      subtitle: '6 open positions · remote-friendly',
       items: [
-        { icon: 'Cpu', label: 'D365 F&O Developer', sub: 'London · Remote · 5+ yrs' },
-        { icon: 'Cloud', label: 'Azure Solution Architect', sub: 'New York · Remote · 7+ yrs' },
-        { icon: 'Brain', label: 'AI / Copilot Engineer', sub: 'Hybrid · 4+ yrs' },
-        { icon: 'Users', label: 'Practice Lead — Retail', sub: 'Toronto · 10+ yrs' },
-      ],
-    },
-    press: {
-      icon: 'FileText',
-      title: 'Press & Media',
-      subtitle: '24 features · 2023–2025',
-      items: [
-        { icon: 'FileText', label: 'Forbes', sub: '"Reshaping mid-market ERP" · 2024' },
-        { icon: 'FileText', label: 'TechCrunch', sub: '"AI-first consulting" · 2024' },
-        { icon: 'FileText', label: 'Microsoft Blog', sub: 'Featured Partner Story · 2025' },
-        { icon: 'FileText', label: 'CIO Review', sub: 'Top 10 D365 Partners · 2024' },
+        { icon: 'Brain', label: 'Senior AI Solutions Engineer', sub: 'Hyderabad · Remote' },
+        { icon: 'Cloud', label: 'Azure Orchestration Architect', sub: 'Hyderabad · Remote' },
+        { icon: 'Cpu', label: 'Power Platform Developer', sub: 'Hyderabad · Remote' },
+        { icon: 'Users', label: 'Business Development Manager', sub: 'Barrie · Hybrid' },
       ],
     },
   }
@@ -467,6 +414,9 @@ function AboutSection({ navigate, openConsult }) {
           </div>
         </div>
       </section>
+
+      {/* Certifications band */}
+      <CertificationsSection />
     </div>
   )
 }
@@ -1047,38 +997,46 @@ function GlobalSection({ navigate }) {
 }
 
 // ── Awards Section ────────────────────────────────────────────────────────────────
-function AwardsSection() {
+function CertificationsSection() {
   useReveal()
   return (
-    <section className="company-section" style={{ padding: '72px 24px', background: '#fff' }}>
-      <div style={{ maxWidth: 1280, margin: '0 auto' }}>
-        <div className="rv" style={{ marginBottom: 48 }}>
-          <div style={{ width: 4, height: 40, borderRadius: 4, background: `linear-gradient(180deg,${C.orange},${C.purple})`, marginBottom: 16 }} />
-          <h2 style={{ fontSize: 32, fontWeight: 800, color: C.text, fontFamily: "'Plus Jakarta Sans',sans-serif", marginBottom: 8 }}>Awards & Recognition</h2>
-          <p style={{ color: C.textM, fontSize: 16, maxWidth: 560 }}>Independent recognition from Microsoft and the wider technology industry for the quality of our work and our culture.</p>
+    <section className="company-section" style={{ padding: '72px 24px', background: C.bgSoft }}>
+      <div style={{ maxWidth: 1180, margin: '0 auto' }}>
+        <div className="rv" style={{ textAlign: 'center', marginBottom: 44, maxWidth: 700, margin: '0 auto 44px' }}>
+          <div style={{ display: 'inline-flex', alignItems: 'center', gap: 8, background: 'rgba(0,102,255,0.10)', border: '1px solid rgba(0,102,255,0.30)', borderRadius: 50, padding: '5px 13px', fontSize: 11, fontWeight: 800, color: '#003FB3', letterSpacing: '.14em', marginBottom: 14 }}>
+            <Ic n="Award" s={12} style={{ color: '#0066FF' }} /> MICROSOFT CERTIFIED
+          </div>
+          <h2 style={{ fontSize: 'clamp(26px,3.4vw,34px)', fontWeight: 800, color: C.text, fontFamily: "'Plus Jakarta Sans',sans-serif", marginBottom: 12, lineHeight: 1.2, letterSpacing: '-0.01em' }}>
+            Certified across the Microsoft AI stack
+          </h2>
+          <p style={{ color: C.textM, fontSize: 15, lineHeight: 1.7 }}>
+            Our team holds current Microsoft certifications spanning AI engineering, data analytics, identity, and agent development — the foundations of every orchestration architecture we build.
+          </p>
         </div>
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill,minmax(340px,1fr))', gap: 16 }}>
-          {AWARDS.map((a, i) => (
-            <div key={a.award} className="rv" style={{ display: 'flex', gap: 16, padding: '22px', borderRadius: 18, border: `1.5px solid ${C.border}`, background: '#fff', transition: 'all .25s', animation: `fadeUp .4s ease both ${i * 50}ms` }}
-              onMouseEnter={e => { e.currentTarget.style.borderColor = a.color + '55'; e.currentTarget.style.boxShadow = `0 8px 28px ${a.color}12`; e.currentTarget.style.transform = 'translateY(-3px)' }}
+
+        <div className="rv certs-g" style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 16 }}>
+          {CERTIFICATIONS.map((c, i) => (
+            <div key={c.code} style={{ display: 'flex', gap: 16, padding: '22px 24px', borderRadius: 18, border: `1.5px solid ${C.border}`, background: '#fff', transition: 'all .25s', animation: `fadeUp .4s ease both ${i * 60}ms`, position: 'relative', overflow: 'hidden' }}
+              onMouseEnter={e => { e.currentTarget.style.borderColor = c.color + '55'; e.currentTarget.style.boxShadow = `0 10px 28px ${c.color}14`; e.currentTarget.style.transform = 'translateY(-3px)' }}
               onMouseLeave={e => { e.currentTarget.style.borderColor = C.border; e.currentTarget.style.boxShadow = 'none'; e.currentTarget.style.transform = 'none' }}>
-              <div style={{ width: 48, height: 48, borderRadius: 14, background: a.color + '15', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-                <Ic n={a.icon} s={22} style={{ color: a.color }} />
+              <div style={{ position: 'absolute', top: 0, left: 0, bottom: 0, width: 3, background: `linear-gradient(180deg, ${c.color}, ${c.color}55)` }} />
+              <div style={{ width: 48, height: 48, borderRadius: 13, background: c.color + '15', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                <Ic n={c.icon} s={22} style={{ color: c.color }} />
               </div>
               <div>
-                <div style={{ fontSize: 11, fontWeight: 700, color: a.color, marginBottom: 4, letterSpacing: '.08em' }}>{a.year} · {a.issuer}</div>
-                <div style={{ fontSize: 14.5, fontWeight: 700, color: C.text, lineHeight: 1.45 }}>{a.award}</div>
+                <div style={{ fontSize: 12, fontWeight: 800, color: c.color, marginBottom: 4, letterSpacing: '.06em', fontFamily: "'JetBrains Mono', monospace" }}>{c.code}</div>
+                <div style={{ fontSize: 14.5, fontWeight: 700, color: C.text, lineHeight: 1.4, marginBottom: 3 }}>{c.name}</div>
+                <div style={{ fontSize: 11.5, color: C.textL, fontWeight: 600 }}>Microsoft Certified: {c.tier}</div>
               </div>
             </div>
           ))}
         </div>
-        <div className="rv" style={{ marginTop: 40, display: 'flex', gap: 16, flexWrap: 'wrap' }}>
-          {[['Microsoft Gold Partner', '#0078d4'], ['Azure Expert MSP', '#0078d4'], ['FastTrack Recognised', '#0078d4'], ['Inner Circle 2025', '#6c3ce1'], ['ISO 9001 Certified', '#00a99d']].map(([b, c]) => (
-            <div key={b} style={{ padding: '10px 20px', borderRadius: 50, background: C.bgSoft, border: `2px solid ${c}44`, display: 'flex', alignItems: 'center', gap: 8 }}>
-              <div style={{ width: 10, height: 10, borderRadius: '50%', background: c }} />
-              <span style={{ fontSize: 13, fontWeight: 700, color: C.text }}>{b}</span>
-            </div>
-          ))}
+
+        <div className="rv" style={{ marginTop: 32, textAlign: 'center' }}>
+          <div style={{ display: 'inline-flex', alignItems: 'center', gap: 10, padding: '12px 24px', borderRadius: 50, background: '#fff', border: `1.5px solid ${C.border}` }}>
+            <Ic n="Shield" s={16} style={{ color: '#0078d4' }} />
+            <span style={{ fontSize: 13.5, fontWeight: 700, color: C.text }}>Microsoft Technology Partner · Power Platform · Azure AI · Dynamics 365 · Fabric</span>
+          </div>
         </div>
       </div>
     </section>
@@ -1422,46 +1380,6 @@ function CareersSection({ navigate }) {
 }
 
 // ── Press Section ────────────────────────────────────────────────────────────────
-function PressSection() {
-  useReveal()
-  return (
-    <section className="company-section" style={{ padding: '72px 24px', background: '#fff' }}>
-      <div style={{ maxWidth: 1280, margin: '0 auto' }}>
-        <div className="rv" style={{ marginBottom: 48 }}>
-          <div style={{ width: 4, height: 40, borderRadius: 4, background: `linear-gradient(180deg,${C.purple},${C.blue})`, marginBottom: 16 }} />
-          <h2 style={{ fontSize: 32, fontWeight: 800, color: C.text, fontFamily: "'Plus Jakarta Sans',sans-serif", marginBottom: 8 }}>Press & Media</h2>
-          <p style={{ color: C.textM, fontSize: 16, maxWidth: 560 }}>News, announcements and expert commentary from the DevinStratus team.</p>
-        </div>
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
-          {PRESS.map((p, i) => (
-            <div key={p.title} className="rv" style={{ display: 'flex', gap: 20, alignItems: 'center', padding: '24px', borderRadius: 18, border: `1.5px solid ${C.border}`, background: '#fff', transition: 'all .25s', animation: `fadeUp .4s ease both ${i * 60}ms` }}
-              onMouseEnter={e => { e.currentTarget.style.borderColor = p.color + '55'; e.currentTarget.style.boxShadow = `0 8px 28px ${p.color}10`; e.currentTarget.style.transform = 'translateX(6px)' }}
-              onMouseLeave={e => { e.currentTarget.style.borderColor = C.border; e.currentTarget.style.boxShadow = 'none'; e.currentTarget.style.transform = 'none' }}>
-              <div style={{ width: 8, height: 8, borderRadius: '50%', background: p.color, flexShrink: 0 }} />
-              <div style={{ flex: 1 }}>
-                <div style={{ fontSize: 11, fontWeight: 700, color: p.color, marginBottom: 4 }}>{p.date} · {p.source}</div>
-                <div style={{ fontSize: 16, fontWeight: 700, color: C.text }}>{p.title}</div>
-              </div>
-              <div style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 13, fontWeight: 600, color: p.color, flexShrink: 0 }}>
-                Read more <Ic n="ExternalLink" s={13} style={{ color: p.color }} />
-              </div>
-            </div>
-          ))}
-        </div>
-        <div className="rv" style={{ marginTop: 40, padding: '28px', borderRadius: 20, background: C.bgSoft, border: `1px solid ${C.border}` }}>
-          <h3 style={{ fontSize: 18, fontWeight: 800, color: C.text, fontFamily: "'Plus Jakarta Sans',sans-serif", marginBottom: 8 }}>Media Enquiries</h3>
-          <p style={{ color: C.textM, fontSize: 14, marginBottom: 12 }}>For press enquiries, interview requests, or to receive our media kit, contact our communications team.</p>
-          <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap' }}>
-            <a href="mailto:press@devinstratus.com" style={{ display: 'flex', alignItems: 'center', gap: 7, padding: '10px 20px', borderRadius: 50, background: `linear-gradient(135deg,${C.blue},${C.purple})`, color: '#fff', fontSize: 13, fontWeight: 700, textDecoration: 'none' }}>
-              <Ic n="Mail" s={14} style={{ color: '#fff' }} /> press@devinstratus.com
-            </a>
-          </div>
-        </div>
-      </div>
-    </section>
-  )
-}
-
 // ── Main Export ────────────────────────────────────────────────────────────────────
 export default function CompanyPage({ navigate, slug, openConsult }) {
   useReveal()
@@ -1473,9 +1391,7 @@ export default function CompanyPage({ navigate, slug, openConsult }) {
     { slug: 'about', title: 'About Us', icon: 'Award', color: C.blue, desc: 'Our story, mission and AI-first approach' },
     { slug: 'team', title: 'Our Team', icon: 'Users', color: C.purple, desc: 'AI engineering team · Canada & India' },
     { slug: 'global', title: 'Global Offices', icon: 'Globe', color: C.teal, desc: 'Ontario · Hyderabad · 12-hour overlap' },
-    // { slug:'awards',  title:'Awards',      icon:'Star',      color:C.orange, desc:'Recognised by Microsoft & industry' }, // HIDDEN — uncomment to show
     { slug: 'careers', title: 'Careers', icon: 'Brief', color: C.green, desc: 'Join a team that grows with you' },
-    // { slug:'press',   title:'Press & Media', icon:'Megaphone', color:C.purple, desc:'News, announcements & expert commentary' }, // HIDDEN — uncomment to show
   ]
 
   return (
@@ -1498,9 +1414,7 @@ export default function CompanyPage({ navigate, slug, openConsult }) {
       {section === 'about' && <AboutSection navigate={navigate} openConsult={openConsult} />}
       {section === 'team' && <TeamSection />}
       {section === 'global' && <GlobalSection navigate={navigate} />}
-      {/* section === 'awards'  && <AwardsSection  /> */}{/* HIDDEN */}
       {section === 'careers' && <CareersSection navigate={navigate} />}
-      {/* section === 'press'   && <PressSection   /> */}{/* HIDDEN */}
     </div>
   )
 }

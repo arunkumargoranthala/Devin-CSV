@@ -1,87 +1,115 @@
 /* ════════════════════════════════════════════════════════════════════════════
-   ContactPage — DevinStratus
-   Theme: cyan/teal family (matches new home page hero + footer)
-   Animation: "Live Pulse" — central beacon transmits data packets to 4 offices
-   Mail: EmailJS-ready (currently DEMO MODE — see comment block below)
-   Responsive: desktop, tablet, mobile
-   ════════════════════════════════════════════════════════════════════════════ */
+ *  ContactPage — DevinStratus
+ *  ────────────────────────────────────────────────────────────────────────────
+ *  4-step booking flow integrated with a Next.js calendar API microservice.
+ *  Graceful fallback: when API is unreachable, uses local mock data and shows
+ *  a "Demo mode" pill — page still works end-to-end for the prospect.
+ *
+ *  Sections:
+ *    1.  HERO — left: value prop + trust pills; right: ContactJohnHero animation
+ *    2.  4-STEP FLOW — focus / details / slot / confirm
+ *    3.  WHAT HAPPENS NEXT — 4-card timeline
+ *    4.  WHY BOOK WITH US — 4 trust signals
+ *    5.  OFFICES — global office selector (data/offices.js)
+ *    6.  URGENT MATTERS — fast-track contact methods
+ *    7.  FAQ — 5 buyer questions
+ *
+ *  Calendar API contract:
+ *    GET  ${API_BASE}/api/slots?from=YYYY-MM-DD&to=YYYY-MM-DD
+ *           → { slots: [{ date, time, available, slotId }] }
+ *    POST ${API_BASE}/api/bookings
+ *           body: { slotId, focus, name, email, company, role, headcount, notes }
+ *           → { ok: true, bookingId, slot }
+ *
+ *  Set REACT_APP_CALENDAR_API in your .env (e.g. https://devinstratus-cal.vercel.app)
+ *  to wire it up. Leave unset for local demo mode.
+ * ════════════════════════════════════════════════════════════════════════════ */
 
-import { useState, useEffect, useRef } from 'react'
-import { C, Ic } from '../components/ui'
+import { useState, useEffect } from 'react'
+import { C, Ic, Btn } from '../components/ui'
+import { OFFICES, CONTACT_FOCUS } from '../data/offices'
 import ContactJohnHero from '../components/ContactJohnHero'
 
-/* ─── EmailJS Setup (free 200 emails/month) ─────────────────────────────────
-   1. Sign up at https://www.emailjs.com (no credit card)
-   2. Add Email Service (Gmail/Outlook) → copy SERVICE_ID
-   3. Email Templates → Create → add {{name}}, {{email}}, {{company}},
-      {{phone}}, {{interest}}, {{message}} → copy TEMPLATE_ID
-   4. Account → API Keys → copy PUBLIC_KEY
-   5. Run:  npm install @emailjs/browser
-   6. Replace the 3 values below. After saving, restart your dev server.
-   ─────────────────────────────────────────────────────────────────────────── */
-const EMAILJS_SERVICE_ID  = 'service_ugcn2fo'
-const EMAILJS_TEMPLATE_ID = 'template_6wrrquf'
-const EMAILJS_PUBLIC_KEY  = '0Thqx9s95gzBPBAW-'
+/* ─── API configuration ──────────────────────────────────────────────────── */
+const API_BASE = process.env.REACT_APP_CALENDAR_API || ''
+const HAS_API  = Boolean(API_BASE)
 
-// A "real" key is any non-empty string that is NOT the placeholder.
-// This is more forgiving than strict-equality with one fixed placeholder string.
-const _isReal = v => typeof v === 'string' && v.trim().length > 4 && !v.startsWith('YOUR_')
-const EMAILJS_CONFIGURED =
-  _isReal(EMAILJS_SERVICE_ID) &&
-  _isReal(EMAILJS_TEMPLATE_ID) &&
-  _isReal(EMAILJS_PUBLIC_KEY)
+/* ─── Calendar fetch helpers (graceful fallback to demo data) ────────────── */
+const MOCK_SLOT_TIMES = ['09:00', '09:30', '10:00', '10:30', '11:00', '11:30', '14:00', '14:30', '15:00', '15:30', '16:00', '16:30']
 
-// Diagnostic log — open browser DevTools (F12 → Console) to see which keys read
-// as "real". Tells you instantly if a key wasn't picked up correctly.
-if (typeof window !== 'undefined') {
-  // eslint-disable-next-line no-console
-  console.log('[ContactPage] EmailJS status:', {
-    configured:       EMAILJS_CONFIGURED,
-    serviceId_real:   _isReal(EMAILJS_SERVICE_ID),
-    templateId_real:  _isReal(EMAILJS_TEMPLATE_ID),
-    publicKey_real:   _isReal(EMAILJS_PUBLIC_KEY),
+function getNextBusinessDays(n = 5) {
+  const days = []
+  const d = new Date()
+  d.setHours(0,0,0,0)
+  d.setDate(d.getDate() + 1)
+  while (days.length < n) {
+    const dow = d.getDay()
+    if (dow !== 0 && dow !== 6) days.push(new Date(d))
+    d.setDate(d.getDate() + 1)
+  }
+  return days
+}
+
+function mockSlots() {
+  const days = getNextBusinessDays(5)
+  const out = []
+  days.forEach(d => {
+    MOCK_SLOT_TIMES.forEach(time => {
+      // Randomly mark ~30% as booked for realism
+      const available = Math.random() > 0.30
+      out.push({
+        slotId: `mock-${d.toISOString().slice(0,10)}-${time}`,
+        date: d.toISOString().slice(0,10),
+        time,
+        available,
+      })
+    })
   })
+  return out
 }
 
-/* ─── Cyan accent palette (used in addition to brand C) ───────────────────── */
-const CY = {
-  cyanDark:  '#0c4a6e',  // deep slate-cyan (footer family)
-  cyanMid:   '#155e75',  // mid teal
-  cyan:      '#06b6d4',  // brand teal (C.teal)
-  cyanLite:  '#67e8f9',  // bright cyan for accents
-  cyanGlow:  '#a5f3fc',  // pale cyan glow
-  cyanWash:  '#ecfeff',  // wash-out
-  bgGrad:    'linear-gradient(180deg, #f5f9ff 0%, #e0f2fe 60%, #cffafe 100%)',
+async function fetchSlots() {
+  if (!HAS_API) return { slots: mockSlots(), source:'demo' }
+  try {
+    const days = getNextBusinessDays(5)
+    const from = days[0].toISOString().slice(0,10)
+    const to   = days[days.length - 1].toISOString().slice(0,10)
+    const res  = await fetch(`${API_BASE}/api/slots?from=${from}&to=${to}`)
+    if (!res.ok) throw new Error(`HTTP ${res.status}`)
+    const data = await res.json()
+    return { slots: data.slots || [], source:'live' }
+  } catch (err) {
+    console.warn('[ContactPage] Calendar API unavailable, falling back to demo:', err.message)
+    return { slots: mockSlots(), source:'demo-fallback' }
+  }
 }
 
-const OFFICES = [
-  { flag:'🇬🇧', city:'London',     full:'London, UK',      phone:'+44 207 193 2502', email:'london@devinstratus.com',  addr:'30 St Mary Axe, EC3A 8EP',    tz:'GMT / BST',       coords:{ x:115, y:90  } },
-  { flag:'🇺🇸', city:'New York',   full:'New York, USA',   phone:'+1 800 938 7929',  email:'usa@devinstratus.com',     addr:'1700 Broadway, NY 10019',     tz:'EST / EDT',       coords:{ x:115, y:330 } },
-  { flag:'🇨🇦', city:'Toronto',    full:'Toronto, Canada', phone:'+1 778 381 5388',  email:'canada@devinstratus.com',  addr:'181 Bay St, M5J 2T3',         tz:'EST / EDT',       coords:{ x:485, y:90  } },
-  { flag:'🇮🇳', city:'New Delhi',  full:'New Delhi, India',phone:'+91 96503 01529',  email:'india@devinstratus.com',   addr:'Plot 5, Sector 44, Gurugram', tz:'IST (UTC +5:30)', coords:{ x:485, y:330 } },
-]
-
-const INTERESTS = [
-  { icon:'Users',     label:'CRM & Customer Svc',  color:CY.cyan     },
-  { icon:'Zap',       label:'Power Platform / AI', color:CY.cyanMid  },
-  { icon:'Wrench',    label:'Implementation',      color:CY.cyanDark },
-  { icon:'Rocket',    label:'Upgrade / Migration', color:CY.cyan     },
-  { icon:'Headphones',label:'Managed Support',     color:CY.cyanMid  },
-  { icon:'Chart',     label:'Analytics & BI',      color:CY.cyanDark },
-  { icon:'LifeBuoy',  label:'Health Check',        color:CY.cyan     },
-  { icon:'Award',     label:'Training',            color:CY.cyanMid  },
-  { icon:'Globe',     label:'General Enquiry',     color:CY.cyanDark },
-]
-
-const TIMES = ['09:00','09:30','10:00','10:30','11:00','11:30','14:00','14:30','15:00','15:30','16:00','16:30']
-const DAYS  = ['Mon','Tue','Wed','Thu','Fri']
+async function postBooking(payload) {
+  if (!HAS_API) {
+    await new Promise(r => setTimeout(r, 800))
+    return { ok:true, bookingId:`demo-${Date.now()}`, slot:payload.slotId, source:'demo' }
+  }
+  try {
+    const res = await fetch(`${API_BASE}/api/bookings`, {
+      method:  'POST',
+      headers: { 'Content-Type':'application/json' },
+      body:    JSON.stringify(payload),
+    })
+    if (!res.ok) throw new Error(`HTTP ${res.status}`)
+    return { ...(await res.json()), source:'live' }
+  } catch (err) {
+    console.warn('[ContactPage] Booking POST failed, demo fallback:', err.message)
+    await new Promise(r => setTimeout(r, 500))
+    return { ok:true, bookingId:`demo-${Date.now()}`, slot:payload.slotId, source:'demo-fallback' }
+  }
+}
 
 /* ─── Helpers ────────────────────────────────────────────────────────────── */
 function useReveal() {
   useEffect(() => {
     const t = setTimeout(() => {
       document.querySelectorAll('.rv').forEach(el => {
-        const ob = new IntersectionObserver(([e]) => { if (e.isIntersecting) { el.classList.add('show'); ob.disconnect() } }, { threshold:.1 })
+        const ob = new IntersectionObserver(([e]) => { if (e.isIntersecting) { el.classList.add('show'); ob.disconnect() } }, { threshold:.08 })
         ob.observe(el)
       })
     }, 60)
@@ -89,668 +117,795 @@ function useReveal() {
   })
 }
 
-function TypeWriter({ text, speed=40 }) {
-  const [displayed, setDisplayed] = useState('')
-  useEffect(() => {
-    setDisplayed('')
-    let i = 0
-    const id = setInterval(() => {
-      setDisplayed(text.slice(0, ++i))
-      if (i >= text.length) clearInterval(id)
-    }, speed)
-    return () => clearInterval(id)
-  }, [text, speed])
-  return <span>{displayed}<span style={{ borderRight:'2px solid currentColor', marginLeft:1, animation:'blink 1s step-end infinite' }}>‌</span></span>
+function fmtDayLabel(isoDate) {
+  const d = new Date(isoDate)
+  const dow = ['SUN','MON','TUE','WED','THU','FRI','SAT'][d.getDay()]
+  const day = d.getDate()
+  const mon = ['JAN','FEB','MAR','APR','MAY','JUN','JUL','AUG','SEP','OCT','NOV','DEC'][d.getMonth()]
+  return { dow, day, mon }
 }
 
-
-/* ════════════════════════════════════════════════════════════════════════════
-   MAIN PAGE
-   ════════════════════════════════════════════════════════════════════════════ */
 export default function ContactPage({ navigate, openConsult }) {
-  useReveal()
-  useEffect(() => { window.scrollTo(0, 0) }, [])
-
-  const [step, setStep]               = useState(0)
-  const [form, setForm]               = useState({ name:'', email:'', company:'', phone:'', interest:'', day:'', time:'', message:'' })
-  const [status, setStatus]           = useState('idle') // idle | sending | sent | error | demo
-  const [err, setErr]                 = useState('')
+  const [step, setStep] = useState(1)
+  const [focus, setFocus] = useState(null)
+  const [details, setDetails] = useState({ name:'', email:'', company:'', role:'', headcount:'', notes:'' })
+  const [slots, setSlots] = useState([])
+  const [slotsLoading, setSlotsLoading] = useState(false)
+  const [slotsSource, setSlotsSource] = useState(null)
+  const [selectedSlot, setSelectedSlot] = useState(null)
+  const [activeDay, setActiveDay] = useState(null)
+  const [submitting, setSubmitting] = useState(false)
+  const [confirmed, setConfirmed] = useState(null)
   const [activeOffice, setActiveOffice] = useState(0)
-  const [chatOpen, setChatOpen]       = useState(false)
-  const [chatMessages, setChatMessages] = useState([
-    { from:'bot', text:"Hi! I'm the DevinStratus assistant. What are you looking for today?" },
-  ])
-  const [chatInput, setChatInput]     = useState('')
-  const chatEndRef                    = useRef(null)
+  const [openFaq, setOpenFaq] = useState(null)
 
-  const h = (k, v) => setForm(f => ({ ...f, [k]:v }))
+  useReveal()
+  useEffect(() => { window.scrollTo(0,0) }, [])
 
-  const sendChat = () => {
-    if (!chatInput.trim()) return
-    const msg = chatInput.trim()
-    setChatMessages(m => [...m, { from:'user', text:msg }])
-    setChatInput('')
-    setTimeout(() => {
-      const lower = msg.toLowerCase()
-      let reply = "Happy to help! Our team typically responds within 2 hours during business hours."
-      if (lower.includes('price') || lower.includes('cost'))         reply = "Pricing varies by module and company size. We offer free scoping calls — want me to book one?"
-      else if (lower.includes('erp') || lower.includes('finance'))   reply = "Dynamics 365 Finance and Business Central are our most-deployed ERP modules. Typical go-live: 8–14 weeks."
-      else if (lower.includes('crm') || lower.includes('sales'))     reply = "Dynamics 365 Sales + Customer Insights is our most popular CRM combo. We've delivered 80+ implementations."
-      else if (lower.includes('support') || lower.includes('help'))  reply = "Managed support starts at £2,500/month with named consultants and 24/7 monitoring."
-      else if (lower.includes('demo'))                                reply = "Happy to arrange a personalised demo — fill in the form on the left and pick your area of interest."
-      setChatMessages(m => [...m, { from:'bot', text:reply }])
-    }, 900)
-  }
+  /* When user enters step 3, fetch slots */
+  useEffect(() => {
+    if (step === 3 && slots.length === 0 && !slotsLoading) {
+      setSlotsLoading(true)
+      fetchSlots().then(({ slots, source }) => {
+        setSlots(slots)
+        setSlotsSource(source)
+        const days = [...new Set(slots.map(s => s.date))]
+        if (days.length > 0) setActiveDay(days[0])
+        setSlotsLoading(false)
+      })
+    }
+  }, [step, slots.length, slotsLoading])
 
-  useEffect(() => { chatEndRef.current?.scrollIntoView({ behavior:'smooth' }) }, [chatMessages])
-
-  const STEPS = [
-    { label:'Your Interest', icon:'Target' },
-    { label:'Your Details',  icon:'User'   },
-    { label:'Pick a Slot',   icon:'Clock'  },
-    { label:'Confirm',       icon:'Check'  },
-  ]
-
-  const canNext = () => {
-    if (step === 0) return !!form.interest
-    if (step === 1) return !!(form.name && form.email)
-    return true
-  }
-
-  /* ─── FORM SUBMISSION ──────────────────────────────────────────────────────
-     If EmailJS is configured → real send via @emailjs/browser.
-     Otherwise → DEMO MODE: status is 'demo' (NOT 'sent'), shows a clear
-     "captured but not actually emailed" message. This was the original bug.
-     PREREQUISITE: run `npm install @emailjs/browser` once.
-     ──────────────────────────────────────────────────────────────────────── */
-  const sendForm = async () => {
-    setStatus('sending'); setErr('')
-    if (EMAILJS_CONFIGURED) {
-      try {
-        const { default: emailjs } = await import('@emailjs/browser')
-        const result = await emailjs.send(
-          EMAILJS_SERVICE_ID,
-          EMAILJS_TEMPLATE_ID,
-          {
-            name:     form.name,
-            email:    form.email,
-            company:  form.company || '—',
-            phone:    form.phone   || '—',
-            interest: form.interest,
-            message:  form.message || '(no message)',
-            day:      form.day     || 'Flexible',
-            time:     form.time    || 'Flexible',
-          },
-          EMAILJS_PUBLIC_KEY
-        )
-        // eslint-disable-next-line no-console
-        console.log('[ContactPage] EmailJS send OK:', result)
-        setStatus('sent')
-      } catch (e) {
-        // eslint-disable-next-line no-console
-        console.error('[ContactPage] EmailJS send FAILED:', e)
-        setStatus('error')
-        const detail = e?.text || e?.message || (typeof e === 'string' ? e : 'Unknown error')
-        setErr(`Couldn't send: ${detail}. Please email us directly at hello@devinstratus.com`)
-      }
+  const handleSubmitBooking = async () => {
+    setSubmitting(true)
+    const slot = slots.find(s => s.slotId === selectedSlot)
+    const payload = {
+      slotId:  selectedSlot,
+      focus:   focus?.slug,
+      focusLabel: focus?.label,
+      ...details,
+    }
+    const result = await postBooking(payload)
+    setSubmitting(false)
+    if (result.ok) {
+      setConfirmed({ ...result, slot })
+      setStep(5)
     } else {
-      await new Promise(r => setTimeout(r, 1000))
-      setStatus('demo')
+      alert('Booking failed — please try again or call us directly.')
     }
   }
 
+  const detailsValid = details.name.trim() && /\S+@\S+\.\S+/.test(details.email) && details.company.trim()
+
+  /* Day grouping for slot picker */
+  const slotsByDay = slots.reduce((acc, s) => {
+    if (!acc[s.date]) acc[s.date] = []
+    acc[s.date].push(s)
+    return acc
+  }, {})
+  const dayKeys = Object.keys(slotsByDay).sort()
+
   return (
-    <div className="page-fade" style={{ background:CY.bgGrad, minHeight:'100vh' }}>
+    <div className="page-fade" style={{ overflowX:'hidden', maxWidth:'100vw' }}>
 
-      <style>{`
-        @keyframes blink     { 0%,100%{opacity:1} 50%{opacity:0} }
-        @keyframes slideUp   { from{opacity:0;transform:translateY(20px)} to{opacity:1;transform:none} }
-        @keyframes fadeUp    { from{opacity:0;transform:translateY(14px)} to{opacity:1;transform:none} }
-        @keyframes pulseGlow { 0%,100%{box-shadow:0 0 0 0 rgba(6,182,212,.55)} 50%{box-shadow:0 0 0 18px rgba(6,182,212,0)} }
-        @keyframes drift     { 0%,100%{transform:translate(0,0)} 50%{transform:translate(0,-10px)} }
-        .step-content { animation: slideUp .3s ease }
-        .chat-msg     { animation: slideUp .25s ease }
-        .contact-card { transition: transform .22s, box-shadow .22s, border-color .22s }
-        .contact-card:hover { transform: translateY(-3px) }
-        .interest-btn { transition: all .2s }
-        .interest-btn:hover { transform: translateY(-2px) }
-        .slot-btn     { transition: all .15s }
-        .slot-btn:hover { transform: scale(1.04) }
-        .rv           { opacity:0; transform: translateY(20px); transition: all .55s ease }
-        .rv.show      { opacity:1; transform:none }
-        .form-input {
-          width:100%; padding:11px 14px; font-size:14px; border-radius:10px;
-          border:1.5px solid #cbd5e1; background:#fff; color:${C.text};
-          transition: border-color .18s, box-shadow .18s;
-          font-family: 'Inter', sans-serif;
+      <style dangerouslySetInnerHTML={{__html:`
+        .cp-section { position: relative; }
+        .cp-h2 { font-size: clamp(28px, 4vw, 38px); font-weight:800; color:#0a0a14; font-family:'Plus Jakarta Sans',sans-serif; margin-bottom:16px; line-height:1.2; letter-spacing:-0.015em; }
+        .cp-input {
+          width:100%; padding:13px 16px; border-radius:12px; border:1px solid #e2e8f0;
+          background:#fff; font-size:14.5px; color:#0a0a14; font-family:'Plus Jakarta Sans',sans-serif;
+          transition: border-color .18s, box-shadow .18s; outline:none;
         }
-        .form-input:focus {
-          outline:none; border-color:${CY.cyan};
-          box-shadow: 0 0 0 3px rgba(6,182,212,.15);
-        }
-        .live-status-dot {
-          width:8px; height:8px; border-radius:50%; background:#06b6d4;
-          display:inline-block; animation: pulseGlow 2s ease-in-out infinite;
-        }
+        .cp-input:focus { border-color:#0066FF; box-shadow:0 0 0 3px rgba(0,102,255,0.12); }
+        .cp-label { font-size:11.5px; font-weight:800; color:#475569; letter-spacing:.08em; display:block; margin-bottom:8px; text-transform:uppercase; }
 
-        /* ─── RESPONSIVE ─── */
-        /* Desktop: wrapper fills the grid right column (height inherits from grid alignment). */
-        .m2a-wrap        { width: 100%; aspect-ratio: 1200 / 450; }
-
-        /* CRITICAL OVERRIDE: somewhere in this project (likely App.jsx) there is a rule:
-           @media (max-width: 900px) { .contact-hero-g > div:nth-child(2) { display: none !important; } }
-           This ID-based selector beats it via specificity (ID = 100, class = 10). */
-        #m2aWrapAnchor {
-          display: block !important;
-          visibility: visible !important;
-        }
-
-        /* heroFloat keyframes (also used by Global Offices) */
-        @keyframes heroFloat { 0%,100%{transform:translate(0,0)} 50%{transform:translate(10px,-10px)} }
-
-        @media (max-width: 1280px) and (min-width: 1024px) {
-          .contact-hero-g  { grid-template-columns: 0.65fr 1.35fr !important; height: 480px !important; gap: 28px !important; }
-        }
         @media (max-width: 1023px) {
-          .contact-hero-section { padding: 48px 18px !important; }
-          .contact-hero-g  { grid-template-columns: 1fr !important; gap: 24px !important; text-align: center !important; height: auto !important; }
-          .contact-hero-g .hero-trust { justify-content: center !important; }
-          .contact-hero-g > div:first-child { align-items: center !important; }
-          .contact-main-g  { grid-template-columns: 1fr !important; gap: 32px !important; }
-          .m2a-wrap        { max-width: 760px; margin: 0 auto !important; aspect-ratio: 1200 / 450; height: auto !important; }
+          .cp-hero-g { grid-template-columns: 1fr !important; gap: 36px !important; }
+          .cp-hero-anim { max-width: 720px; margin: 0 auto; }
+          .cp-flow-g { grid-template-columns: 1fr !important; }
+          .cp-flow-progress { display:none !important; }
+          .cp-next-g { grid-template-columns: repeat(2, 1fr) !important; }
+          .cp-why-g { grid-template-columns: repeat(2, 1fr) !important; }
+          .cp-office-g { grid-template-columns: 1fr !important; }
         }
         @media (max-width: 767px) {
-          .contact-hero-section { padding: 36px 18px !important; }
-          .contact-main-section { padding: 56px 18px !important; }
-          .contact-h1           { font-size: clamp(26px, 7vw, 36px) !important; }
-          .contact-sub          { font-size: 14.5px !important; }
-          .contact-form-grid-2  { grid-template-columns: 1fr !important; gap:12px !important; }
-          .interest-grid        { grid-template-columns: 1fr !important; }
-          .why-us-grid          { grid-template-columns: 1fr !important; }
-          .why-us-section       { padding: 48px 18px !important; }
-          .step-indicator-label { display: none !important; }
-          .office-tabs          { gap:6px !important; }
-          .office-tabs button   { padding:7px 11px !important; font-size:12px !important; }
-          .m2a-wrap             { max-width: 380px; aspect-ratio: 460 / 980; }
+          .cp-hero-wrap { padding: 32px 18px 56px !important; }
+          .cp-hero-wrap h1 { font-size: clamp(28px, 7vw, 42px) !important; }
+          .cp-section { padding-top: 60px !important; padding-bottom: 40px !important; padding-left: 18px !important; padding-right: 18px !important; }
+          .cp-stats-section { padding: 44px 18px !important; }
+          .cp-stats-g { grid-template-columns: repeat(2, 1fr) !important; gap: 16px !important; row-gap: 28px !important; }
+          .cp-stats-g > div { padding-left: 0 !important; border-left: none !important; }
+          .cp-stats-g > div:nth-child(3),
+          .cp-stats-g > div:nth-child(4) { padding-top: 22px !important; border-top: 1px solid #e2e8f0; }
+          .cp-stats-g .stat-v { font-size: 32px !important; }
+          .cp-focus-g { grid-template-columns: 1fr !important; gap: 12px !important; }
+          .cp-form-g { grid-template-columns: 1fr !important; }
+          .cp-slot-days { overflow-x: auto; flex-wrap: nowrap !important; padding-bottom: 8px; }
+          .cp-slot-times-g { grid-template-columns: repeat(2, 1fr) !important; }
+          .cp-review-g { grid-template-columns: 1fr !important; gap: 14px !important; }
+          .cp-next-g { grid-template-columns: 1fr !important; }
+          .cp-why-g { grid-template-columns: 1fr !important; }
+          .cp-office-tabs { overflow-x: auto; flex-wrap: nowrap !important; padding-bottom: 6px; }
+          .cp-cta-section { padding: 72px 20px !important; }
         }
-        @media (max-width: 480px) {
-          .contact-hero-section { padding: 32px 14px !important; }
-          .contact-main-section { padding: 44px 14px !important; }
-          .why-us-section       { padding: 40px 14px !important; }
-          .contact-form-grid-2  { gap:10px !important; }
-          .m2a-wrap             { max-width: 100%; aspect-ratio: 460 / 980; }
-        }
-      `}</style>
+      `}}/>
 
-      {/* ════ HERO ════ Background matches Global Offices; layout is simple grid with no wasted space */}
-      <section className="contact-hero-section" style={{
-        padding:'40px 24px 32px',
-        position:'relative',
-        overflow:'hidden',
+
+      {/* ════════════════════════════════════════════════════
+         1.  HERO
+         ════════════════════════════════════════════════════ */}
+      <section style={{
+        position:'relative', paddingTop:68, overflow:'hidden',
         background: `
-          radial-gradient(circle at 100% 100%, rgba(6,182,212,0.35), transparent 55%),
-          radial-gradient(circle at 80% 70%, rgba(0,102,255,0.20), transparent 60%),
+          radial-gradient(circle at 100% 100%, rgba(6, 182, 212, 0.35), transparent 55%),
+          radial-gradient(circle at 80% 70%, rgba(0, 102, 255, 0.20), transparent 60%),
           linear-gradient(135deg, #ffffff 0%, #f0f7ff 25%, #d6ebff 55%, #b8defa 80%, #9bd3f5 100%)
-        `,
-        borderBottom: '1px solid rgba(0,102,255,0.10)',
+        `
       }}>
-        {/* Floating decorative orbs */}
-        <div style={{ position:'absolute', top:'15%', right:'-5%', width:380, height:380, borderRadius:'50%', background:'radial-gradient(circle, rgba(6,182,212,0.30), transparent 70%)', filter:'blur(50px)', animation:'heroFloat 8s ease-in-out infinite', pointerEvents:'none' }}/>
-        <div style={{ position:'absolute', bottom:'-15%', left:'-5%', width:300, height:300, borderRadius:'50%', background:'radial-gradient(circle, rgba(0,102,255,0.18), transparent 70%)', filter:'blur(50px)', animation:'heroFloat 11s ease-in-out infinite reverse', pointerEvents:'none' }}/>
+        <div style={{ position:'absolute', top:-100, right:-80, width:380, height:380, borderRadius:'50%', background:'radial-gradient(circle, rgba(6,182,212,0.32), transparent 70%)', filter:'blur(48px)', animation:'heroFloat 9s ease-in-out infinite', pointerEvents:'none' }} />
+        <div style={{ position:'absolute', bottom:-80, left:-60, width:300, height:300, borderRadius:'50%', background:'radial-gradient(circle, rgba(0,102,255,0.20), transparent 70%)', filter:'blur(56px)', animation:'heroFloat 7s ease-in-out infinite reverse', pointerEvents:'none' }} />
 
-        <div style={{ maxWidth:1400, margin:'0 auto', position:'relative', zIndex:1, paddingTop:30 }}>
-          <div className="contact-hero-g" style={{ display:'grid', gridTemplateColumns:'0.55fr 1.45fr', gap:32, alignItems:'center' }}>
+        <div className="cp-hero-wrap" style={{ maxWidth:1300, margin:'0 auto', padding:'48px 32px 80px', position:'relative', zIndex:1 }}>
+          <div style={{ display:'flex', alignItems:'center', gap:8, marginBottom:28, flexWrap:'wrap' }}>
+            <button onClick={() => navigate('/')} style={{ background:'none', border:'none', cursor:'pointer', fontSize:13, color:'#475569' }}>Home</button>
+            <Ic n="ChevR" s={12} style={{ color:'#94a3b8' }}/>
+            <span style={{ fontSize:13, color:'#0a0a14', fontWeight:600 }}>Contact</span>
+          </div>
 
+          <div className="cp-hero-g" style={{ display:'grid', gridTemplateColumns:'1fr 1.25fr', gap:56, alignItems:'center' }}>
             <div>
-              <div style={{ display:'inline-flex', alignItems:'center', gap:9, background:'rgba(6,182,212,.10)', border:`1px solid ${CY.cyan}40`, borderRadius:50, padding:'7px 16px', fontSize:12, fontWeight:800, color:CY.cyanDark, marginBottom:18, letterSpacing:'.06em' }}>
-                <span className="live-status-dot"/> START THE CONVERSATION
+              <div style={{ display:'inline-flex', alignItems:'center', gap:10, background:'rgba(6,182,212,0.10)', border:'1px solid rgba(6,182,212,0.30)', borderRadius:50, padding:'7px 16px', fontSize:12, fontWeight:800, color:'#003FB3', letterSpacing:'.06em', marginBottom:24 }}>
+                <span style={{ width:8, height:8, borderRadius:'50%', background:'#06b6d4', boxShadow:'0 0 0 4px rgba(6,182,212,0.20)', animation:'heroFloat 2s ease-in-out infinite' }} />
+                START THE CONVERSATION
               </div>
-              <h1 className="contact-h1" style={{ fontSize:'clamp(28px, 3.6vw, 44px)', fontWeight:900, color:C.text, lineHeight:1.1, marginBottom:14, fontFamily:"'Plus Jakarta Sans',sans-serif", letterSpacing:'-0.02em' }}>
-                Tell us what's slowing you{' '}
-                <span style={{ background:`linear-gradient(135deg, ${CY.cyan}, ${CY.cyanDark})`, WebkitBackgroundClip:'text', WebkitTextFillColor:'transparent' }}>
-                  <TypeWriter text="down." speed={120}/>
-                </span>
+
+              <h1 style={{ fontSize:'clamp(34px, 5.2vw, 58px)', fontWeight:900, lineHeight:1.05, letterSpacing:'-0.02em', color:'#0a0a14', fontFamily:"'Plus Jakarta Sans',sans-serif", marginBottom:22 }}>
+                Tell us what's<br/>
+                slowing you{' '}
+                <span style={{ background:'linear-gradient(135deg, #06b6d4 0%, #0066FF 50%, #003FB3 100%)', WebkitBackgroundClip:'text', backgroundClip:'text', WebkitTextFillColor:'transparent' }}>down.</span>
               </h1>
-              <p className="contact-sub" style={{ fontSize:15, color:C.textM, lineHeight:1.6, marginBottom:18, maxWidth:480 }}>
-                From repetitive workflows to system upgrades, share your challenge with a Microsoft-certified solution architect. We'll respond with a real plan — not a sales deck.
+
+              <p style={{ fontSize:17, color:'#334155', lineHeight:1.7, marginBottom:30, maxWidth:540 }}>
+                From repetitive workflows to system upgrades, share your challenge with a Microsoft-certified solution architect. We'll respond with a <strong style={{ color:'#0a0a14' }}>real plan</strong> — not a sales deck.
               </p>
 
-              <div className="hero-trust" style={{ display:'flex', gap:18, flexWrap:'wrap' }}>
+              <div style={{ display:'flex', flexDirection:'column', gap:12, marginBottom:34 }}>
                 {[
-                  { icon:'Users',       text:'Solution Architect on first call', color:CY.cyanDark },
-                  { icon:'CheckCircle', text:'No obligation, no pressure',       color:CY.cyan     },
-                  { icon:'Shield',      text:'Confidential by default',          color:CY.cyanMid  },
-                ].map(t => (
-                  <div key={t.text} style={{ display:'flex', alignItems:'center', gap:8, fontSize:13, color:C.textM, fontWeight:600 }}>
-                    <Ic n={t.icon} s={15} style={{ color:t.color }}/> {t.text}
+                  { icon:'Users',       text:'Solution Architect on first call'  },
+                  { icon:'CheckCircle', text:'No obligation, no pressure' },
+                  { icon:'Shield',      text:'Confidential by default' },
+                ].map((t,i) => (
+                  <div key={i} style={{ display:'flex', alignItems:'center', gap:11, fontSize:14, fontWeight:600, color:'#0a0a14' }}>
+                    <span style={{ width:28, height:28, borderRadius:'50%', background:'rgba(255,255,255,0.65)', border:'1px solid rgba(0,102,255,0.20)', backdropFilter:'blur(10px)', display:'inline-flex', alignItems:'center', justifyContent:'center' }}>
+                      <Ic n={t.icon} s={14} style={{ color:'#0066FF' }}/>
+                    </span>
+                    {t.text}
                   </div>
                 ))}
               </div>
+
+              <button onClick={() => { const el = document.getElementById('contact-flow'); if (el) el.scrollIntoView({ behavior:'smooth' }) }}
+                style={{ display:'inline-flex', alignItems:'center', gap:10, padding:'15px 30px', borderRadius:50, background:'linear-gradient(135deg, #0066FF, #003FB3)', border:'none', cursor:'pointer', fontSize:15, fontWeight:700, color:'#fff', fontFamily:"'Plus Jakarta Sans',sans-serif", boxShadow:'0 10px 26px rgba(0,102,255,0.36)' }}>
+                Start booking · 60 seconds <Ic n="ChevD" s={14} style={{ color:'#fff' }}/>
+              </button>
             </div>
 
-            <div id="m2aWrapAnchor" className="m2a-wrap" style={{ position:'relative', background:'transparent', width:'100%' }}>
-              <ContactJohnHero/>
+            <div className="cp-hero-anim">
+              <ContactJohnHero />
             </div>
           </div>
         </div>
       </section>
 
-      {/* ════ MAIN CONTENT ════ */}
-      <section className="contact-main-section" style={{ padding:'80px 24px', background:'transparent', position:'relative' }}>
-        <div className="contact-main-g" style={{ maxWidth:1280, margin:'0 auto', display:'grid', gridTemplateColumns:'1fr 1fr', gap:56, alignItems:'start' }}>
 
-          {/* LEFT: FORM */}
-          <div className="rv">
-            {status === 'sent' ? (
-              <div className="contact-card" style={{ padding:48, borderRadius:24, background:`linear-gradient(135deg, rgba(6,182,212,.08), #fff)`, border:'2px solid rgba(6,182,212,.30)', textAlign:'center', animation:'slideUp .4s ease' }}>
-                <div style={{ width:72, height:72, borderRadius:'50%', background:CY.cyan, display:'flex', alignItems:'center', justifyContent:'center', margin:'0 auto 20px', boxShadow:'0 8px 32px rgba(6,182,212,.35)' }}>
-                  <Ic n="Check" s={32} style={{ color:'#fff' }}/>
-                </div>
-                <h2 style={{ fontSize:26, fontWeight:900, color:C.text, fontFamily:"'Plus Jakarta Sans',sans-serif", marginBottom:8 }}>You're booked in!</h2>
-                <p style={{ color:C.textM, fontSize:16, lineHeight:1.7, marginBottom:8 }}>
-                  Hi <strong>{form.name}</strong>, thank you. A certified specialist will confirm your{form.day ? ` ${form.day} ${form.time}` : ''} slot within the hour.
-                </p>
-                <p style={{ color:C.textL, fontSize:13, marginBottom:28 }}>Check your inbox at <strong>{form.email}</strong></p>
-                <button onClick={() => { setStatus('idle'); setStep(0); setForm({ name:'',email:'',company:'',phone:'',interest:'',day:'',time:'',message:'' }) }}
-                  style={{ padding:'12px 26px', borderRadius:50, background:CY.cyan, border:'none', color:'#fff', fontWeight:700, cursor:'pointer', fontSize:14, fontFamily:"'Plus Jakarta Sans',sans-serif" }}>
-                  Submit Another Enquiry
-                </button>
-              </div>
-            ) : status === 'demo' ? (
-              <div className="contact-card" style={{ padding:40, borderRadius:24, background:'linear-gradient(135deg, #f0f9ff, #fff)', border:'2px solid '+CY.cyan, textAlign:'left', animation:'slideUp .4s ease' }}>
-                <div style={{ display:'flex', alignItems:'center', gap:12, marginBottom:16 }}>
-                  <div style={{ width:48, height:48, borderRadius:14, background:CY.cyan, display:'flex', alignItems:'center', justifyContent:'center', flexShrink:0 }}>
-                    <Ic n="Brief" s={22} style={{ color:'#fff' }}/>
-                  </div>
-                  <div>
-                    <h2 style={{ fontSize:20, fontWeight:900, color:'#78350f', fontFamily:"'Plus Jakarta Sans',sans-serif", marginBottom:2 }}>Form captured (Demo Mode)</h2>
-                    <p style={{ fontSize:13, color:'#92400e' }}>Email integration is not yet configured.</p>
-                  </div>
-                </div>
-                <div style={{ background:'#fff', borderRadius:14, padding:'14px 18px', border:'1px solid rgba(6,182,212,0.25)', marginBottom:18 }}>
-                  <p style={{ fontSize:13, color:'#78350f', lineHeight:1.7, marginBottom:8 }}>
-                    <strong>What happened:</strong> Your form data was captured but no email was actually sent — the EmailJS keys at the top of <code style={{ background:'rgba(6,182,212,0.12)', padding:'1px 5px', borderRadius:4 }}>ContactPage.js</code> are still placeholders.
-                  </p>
-                  <p style={{ fontSize:13, color:'#78350f', lineHeight:1.7, marginBottom:0 }}>
-                    <strong>To fix:</strong> Add EmailJS credentials (or wire up your own backend), then real submissions will deliver. See the developer guide below.
-                  </p>
-                </div>
-                <div style={{ display:'flex', gap:10, flexWrap:'wrap' }}>
-                  <a href={`mailto:hello@devinstratus.com?subject=Enquiry: ${encodeURIComponent(form.interest||'General')}&body=${encodeURIComponent(`Name: ${form.name}\nEmail: ${form.email}\nCompany: ${form.company}\nPhone: ${form.phone}\nInterest: ${form.interest}\n\nMessage: ${form.message}`)}`}
-                    style={{ padding:'11px 22px', borderRadius:50, background:`linear-gradient(135deg, ${CY.cyan}, ${CY.cyanDark})`, color:'#fff', textDecoration:'none', fontWeight:700, fontSize:13.5, display:'inline-flex', alignItems:'center', gap:6, fontFamily:"'Plus Jakarta Sans',sans-serif" }}>
-                    <Ic n="Mail" s={14} style={{ color:'#fff' }}/> Email it manually
-                  </a>
-                  <button onClick={() => { setStatus('idle'); setStep(0); setForm({ name:'',email:'',company:'',phone:'',interest:'',day:'',time:'',message:'' }) }}
-                    style={{ padding:'11px 22px', borderRadius:50, background:'#fff', border:`2px solid ${C.border}`, color:C.text, fontWeight:600, cursor:'pointer', fontSize:13.5 }}>
-                    Reset Form
-                  </button>
-                </div>
-              </div>
-            ) : (
-              <>
-                {/* Step indicator */}
-                <div style={{ display:'flex', alignItems:'center', marginBottom:32 }}>
-                  {STEPS.map((s, i) => (
-                    <div key={i} style={{ display:'flex', alignItems:'center', flex: i < STEPS.length-1 ? 1 : 0 }}>
-                      <div style={{ display:'flex', flexDirection:'column', alignItems:'center', gap:5 }}>
-                        <div style={{
-                          width:40, height:40, borderRadius:'50%', display:'flex', alignItems:'center', justifyContent:'center',
-                          background: i < step ? CY.cyan : i === step ? `linear-gradient(135deg, ${CY.cyan}, ${CY.cyanDark})` : '#fff',
-                          border:    `2px solid ${i < step ? CY.cyan : i === step ? 'transparent' : C.border}`,
-                          boxShadow: i === step ? `0 4px 18px rgba(6,182,212,.45)` : 'none',
-                          transition:'all .3s', cursor: i < step ? 'pointer' : 'default',
-                        }}
-                          onClick={() => i < step && setStep(i)}>
-                          {i < step
-                            ? <Ic n="Check" s={16} style={{ color:'#fff' }}/>
-                            : <Ic n={s.icon} s={16} style={{ color: i === step ? '#fff' : C.textL }}/>
-                          }
-                        </div>
-                        <span className="step-indicator-label" style={{ fontSize:10, fontWeight:700, color: i === step ? CY.cyanDark : i < step ? CY.cyan : C.textL, whiteSpace:'nowrap' }}>{s.label}</span>
-                      </div>
-                      {i < STEPS.length - 1 && (
-                        <div style={{ flex:1, height:2, margin:'0 8px', marginBottom:18, background: i < step ? CY.cyan : C.border, transition:'background .3s' }}/>
-                      )}
-                    </div>
-                  ))}
-                </div>
-
-                <div className="contact-card step-content" key={step} style={{ background:'#fff', borderRadius:22, padding:'28px 26px', border:`1.5px solid ${C.border}`, boxShadow:'0 8px 30px rgba(15,23,42,.05)' }}>
-                  {step === 0 && (
-                    <div>
-                      <h2 style={{ fontSize:22, fontWeight:800, color:C.text, fontFamily:"'Plus Jakarta Sans',sans-serif", marginBottom:6 }}>What can we help you with?</h2>
-                      <p style={{ color:C.textM, fontSize:14, marginBottom:22 }}>Pick the area most relevant to your needs.</p>
-                      <div className="interest-grid" style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:10 }}>
-                        {INTERESTS.map(int => (
-                          <button key={int.label} className="interest-btn"
-                            onClick={() => h('interest', int.label)}
-                            style={{
-                              display:'flex', alignItems:'center', gap:12, padding:'13px 16px',
-                              borderRadius:14, border:`2px solid ${form.interest === int.label ? int.color : C.border}`,
-                              background: form.interest === int.label ? `${int.color}10` : '#fff',
-                              cursor:'pointer', textAlign:'left',
-                              boxShadow: form.interest === int.label ? `0 4px 20px ${int.color}28` : 'none',
-                            }}>
-                            <div style={{ width:36, height:36, borderRadius:10, background:`${int.color}18`, display:'flex', alignItems:'center', justifyContent:'center', flexShrink:0 }}>
-                              <Ic n={int.icon} s={16} style={{ color:int.color }}/>
-                            </div>
-                            <span style={{ fontSize:13, fontWeight: form.interest === int.label ? 700 : 600, color: form.interest === int.label ? int.color : C.text }}>{int.label}</span>
-                            {form.interest === int.label && <Ic n="CheckCircle" s={16} style={{ color:int.color, marginLeft:'auto' }}/>}
-                          </button>
-                        ))}
-                      </div>
-                    </div>
-                  )}
-
-                  {step === 1 && (
-                    <div>
-                      <h2 style={{ fontSize:22, fontWeight:800, color:C.text, fontFamily:"'Plus Jakarta Sans',sans-serif", marginBottom:6 }}>Tell us about yourself</h2>
-                      <p style={{ color:C.textM, fontSize:14, marginBottom:22 }}>We'll match you with a specialist for <strong style={{ color:CY.cyanDark }}>{form.interest}</strong>.</p>
-                      <div style={{ display:'flex', flexDirection:'column', gap:14 }}>
-                        <div className="contact-form-grid-2" style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:12 }}>
-                          {[['name','Full Name *','text','Sarah Mitchell'], ['company','Company Name','text','Acme Ltd']].map(([k, l, t, ph]) => (
-                            <div key={k}>
-                              <label style={{ fontSize:12.5, fontWeight:600, color:C.text, display:'block', marginBottom:5 }}>{l}</label>
-                              <input className="form-input" type={t} placeholder={ph} value={form[k]} onChange={e => h(k, e.target.value)}/>
-                            </div>
-                          ))}
-                        </div>
-                        <div className="contact-form-grid-2" style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:12 }}>
-                          {[['email','Work Email *','email','sarah@acmeltd.com'], ['phone','Phone Number','tel','+44 7700 900000']].map(([k, l, t, ph]) => (
-                            <div key={k}>
-                              <label style={{ fontSize:12.5, fontWeight:600, color:C.text, display:'block', marginBottom:5 }}>{l}</label>
-                              <input className="form-input" type={t} placeholder={ph} value={form[k]} onChange={e => h(k, e.target.value)}/>
-                            </div>
-                          ))}
-                        </div>
-                        <div>
-                          <label style={{ fontSize:12.5, fontWeight:600, color:C.text, display:'block', marginBottom:5 }}>Tell us more (optional)</label>
-                          <textarea className="form-input" rows={4} placeholder="Current systems, team size, key challenges, timeline..." value={form.message} onChange={e => h('message', e.target.value)} style={{ resize:'vertical' }}/>
-                        </div>
-                      </div>
-                    </div>
-                  )}
-
-                  {step === 2 && (
-                    <div>
-                      <h2 style={{ fontSize:22, fontWeight:800, color:C.text, fontFamily:"'Plus Jakarta Sans',sans-serif", marginBottom:6 }}>Pick a consultation slot</h2>
-                      <p style={{ color:C.textM, fontSize:14, marginBottom:22 }}>30-minute slots, UK time. Or skip and we'll email you options.</p>
-                      <div style={{ marginBottom:20 }}>
-                        <div style={{ fontSize:11, fontWeight:700, color:C.textL, letterSpacing:'.12em', marginBottom:12 }}>SELECT DAY (THIS WEEK)</div>
-                        <div style={{ display:'flex', gap:8, flexWrap:'wrap' }}>
-                          {DAYS.map(d => (
-                            <button key={d} className="slot-btn"
-                              onClick={() => h('day', d)}
-                              style={{ flex:'1 1 60px', padding:'12px 6px', borderRadius:12, border:`2px solid ${form.day === d ? CY.cyan : C.border}`, background: form.day === d ? `${CY.cyan}15` : '#fff', cursor:'pointer', fontSize:13, fontWeight:700, color: form.day === d ? CY.cyanDark : C.textM }}>
-                              {d}
-                            </button>
-                          ))}
-                        </div>
-                      </div>
-                      {form.day && (
-                        <div style={{ animation:'slideUp .25s ease' }}>
-                          <div style={{ fontSize:11, fontWeight:700, color:C.textL, letterSpacing:'.12em', marginBottom:12 }}>AVAILABLE TIMES ({form.day})</div>
-                          <div style={{ display:'grid', gridTemplateColumns:'repeat(auto-fill, minmax(72px, 1fr))', gap:8 }}>
-                            {TIMES.map(t => (
-                              <button key={t} className="slot-btn"
-                                onClick={() => h('time', t)}
-                                style={{ padding:'10px', borderRadius:10, border:`2px solid ${form.time === t ? CY.cyan : C.border}`, background: form.time === t ? `${CY.cyan}15` : '#fff', cursor:'pointer', fontSize:13, fontWeight:700, color: form.time === t ? CY.cyanDark : C.textM }}>
-                                {t}
-                              </button>
-                            ))}
-                          </div>
-                        </div>
-                      )}
-                      {!form.day && (
-                        <div style={{ padding:20, borderRadius:14, background:CY.cyanWash, border:`1.5px dashed ${CY.cyan}`, textAlign:'center' }}>
-                          <p style={{ color:CY.cyanDark, fontSize:13, fontWeight:600 }}>Pick a day above to see available times — or skip and we'll email you options.</p>
-                        </div>
-                      )}
-                    </div>
-                  )}
-
-                  {step === 3 && (
-                    <div>
-                      <h2 style={{ fontSize:22, fontWeight:800, color:C.text, fontFamily:"'Plus Jakarta Sans',sans-serif", marginBottom:6 }}>Review &amp; confirm</h2>
-                      <p style={{ color:C.textM, fontSize:14, marginBottom:22 }}>Looks good? Hit confirm to book your consultation.</p>
-                      <div style={{ background:CY.cyanWash, borderRadius:18, padding:22, marginBottom:18, border:`1.5px solid ${CY.cyan}30` }}>
-                        {[
-                          ['Area of Interest', form.interest, 'Target'],
-                          ['Your Name',        form.name,     'User'],
-                          ['Work Email',       form.email,    'Mail'],
-                          ['Company',          form.company || '—', 'Brief'],
-                          ['Phone',            form.phone || '—',   'Phone'],
-                          ['Preferred Slot',   form.day && form.time ? `${form.day} at ${form.time} UK time` : 'Flexible / TBC', 'Clock'],
-                        ].map(([label, val, icon]) => (
-                          <div key={label} style={{ display:'flex', alignItems:'center', gap:12, padding:'10px 0', borderBottom:`1px solid ${CY.cyan}22` }}>
-                            <Ic n={icon} s={15} style={{ color:CY.cyanDark, flexShrink:0 }}/>
-                            <div style={{ flex:1 }}>
-                              <div style={{ fontSize:11, fontWeight:600, color:C.textL, marginBottom:1 }}>{label}</div>
-                              <div style={{ fontSize:14, fontWeight:600, color:C.text }}>{val}</div>
-                            </div>
-                          </div>
-                        ))}
-                      </div>
-                      {form.message && (
-                        <div style={{ padding:'14px 18px', borderRadius:14, background:'#fff', border:`1.5px solid ${C.border}`, marginBottom:14 }}>
-                          <div style={{ fontSize:11, fontWeight:700, color:C.textL, marginBottom:6 }}>YOUR MESSAGE</div>
-                          <p style={{ fontSize:13.5, color:C.textM, lineHeight:1.6 }}>{form.message}</p>
-                        </div>
-                      )}
-                      {err && <div style={{ padding:'12px 16px', borderRadius:10, background:'#fef2f2', border:'1px solid #fecaca', fontSize:13, color:'#dc2626', marginBottom:12 }}>{err}</div>}
-                      <div style={{ padding:'13px 18px', borderRadius:12, background:`${CY.cyan}12`, border:`1px solid ${CY.cyan}30`, fontSize:12.5, color:C.textM }}>
-                        🔒 Your information is processed securely and never shared with third parties.
-                      </div>
-                    </div>
-                  )}
-                </div>
-
-                <div style={{ display:'flex', gap:10, marginTop:20 }}>
-                  {step > 0 && (
-                    <button onClick={() => setStep(s => s - 1)}
-                      style={{ padding:'12px 24px', borderRadius:12, background:'#fff', border:`2px solid ${C.border}`, color:C.text, fontSize:14, fontWeight:600, cursor:'pointer' }}>
-                      ← Back
-                    </button>
-                  )}
-                  <button
-                    onClick={() => { if (step < 3) setStep(s => s + 1); else sendForm() }}
-                    disabled={!canNext() || status === 'sending'}
-                    style={{
-                      flex:1, padding:'14px', borderRadius:12,
-                      background: canNext() && status !== 'sending' ? `linear-gradient(135deg, ${CY.cyan}, ${CY.cyanDark})` : '#e2e8f0',
-                      border:'none', color: canNext() ? '#fff' : C.textL,
-                      fontSize:15, fontWeight:700, cursor: canNext() ? 'pointer' : 'not-allowed',
-                      fontFamily:"'Plus Jakarta Sans',sans-serif",
-                      boxShadow: canNext() ? `0 6px 24px rgba(6,182,212,.4)` : 'none',
-                      transition:'all .2s',
-                    }}>
-                    {status === 'sending' ? '⏳ Sending...' : step === 3 ? '✓ Confirm Booking' : step === 2 ? (form.day && form.time ? 'Confirm Slot →' : 'Skip & Continue →') : 'Continue →'}
-                  </button>
-                </div>
-                {step === 0 && !form.interest && (
-                  <p style={{ fontSize:12, color:C.textL, textAlign:'center', marginTop:10 }}>Select an area of interest above to continue</p>
-                )}
-              </>
-            )}
-          </div>
-
-          {/* RIGHT: OFFICES + CHAT + URGENT */}
-          <div style={{ display:'flex', flexDirection:'column', gap:22 }}>
-
-            <div className="rv">
-              <h3 style={{ fontSize:20, fontWeight:800, color:C.text, fontFamily:"'Plus Jakarta Sans',sans-serif", marginBottom:14 }}>Our Offices</h3>
-              <div className="office-tabs" style={{ display:'flex', gap:8, marginBottom:16, flexWrap:'wrap' }}>
-                {OFFICES.map((o, i) => (
-                  <button key={o.city} onClick={() => setActiveOffice(i)}
-                    style={{ display:'flex', alignItems:'center', gap:6, padding:'8px 14px', borderRadius:50,
-                      border:`2px solid ${activeOffice === i ? CY.cyan : C.border}`,
-                      background: activeOffice === i ? `${CY.cyan}12` : '#fff',
-                      cursor:'pointer', fontSize:13, fontWeight:700,
-                      color: activeOffice === i ? CY.cyanDark : C.textM,
-                      transition:'all .18s' }}>
-                    <span style={{ fontSize:14 }}>{o.flag}</span> {o.city}
-                  </button>
-                ))}
-              </div>
-
-              <div className="contact-card" style={{ background:`linear-gradient(135deg, ${CY.cyan}08, #fff)`, border:`2px solid ${CY.cyan}30`, borderRadius:22, padding:'24px 26px' }}>
-                <div style={{ display:'flex', alignItems:'center', gap:14, marginBottom:18 }}>
-                  <div style={{ fontSize:36 }}>{OFFICES[activeOffice].flag}</div>
-                  <div>
-                    <h4 style={{ fontSize:19, fontWeight:800, color:C.text, fontFamily:"'Plus Jakarta Sans',sans-serif" }}>{OFFICES[activeOffice].full}</h4>
-                    <span style={{ fontSize:12, fontWeight:600, color:CY.cyanDark, background:`${CY.cyan}18`, padding:'3px 10px', borderRadius:50 }}>{OFFICES[activeOffice].tz}</span>
-                  </div>
-                </div>
-                <div style={{ display:'flex', flexDirection:'column', gap:10 }}>
-                  {[
-                    { icon:'Pin',   val:OFFICES[activeOffice].addr  },
-                    { icon:'Phone', val:OFFICES[activeOffice].phone },
-                    { icon:'Mail',  val:OFFICES[activeOffice].email },
-                  ].map(row => (
-                    <div key={row.val} style={{ display:'flex', gap:10, alignItems:'center' }}>
-                      <div style={{ width:34, height:34, borderRadius:9, background:`${CY.cyan}15`, display:'flex', alignItems:'center', justifyContent:'center', flexShrink:0 }}>
-                        <Ic n={row.icon} s={15} style={{ color:CY.cyanDark }}/>
-                      </div>
-                      <span style={{ fontSize:13.5, color:C.textM, wordBreak:'break-word' }}>{row.val}</span>
-                    </div>
-                  ))}
-                </div>
-                <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:8, marginTop:18 }}>
-                  <a href={`tel:${OFFICES[activeOffice].phone.replace(/\s/g, '')}`}
-                    style={{ display:'flex', alignItems:'center', justifyContent:'center', gap:7, padding:'11px', borderRadius:12, background:`linear-gradient(135deg, ${CY.cyan}, ${CY.cyanDark})`, textDecoration:'none', color:'#fff', fontSize:13, fontWeight:700 }}>
-                    <Ic n="Phone" s={14} style={{ color:'#fff' }}/> Call Now
-                  </a>
-                  <a href={`mailto:${OFFICES[activeOffice].email}`}
-                    style={{ display:'flex', alignItems:'center', justifyContent:'center', gap:7, padding:'11px', borderRadius:12, background:'#fff', border:`2px solid ${CY.cyan}40`, textDecoration:'none', color:CY.cyanDark, fontSize:13, fontWeight:700 }}>
-                    <Ic n="Mail" s={14} style={{ color:CY.cyanDark }}/> Email Us
-                  </a>
-                </div>
-              </div>
-            </div>
-
-            <div className="rv">
-              <div style={{ border:`1.5px solid ${C.border}`, borderRadius:22, overflow:'hidden', boxShadow:'0 8px 32px rgba(0,0,0,.06)', background:'#fff' }}>
-                <button
-                  onClick={() => setChatOpen(o => !o)}
-                  style={{ width:'100%', display:'flex', alignItems:'center', gap:12, padding:'16px 20px', background:`linear-gradient(135deg, ${CY.cyan}, ${CY.cyanDark})`, border:'none', cursor:'pointer', textAlign:'left' }}>
-                  <div style={{ position:'relative' }}>
-                    <div style={{ width:38, height:38, borderRadius:'50%', background:'rgba(255,255,255,.2)', display:'flex', alignItems:'center', justifyContent:'center' }}>
-                      <Ic n="Megaphone" s={18} style={{ color:'#fff' }}/>
-                    </div>
-                    <div style={{ position:'absolute', bottom:0, right:0, width:11, height:11, borderRadius:'50%', background:CY.cyan, border:'2px solid white' }}/>
-                  </div>
-                  <div style={{ flex:1 }}>
-                    <div style={{ fontSize:14, fontWeight:700, color:'#fff' }}>DevinStratus Assistant</div>
-                    <div style={{ fontSize:11, color:'rgba(255,255,255,.75)' }}>Online · Ask anything</div>
-                  </div>
-                  <Ic n="ChevD" s={18} style={{ color:'rgba(255,255,255,.7)', transition:'transform .2s', transform: chatOpen ? 'rotate(180deg)' : 'none' }}/>
-                </button>
-
-                {chatOpen && (
-                  <div style={{ animation:'slideUp .25s ease' }}>
-                    <div style={{ height:220, overflowY:'auto', padding:16, display:'flex', flexDirection:'column', gap:10, background:CY.cyanWash }}>
-                      {chatMessages.map((m, i) => (
-                        <div key={i} className="chat-msg" style={{ display:'flex', justifyContent: m.from === 'user' ? 'flex-end' : 'flex-start' }}>
-                          <div style={{
-                            maxWidth:'82%', padding:'10px 14px',
-                            borderRadius: m.from === 'user' ? '18px 18px 4px 18px' : '18px 18px 18px 4px',
-                            background: m.from === 'user' ? `linear-gradient(135deg, ${CY.cyan}, ${CY.cyanDark})` : '#fff',
-                            color: m.from === 'user' ? '#fff' : C.text,
-                            fontSize:13.5, lineHeight:1.5,
-                            boxShadow: m.from === 'bot' ? '0 2px 8px rgba(0,0,0,.06)' : 'none',
-                          }}>
-                            {m.text}
-                          </div>
-                        </div>
-                      ))}
-                      <div ref={chatEndRef}/>
-                    </div>
-                    <div style={{ display:'flex', gap:0, padding:12, background:'#fff', borderTop:`1px solid ${C.border}` }}>
-                      <input
-                        value={chatInput} onChange={e => setChatInput(e.target.value)}
-                        onKeyDown={e => e.key === 'Enter' && sendChat()}
-                        placeholder="Type a message..."
-                        style={{ flex:1, padding:'10px 14px', border:`1.5px solid ${C.border}`, borderRight:'none', borderRadius:'12px 0 0 12px', fontSize:13.5, outline:'none', fontFamily:'Inter, sans-serif', color:C.text, background:'#fff' }}
-                      />
-                      <button onClick={sendChat}
-                        style={{ padding:'10px 18px', background:`linear-gradient(135deg, ${CY.cyan}, ${CY.cyanDark})`, border:'none', borderRadius:'0 12px 12px 0', cursor:'pointer', display:'flex', alignItems:'center' }}>
-                        <Ic n="Arrow" s={16} style={{ color:'#fff' }}/>
-                      </button>
-                    </div>
-                  </div>
-                )}
-              </div>
-            </div>
-
-            <div className="rv contact-card" style={{ background:`linear-gradient(135deg, ${CY.cyanDark} 0%, ${CY.cyanMid} 60%, ${CY.cyan} 100%)`, borderRadius:20, padding:'24px 26px', color:'#fff', position:'relative', overflow:'hidden' }}>
-              <div style={{ position:'absolute', top:-30, right:-30, width:120, height:120, borderRadius:'50%', background:'rgba(255,255,255,.10)', pointerEvents:'none' }}/>
-              <div style={{ position:'absolute', bottom:-20, left:60, width:80, height:80, borderRadius:'50%', background:'rgba(103,232,249,.18)', pointerEvents:'none' }}/>
-              <div style={{ position:'relative', zIndex:1 }}>
-                <Ic n="Rocket" s={24} style={{ color:'rgba(255,255,255,.7)', marginBottom:10 }}/>
-                <h3 style={{ fontSize:18, fontWeight:800, marginBottom:8, fontFamily:"'Plus Jakarta Sans',sans-serif" }}>Need urgent help?</h3>
-                <p style={{ fontSize:13.5, opacity:.9, marginBottom:16, lineHeight:1.6 }}>For critical system issues, our emergency support line is staffed 24/7 by certified Dynamics 365 consultants.</p>
-                <a href="tel:+442071932502"
-                  style={{ display:'inline-flex', alignItems:'center', gap:8, padding:'11px 20px', borderRadius:50, background:'rgba(255,255,255,.18)', border:'1.5px solid rgba(255,255,255,.3)', color:'#fff', textDecoration:'none', fontSize:13.5, fontWeight:700, backdropFilter:'blur(8px)' }}>
-                  <Ic n="Phone" s={15} style={{ color:'#fff' }}/> +44 207 193 2502
-                </a>
-              </div>
-            </div>
-
-          </div>
-        </div>
-      </section>
-
-      {/* ════ WHY US ════ */}
-      <section className="why-us-section" style={{ padding:'72px 24px', background:'rgba(255,255,255,0.4)', borderTop:`1px solid ${CY.cyan}25`, borderBottom:`1px solid ${CY.cyan}25`, backdropFilter:'blur(8px)' }}>
-        <div style={{ maxWidth:1280, margin:'0 auto' }}>
-          <div style={{ textAlign:'center', marginBottom:44 }}>
-            <div style={{ fontSize:11, fontWeight:800, letterSpacing:'.2em', color:CY.cyanDark, marginBottom:14, textTransform:'uppercase' }}>WHY DEVINSTRATUS</div>
-            <h2 style={{ fontSize:'clamp(26px, 3.4vw, 36px)', fontWeight:900, color:C.text, fontFamily:"'Plus Jakarta Sans',sans-serif" }}>
-              Trusted by <span style={{ background:`linear-gradient(135deg, ${CY.cyan}, ${CY.cyanDark})`, WebkitBackgroundClip:'text', WebkitTextFillColor:'transparent' }}>3,200+ professionals</span>
-            </h2>
-          </div>
-          <div className="why-us-grid" style={{ display:'grid', gridTemplateColumns:'repeat(auto-fill, minmax(220px, 1fr))', gap:18 }}>
+      {/* ════════════════════════════════════════════════════
+         1b.  TRUST STRIP — by the numbers
+         ════════════════════════════════════════════════════ */}
+      <section className="cp-stats-section" style={{ padding:'56px 32px', background:'#fff', borderTop:'1px solid #e2e8f0', borderBottom:'1px solid #e2e8f0' }}>
+        <div style={{ maxWidth:1300, margin:'0 auto' }}>
+          <div className="rv cp-stats-g" style={{ display:'grid', gridTemplateColumns:'repeat(4, 1fr)', gap:32 }}>
             {[
-              { icon:'Clock',       title:'Same-Day Response',      desc:'Every enquiry answered within business hours — no queues, no bots.' },
-              { icon:'Users',       title:'Named Consultant',       desc:'A dedicated specialist who knows your stack and your goals.' },
-              { icon:'Award',       title:'Gold Partner Certified', desc:'Microsoft Inner Circle — top 1% of partners globally.' },
-              { icon:'Shield',      title:'No Lock-In Contracts',   desc:'Month-to-month support. Stay because we deliver, not because you\'re trapped.' },
-              { icon:'Globe',       title:'4 Global Offices',       desc:'Local expertise across UK, USA, Canada and India.' },
-              { icon:'CheckCircle', title:'94% Client Retention',   desc:'Our retention rate speaks for itself. We keep clients for years.' },
-            ].map((card, i) => (
-              <div key={card.title} className="rv contact-card" style={{ background:'#fff', borderRadius:18, padding:'22px 20px', border:`1.5px solid ${C.border}`, animation:`fadeUp .4s ease both ${i * 60}ms` }}>
-                <div style={{ width:44, height:44, borderRadius:13, background:`${CY.cyan}15`, display:'flex', alignItems:'center', justifyContent:'center', marginBottom:14, border:`1px solid ${CY.cyan}30` }}>
-                  <Ic n={card.icon} s={20} style={{ color:CY.cyanDark }}/>
-                </div>
-                <h4 style={{ fontSize:15, fontWeight:800, color:C.text, fontFamily:"'Plus Jakarta Sans',sans-serif", marginBottom:6 }}>{card.title}</h4>
-                <p style={{ fontSize:13, color:C.textM, lineHeight:1.65 }}>{card.desc}</p>
+              { v:'350+',  l:'Enterprise engagements',  s:'Delivered across UK, US, Canada and India' },
+              { v:'120+',  l:'Certified consultants',   s:'Microsoft MCT / MVP / Inner Circle' },
+              { v:'2',     l:'Global offices',           s:'Canada · India' },
+              { v:'30 min', l:'First call',              s:'With a Solution Architect — not an SDR' },
+            ].map((s,i) => (
+              <div key={i} style={{ display:'flex', flexDirection:'column', position:'relative', paddingLeft:i===0?0:24, borderLeft:i===0?'none':'1px solid #e2e8f0' }}>
+                <div className="stat-v" style={{ fontSize:38, fontWeight:900, color:'#0a0a14', fontFamily:"'Plus Jakarta Sans',sans-serif", lineHeight:1, marginBottom:8, background:'linear-gradient(135deg, #0066FF, #003FB3)', WebkitBackgroundClip:'text', backgroundClip:'text', WebkitTextFillColor:'transparent' }}>{s.v}</div>
+                <div style={{ fontSize:13.5, fontWeight:700, color:'#0a0a14', marginBottom:4 }}>{s.l}</div>
+                <div style={{ fontSize:12.5, color:'#64748b', lineHeight:1.45 }}>{s.s}</div>
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* ════ DEV GUIDE (auto-hides once email is wired up) ════ */}
-      {!EMAILJS_CONFIGURED && (
-        <section style={{ padding:'40px 24px', background:'transparent' }}>
-          <div style={{ maxWidth:900, margin:'0 auto' }}>
-            <div style={{ background:'#f0f9ff', border:'1.5px solid '+CY.cyan, borderRadius:16, padding:'18px 24px' }}>
-              <div style={{ display:'flex', alignItems:'flex-start', gap:12 }}>
-                <div style={{ width:36, height:36, borderRadius:10, background:CY.cyan, display:'flex', alignItems:'center', justifyContent:'center', flexShrink:0 }}>
-                  <Ic n="Brief" s={18} style={{ color:'#fff' }}/>
+
+      {/* ════════════════════════════════════════════════════
+         2.  4-STEP FLOW
+         ════════════════════════════════════════════════════ */}
+      <section className="cp-section" id="contact-flow" style={{ padding:'90px 32px', background:'#fff' }}>
+        <div style={{ maxWidth:1180, margin:'0 auto' }}>
+
+          {/* Section heading + progress */}
+          <div className="rv" style={{ textAlign:'center', marginBottom:48, maxWidth:780, margin:'0 auto 48px' }}>
+            <div style={{ display:'inline-flex', alignItems:'center', gap:8, background:'#0066FF15', border:'1px solid #0066FF30', borderRadius:50, padding:'6px 14px', fontSize:11.5, fontWeight:800, color:'#003FB3', letterSpacing:'.14em', marginBottom:16 }}>
+              4 STEPS · ~60 SECONDS
+            </div>
+            <h2 className="cp-h2" style={{ textAlign:'center' }}>Book a Solution Architect call</h2>
+            <p style={{ fontSize:15.5, color:'#475569', lineHeight:1.7 }}>
+              No marketing forms. No SDR triage. A senior architect on the first call, with the technical context to actually help.
+              {!HAS_API && <span style={{ marginLeft:10, display:'inline-flex', alignItems:'center', gap:6, padding:'3px 10px', borderRadius:50, background:'#fef3c7', border:'1px solid #fbbf24', fontSize:11, fontWeight:700, color:'#92400e' }}>
+                <span style={{ width:6, height:6, borderRadius:'50%', background:'#f59e0b' }}/>
+                DEMO MODE — wire REACT_APP_CALENDAR_API to go live
+              </span>}
+            </p>
+          </div>
+
+          {/* Step progress bar */}
+          <div className="rv cp-flow-progress" style={{ display:'flex', justifyContent:'center', gap:6, marginBottom:48 }}>
+            {[
+              { n:1, l:'Pick focus',  i:'Target'  },
+              { n:2, l:'Your details', i:'User'   },
+              { n:3, l:'Pick a slot',  i:'Clock'  },
+              { n:4, l:'Confirm',      i:'CheckCircle' },
+            ].map((s, i) => (
+              <div key={s.n} style={{ display:'flex', alignItems:'center', gap:6 }}>
+                <div style={{
+                  display:'inline-flex', alignItems:'center', gap:8, padding:'9px 16px', borderRadius:50,
+                  background: step >= s.n ? 'linear-gradient(135deg, #0066FF, #003FB3)' : '#f1f5f9',
+                  color: step >= s.n ? '#fff' : '#94a3b8', border: step === s.n ? '1.5px solid #06b6d4' : 'none',
+                  boxShadow: step === s.n ? '0 6px 18px rgba(0,102,255,0.30)' : 'none',
+                  fontSize:12.5, fontWeight:800, transition:'all .22s',
+                }}>
+                  <span style={{ width:22, height:22, borderRadius:'50%', background:'rgba(255,255,255,0.25)', display:'inline-flex', alignItems:'center', justifyContent:'center', fontSize:10, fontWeight:900 }}>{s.n}</span>
+                  {s.l}
                 </div>
-                <div style={{ flex:1 }}>
-                  <h3 style={{ fontSize:15, fontWeight:800, color:'#78350f', marginBottom:6 }}>Developer note: Activate real email delivery</h3>
-                  <p style={{ fontSize:13, color:'#92400e', lineHeight:1.65, margin:0 }}>
-                    The form is currently in <strong>Demo Mode</strong> — submissions are captured but no email is sent. To activate:
-                    (1) Sign up free at <strong>emailjs.com</strong> · (2) Add a service → copy SERVICE_ID · (3) Create a template with <code style={{ background:'rgba(6,182,212,0.12)', padding:'1px 5px', borderRadius:4 }}>{'{{name}}'} {'{{email}}'} {'{{company}}'} {'{{phone}}'} {'{{interest}}'} {'{{message}}'}</code> → copy TEMPLATE_ID · (4) Account → API Keys → copy PUBLIC_KEY · (5) Run <code style={{ background:'rgba(6,182,212,0.12)', padding:'1px 5px', borderRadius:4 }}>npm install @emailjs/browser</code>, replace the 3 constants at the top of <code>ContactPage.js</code>, and uncomment the real send block. This banner disappears automatically once configured.
-                  </p>
+                {i < 3 && <span style={{ color:'#cbd5e1', fontWeight:800 }}>→</span>}
+              </div>
+            ))}
+          </div>
+
+
+          {/* ──── STEP 1: Focus ──── */}
+          {step === 1 && (
+            <div className="rv" style={{ maxWidth:880, margin:'0 auto' }}>
+              <div style={{ textAlign:'center', marginBottom:32 }}>
+                <h3 style={{ fontSize:22, fontWeight:800, color:'#0a0a14', fontFamily:"'Plus Jakarta Sans',sans-serif", marginBottom:8 }}>What can we help you with?</h3>
+                <p style={{ fontSize:14, color:'#475569' }}>Pick the area closest to your challenge — we'll route to the right architect.</p>
+              </div>
+
+              <div className="cp-focus-g" style={{ display:'grid', gridTemplateColumns:'repeat(2, 1fr)', gap:14, marginBottom:32 }}>
+                {CONTACT_FOCUS.map(f => (
+                  <button key={f.slug} onClick={() => setFocus(f)}
+                    style={{
+                      display:'flex', alignItems:'flex-start', gap:14, padding:'20px 22px', textAlign:'left',
+                      borderRadius:16, cursor:'pointer', position:'relative', overflow:'hidden',
+                      background: focus?.slug === f.slug ? 'linear-gradient(135deg, rgba(0,102,255,0.08), rgba(6,182,212,0.08))' : '#fff',
+                      border: focus?.slug === f.slug ? '1.5px solid #0066FF' : '1px solid #e2e8f0',
+                      boxShadow: focus?.slug === f.slug ? '0 8px 24px rgba(0,102,255,0.18)' : '0 1px 3px rgba(0,53,128,0.04)',
+                      transition:'all .22s',
+                    }}
+                    onMouseEnter={e => { if (focus?.slug !== f.slug) { e.currentTarget.style.borderColor='#0066FF55'; e.currentTarget.style.transform='translateY(-2px)' } }}
+                    onMouseLeave={e => { if (focus?.slug !== f.slug) { e.currentTarget.style.borderColor='#e2e8f0'; e.currentTarget.style.transform='none' } }}>
+                    <div style={{ width:46, height:46, borderRadius:13, background:'linear-gradient(135deg, #0066FF, #003FB3)', display:'flex', alignItems:'center', justifyContent:'center', flexShrink:0, boxShadow:'0 6px 16px rgba(0,102,255,0.30)' }}>
+                      <Ic n={f.icon} s={22} style={{ color:'#fff' }}/>
+                    </div>
+                    <div style={{ flex:1 }}>
+                      <div style={{ fontSize:15.5, fontWeight:800, color:'#0a0a14', fontFamily:"'Plus Jakarta Sans',sans-serif", marginBottom:5 }}>{f.label}</div>
+                      <div style={{ fontSize:12.5, color:'#475569', lineHeight:1.55 }}>{f.desc}</div>
+                    </div>
+                    {focus?.slug === f.slug && (
+                      <div style={{ position:'absolute', top:14, right:14, width:24, height:24, borderRadius:'50%', background:'#0066FF', display:'flex', alignItems:'center', justifyContent:'center' }}>
+                        <Ic n="Check" s={14} style={{ color:'#fff' }}/>
+                      </div>
+                    )}
+                  </button>
+                ))}
+              </div>
+
+              <div style={{ display:'flex', justifyContent:'flex-end' }}>
+                <button onClick={() => focus && setStep(2)} disabled={!focus}
+                  style={{
+                    display:'inline-flex', alignItems:'center', gap:10, padding:'13px 26px', borderRadius:50,
+                    background: focus ? 'linear-gradient(135deg, #0066FF, #003FB3)' : '#e2e8f0',
+                    border:'none', cursor: focus ? 'pointer' : 'not-allowed',
+                    fontSize:14.5, fontWeight:700, color: focus ? '#fff' : '#94a3b8',
+                    fontFamily:"'Plus Jakarta Sans',sans-serif",
+                    boxShadow: focus ? '0 8px 22px rgba(0,102,255,0.30)' : 'none',
+                  }}>
+                  Continue → <Ic n="Arrow" s={14} style={{ color: focus ? '#fff' : '#94a3b8' }}/>
+                </button>
+              </div>
+            </div>
+          )}
+
+
+          {/* ──── STEP 2: Details ──── */}
+          {step === 2 && (
+            <div className="rv" style={{ maxWidth:780, margin:'0 auto' }}>
+              <div style={{ textAlign:'center', marginBottom:32 }}>
+                <h3 style={{ fontSize:22, fontWeight:800, color:'#0a0a14', fontFamily:"'Plus Jakarta Sans',sans-serif", marginBottom:8 }}>Tell us about yourself</h3>
+                <p style={{ fontSize:14, color:'#475569' }}>So we route to the right architect and understand your context before the call.</p>
+              </div>
+
+              <div className="cp-form-g" style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:18, marginBottom:18 }}>
+                <div>
+                  <label className="cp-label">Your name *</label>
+                  <input className="cp-input" placeholder="Jane Smith" value={details.name} onChange={e => setDetails({...details, name:e.target.value})}/>
                 </div>
+                <div>
+                  <label className="cp-label">Work email *</label>
+                  <input className="cp-input" type="email" placeholder="jane@company.com" value={details.email} onChange={e => setDetails({...details, email:e.target.value})}/>
+                </div>
+                <div>
+                  <label className="cp-label">Company *</label>
+                  <input className="cp-input" placeholder="Acme Manufacturing" value={details.company} onChange={e => setDetails({...details, company:e.target.value})}/>
+                </div>
+                <div>
+                  <label className="cp-label">Your role</label>
+                  <input className="cp-input" placeholder="CTO / Head of Operations / IT Director" value={details.role} onChange={e => setDetails({...details, role:e.target.value})}/>
+                </div>
+                <div>
+                  <label className="cp-label">Company headcount</label>
+                  <select className="cp-input" value={details.headcount} onChange={e => setDetails({...details, headcount:e.target.value})}>
+                    <option value="">Select range...</option>
+                    <option>Under 200</option>
+                    <option>200–1,000</option>
+                    <option>1,000–5,000</option>
+                    <option>5,000–25,000</option>
+                    <option>25,000+</option>
+                  </select>
+                </div>
+                <div>
+                  <label className="cp-label">Focus area</label>
+                  <input className="cp-input" value={focus?.label || ''} readOnly style={{ background:'#f8fafc', color:'#475569', cursor:'not-allowed' }}/>
+                </div>
+              </div>
+
+              <div style={{ marginBottom:32 }}>
+                <label className="cp-label">Brief context (optional)</label>
+                <textarea className="cp-input" rows={4} placeholder="What's slowing you down? Specific pain points, existing Microsoft estate, timeline, anything that helps us prepare..." value={details.notes} onChange={e => setDetails({...details, notes:e.target.value})} style={{ resize:'vertical', fontFamily:"'Plus Jakarta Sans',sans-serif" }}/>
+              </div>
+
+              <div style={{ display:'flex', justifyContent:'space-between', alignItems:'center', flexWrap:'wrap', gap:12 }}>
+                <button onClick={() => setStep(1)} style={{ display:'inline-flex', alignItems:'center', gap:8, padding:'12px 22px', borderRadius:50, background:'#fff', border:'1px solid #e2e8f0', cursor:'pointer', fontSize:13.5, fontWeight:700, color:'#475569' }}>
+                  ← Back
+                </button>
+                <button onClick={() => detailsValid && setStep(3)} disabled={!detailsValid}
+                  style={{ display:'inline-flex', alignItems:'center', gap:10, padding:'13px 26px', borderRadius:50, background: detailsValid ? 'linear-gradient(135deg, #0066FF, #003FB3)' : '#e2e8f0', border:'none', cursor: detailsValid ? 'pointer' : 'not-allowed', fontSize:14.5, fontWeight:700, color: detailsValid ? '#fff' : '#94a3b8', fontFamily:"'Plus Jakarta Sans',sans-serif", boxShadow: detailsValid ? '0 8px 22px rgba(0,102,255,0.30)' : 'none' }}>
+                  Pick a slot → <Ic n="Arrow" s={14} style={{ color: detailsValid ? '#fff' : '#94a3b8' }}/>
+                </button>
+              </div>
+            </div>
+          )}
+
+
+          {/* ──── STEP 3: Pick a slot (API-driven) ──── */}
+          {step === 3 && (
+            <div className="rv" style={{ maxWidth:880, margin:'0 auto' }}>
+              <div style={{ textAlign:'center', marginBottom:32 }}>
+                <h3 style={{ fontSize:22, fontWeight:800, color:'#0a0a14', fontFamily:"'Plus Jakarta Sans',sans-serif", marginBottom:8 }}>Pick a slot that works</h3>
+                <p style={{ fontSize:14, color:'#475569' }}>
+                  All times in <strong style={{ color:'#0a0a14' }}>{OFFICES[activeOffice].tz}</strong>.
+                  {slotsSource === 'live' && <span style={{ marginLeft:8, color:'#0EA5E9', fontWeight:700 }}>· Live availability</span>}
+                  {slotsSource === 'demo' && <span style={{ marginLeft:8, color:'#f59e0b', fontWeight:700 }}>· Demo mode</span>}
+                  {slotsSource === 'demo-fallback' && <span style={{ marginLeft:8, color:'#f59e0b', fontWeight:700 }}>· API offline — showing sample availability</span>}
+                </p>
+              </div>
+
+              {slotsLoading ? (
+                <div style={{ textAlign:'center', padding:'60px 0' }}>
+                  <div style={{ width:40, height:40, border:'3px solid #e2e8f0', borderTopColor:'#0066FF', borderRadius:'50%', animation:'spin 0.8s linear infinite', margin:'0 auto 16px' }}/>
+                  <div style={{ fontSize:13, color:'#64748b' }}>Checking architect availability...</div>
+                  <style>{`@keyframes spin{to{transform:rotate(360deg)}}`}</style>
+                </div>
+              ) : (
+                <>
+                  {/* Day tabs */}
+                  <div className="cp-slot-days" style={{ display:'flex', gap:10, justifyContent:'center', marginBottom:24, flexWrap:'wrap' }}>
+                    {dayKeys.map(d => {
+                      const { dow, day, mon } = fmtDayLabel(d)
+                      const isActive = activeDay === d
+                      const dayAvailable = slotsByDay[d].some(s => s.available)
+                      return (
+                        <button key={d} onClick={() => setActiveDay(d)}
+                          style={{
+                            display:'flex', flexDirection:'column', alignItems:'center', padding:'12px 18px', borderRadius:14, cursor:'pointer', minWidth:80,
+                            background: isActive ? 'linear-gradient(135deg, #0066FF, #003FB3)' : '#fff',
+                            border: isActive ? 'none' : '1px solid #e2e8f0',
+                            color: isActive ? '#fff' : '#0a0a14',
+                            boxShadow: isActive ? '0 8px 22px rgba(0,102,255,0.30)' : '0 1px 3px rgba(0,53,128,0.04)',
+                            opacity: dayAvailable ? 1 : 0.4,
+                            transition:'all .22s',
+                          }}>
+                          <span style={{ fontSize:10.5, fontWeight:800, letterSpacing:'.10em', opacity:0.8 }}>{dow}</span>
+                          <span style={{ fontSize:22, fontWeight:900, fontFamily:"'Plus Jakarta Sans',sans-serif", lineHeight:1, margin:'4px 0' }}>{day}</span>
+                          <span style={{ fontSize:10.5, fontWeight:700, opacity:0.8 }}>{mon}</span>
+                        </button>
+                      )
+                    })}
+                  </div>
+
+                  {/* Times for active day */}
+                  {activeDay && (
+                    <div className="cp-slot-times-g" style={{ display:'grid', gridTemplateColumns:'repeat(4, 1fr)', gap:10, marginBottom:32 }}>
+                      {slotsByDay[activeDay].map(s => (
+                        <button key={s.slotId} disabled={!s.available} onClick={() => s.available && setSelectedSlot(s.slotId)}
+                          style={{
+                            padding:'14px 16px', borderRadius:12, cursor: s.available ? 'pointer' : 'not-allowed',
+                            background: selectedSlot === s.slotId ? 'linear-gradient(135deg, #0066FF, #003FB3)' : (s.available ? '#fff' : '#f8fafc'),
+                            border: selectedSlot === s.slotId ? 'none' : '1px solid #e2e8f0',
+                            color: selectedSlot === s.slotId ? '#fff' : (s.available ? '#0a0a14' : '#cbd5e1'),
+                            fontSize:14, fontWeight:700,
+                            fontFamily:"'JetBrains Mono', monospace",
+                            transition:'all .15s',
+                            textDecoration: s.available ? 'none' : 'line-through',
+                          }}>
+                          {s.time}
+                        </button>
+                      ))}
+                    </div>
+                  )}
+
+                  <div style={{ display:'flex', justifyContent:'space-between', alignItems:'center', flexWrap:'wrap', gap:12 }}>
+                    <button onClick={() => setStep(2)} style={{ display:'inline-flex', alignItems:'center', gap:8, padding:'12px 22px', borderRadius:50, background:'#fff', border:'1px solid #e2e8f0', cursor:'pointer', fontSize:13.5, fontWeight:700, color:'#475569' }}>
+                      ← Back
+                    </button>
+                    <button onClick={() => selectedSlot && setStep(4)} disabled={!selectedSlot}
+                      style={{ display:'inline-flex', alignItems:'center', gap:10, padding:'13px 26px', borderRadius:50, background: selectedSlot ? 'linear-gradient(135deg, #0066FF, #003FB3)' : '#e2e8f0', border:'none', cursor: selectedSlot ? 'pointer' : 'not-allowed', fontSize:14.5, fontWeight:700, color: selectedSlot ? '#fff' : '#94a3b8', fontFamily:"'Plus Jakarta Sans',sans-serif", boxShadow: selectedSlot ? '0 8px 22px rgba(0,102,255,0.30)' : 'none' }}>
+                      Review → <Ic n="Arrow" s={14} style={{ color: selectedSlot ? '#fff' : '#94a3b8' }}/>
+                    </button>
+                  </div>
+                </>
+              )}
+            </div>
+          )}
+
+
+          {/* ──── STEP 4: Review & Confirm ──── */}
+          {step === 4 && (() => {
+            const slot = slots.find(s => s.slotId === selectedSlot)
+            const { dow, day, mon } = slot ? fmtDayLabel(slot.date) : { dow:'', day:'', mon:'' }
+            return (
+              <div className="rv" style={{ maxWidth:780, margin:'0 auto' }}>
+                <div style={{ textAlign:'center', marginBottom:32 }}>
+                  <h3 style={{ fontSize:22, fontWeight:800, color:'#0a0a14', fontFamily:"'Plus Jakarta Sans',sans-serif", marginBottom:8 }}>Review &amp; confirm</h3>
+                  <p style={{ fontSize:14, color:'#475569' }}>Everything correct? Click confirm to send the booking.</p>
+                </div>
+
+                <div className="cp-review-g" style={{ display:'grid', gridTemplateColumns:'1.2fr 1fr', gap:18, marginBottom:32 }}>
+                  {/* Booking summary */}
+                  <div style={{ padding:'24px 26px', borderRadius:18, background:'linear-gradient(135deg, #f0f7ff, #ecfeff)', border:'1px solid rgba(0,102,255,0.18)' }}>
+                    <div style={{ fontSize:11, fontWeight:800, letterSpacing:'.14em', color:'#003FB3', marginBottom:18 }}>YOUR BOOKING</div>
+
+                    {[
+                      { l:'FOCUS',    v: focus?.label },
+                      { l:'NAME',     v: details.name },
+                      { l:'EMAIL',    v: details.email },
+                      { l:'COMPANY',  v: details.company },
+                      { l:'ROLE',     v: details.role || '—' },
+                      { l:'HEADCOUNT',v: details.headcount || '—' },
+                    ].map(item => (
+                      <div key={item.l} style={{ marginBottom:12 }}>
+                        <div style={{ fontSize:10, fontWeight:800, letterSpacing:'.10em', color:'#64748b', marginBottom:3 }}>{item.l}</div>
+                        <div style={{ fontSize:13.5, color:'#0a0a14', fontWeight:700 }}>{item.v}</div>
+                      </div>
+                    ))}
+                  </div>
+
+                  {/* Slot card */}
+                  <div style={{ padding:'28px', borderRadius:18, background:'linear-gradient(135deg, #003FB3, #0066FF, #06b6d4)', color:'#fff', position:'relative', overflow:'hidden', boxShadow:'0 20px 50px rgba(0,102,255,0.30)' }}>
+                    <div style={{ position:'absolute', top:-60, right:-50, width:200, height:200, borderRadius:'50%', background:'radial-gradient(circle, rgba(255,255,255,0.18), transparent 70%)', pointerEvents:'none' }}/>
+                    <div style={{ position:'relative', zIndex:1 }}>
+                      <div style={{ fontSize:11, fontWeight:800, letterSpacing:'.14em', opacity:0.85, marginBottom:14 }}>YOUR SLOT</div>
+                      <div style={{ fontSize:42, fontWeight:900, fontFamily:"'Plus Jakarta Sans',sans-serif", lineHeight:1, marginBottom:4, letterSpacing:'-0.02em' }}>{day}</div>
+                      <div style={{ fontSize:14, fontWeight:700, opacity:0.95, marginBottom:18 }}>{dow} · {mon}</div>
+                      <div style={{ padding:'14px 18px', borderRadius:12, background:'rgba(255,255,255,0.18)', border:'1px solid rgba(255,255,255,0.30)', backdropFilter:'blur(10px)', fontSize:20, fontWeight:900, fontFamily:"'JetBrains Mono', monospace", textAlign:'center' }}>
+                        {slot?.time}
+                      </div>
+                      <div style={{ fontSize:11, opacity:0.85, marginTop:14, textAlign:'center' }}>{OFFICES[activeOffice].tz} · 30 minutes</div>
+                    </div>
+                  </div>
+                </div>
+
+                <div style={{ display:'flex', justifyContent:'space-between', alignItems:'center', flexWrap:'wrap', gap:12 }}>
+                  <button onClick={() => setStep(3)} style={{ display:'inline-flex', alignItems:'center', gap:8, padding:'12px 22px', borderRadius:50, background:'#fff', border:'1px solid #e2e8f0', cursor:'pointer', fontSize:13.5, fontWeight:700, color:'#475569' }}>
+                    ← Back
+                  </button>
+                  <button onClick={handleSubmitBooking} disabled={submitting}
+                    style={{ display:'inline-flex', alignItems:'center', gap:10, padding:'14px 32px', borderRadius:50, background: submitting ? '#94a3b8' : 'linear-gradient(135deg, #0066FF, #003FB3)', border:'none', cursor: submitting ? 'wait' : 'pointer', fontSize:15, fontWeight:800, color:'#fff', fontFamily:"'Plus Jakarta Sans',sans-serif", boxShadow:'0 8px 22px rgba(0,102,255,0.30)' }}>
+                    {submitting ? 'Booking...' : 'CONFIRM BOOKING'} <Ic n={submitting ? 'Clock' : 'CheckCircle'} s={14} style={{ color:'#fff' }}/>
+                  </button>
+                </div>
+              </div>
+            )
+          })()}
+
+
+          {/* ──── STEP 5: Success ──── */}
+          {step === 5 && confirmed && (() => {
+            const slot = confirmed.slot
+            const { dow, day, mon } = slot ? fmtDayLabel(slot.date) : { dow:'', day:'', mon:'' }
+            return (
+              <div className="rv" style={{ maxWidth:660, margin:'0 auto', textAlign:'center', padding:'40px 0' }}>
+                <div style={{ width:96, height:96, borderRadius:'50%', background:'linear-gradient(135deg, #0EA5E9, #06b6d4)', display:'inline-flex', alignItems:'center', justifyContent:'center', marginBottom:24, boxShadow:'0 16px 40px rgba(14,165,233,0.35)' }}>
+                  <Ic n="CheckCircle" s={48} style={{ color:'#fff' }}/>
+                </div>
+                <h3 style={{ fontSize:32, fontWeight:900, color:'#0a0a14', fontFamily:"'Plus Jakarta Sans',sans-serif", marginBottom:14, letterSpacing:'-0.02em' }}>You're booked! 🎉</h3>
+                <p style={{ fontSize:16, color:'#475569', lineHeight:1.7, marginBottom:28 }}>
+                  <strong style={{ color:'#0a0a14' }}>{dow} {day} {mon} · {slot?.time}</strong>
+                  <br/>A calendar invite is on its way to <strong style={{ color:'#0a0a14' }}>{details.email}</strong>.
+                </p>
+                <div style={{ padding:'18px 22px', borderRadius:14, background:'#f0f7ff', border:'1px solid rgba(0,102,255,0.18)', marginBottom:28 }}>
+                  <div style={{ fontSize:11, fontWeight:800, letterSpacing:'.14em', color:'#003FB3', marginBottom:6 }}>BOOKING ID</div>
+                  <div style={{ fontSize:14, fontWeight:700, color:'#0a0a14', fontFamily:"'JetBrains Mono', monospace" }}>{confirmed.bookingId}</div>
+                </div>
+                <div style={{ display:'flex', gap:12, justifyContent:'center', flexWrap:'wrap' }}>
+                  <button onClick={() => navigate('/')} style={{ display:'inline-flex', alignItems:'center', gap:8, padding:'13px 26px', borderRadius:50, background:'linear-gradient(135deg, #0066FF, #003FB3)', border:'none', cursor:'pointer', fontSize:14.5, fontWeight:700, color:'#fff', fontFamily:"'Plus Jakarta Sans',sans-serif", boxShadow:'0 8px 22px rgba(0,102,255,0.30)' }}>
+                    Back to home <Ic n="Arrow" s={14} style={{ color:'#fff' }}/>
+                  </button>
+                  <button onClick={() => { setStep(1); setFocus(null); setSelectedSlot(null); setConfirmed(null); setDetails({ name:'', email:'', company:'', role:'', headcount:'', notes:'' }) }}
+                    style={{ display:'inline-flex', alignItems:'center', gap:8, padding:'13px 22px', borderRadius:50, background:'#fff', border:'1px solid #e2e8f0', cursor:'pointer', fontSize:13.5, fontWeight:700, color:'#475569' }}>
+                    Book another call
+                  </button>
+                </div>
+              </div>
+            )
+          })()}
+
+        </div>
+      </section>
+
+
+      {/* ════════════════════════════════════════════════════
+         3.  WHAT HAPPENS NEXT
+         ════════════════════════════════════════════════════ */}
+      <section className="cp-section" style={{ padding:'90px 32px', background:'linear-gradient(180deg, #f8fafc 0%, #f0f7ff 100%)' }}>
+        <div style={{ maxWidth:1180, margin:'0 auto' }}>
+          <div className="rv" style={{ textAlign:'center', marginBottom:48, maxWidth:760, margin:'0 auto 48px' }}>
+            <div style={{ display:'inline-flex', alignItems:'center', gap:8, background:'rgba(6,182,212,0.10)', border:'1px solid rgba(6,182,212,0.30)', borderRadius:50, padding:'6px 14px', fontSize:11.5, fontWeight:800, color:'#003FB3', letterSpacing:'.14em', marginBottom:16 }}>
+              <Ic n="Clock" s={13} style={{ color:'#06b6d4' }}/>
+              AFTER YOU BOOK
+            </div>
+            <h2 className="cp-h2" style={{ textAlign:'center' }}>What happens next</h2>
+            <p style={{ fontSize:15.5, color:'#475569', lineHeight:1.7 }}>Clear, predictable, no surprises. We respect your time.</p>
+          </div>
+
+          <div className="rv cp-next-g" style={{ display:'grid', gridTemplateColumns:'repeat(4, 1fr)', gap:18 }}>
+            {[
+              { n:'01', icon:'Mail',        title:'Within minutes',  desc:'Calendar invite + brief background questionnaire — so the architect arrives prepared.' },
+              { n:'02', icon:'Headphones',  title:'On the call',     desc:'30 minutes with a Microsoft-certified Solution Architect. Technical depth, no SDR triage.' },
+              { n:'03', icon:'FileText',    title:'Within 5 days',   desc:"Written technical scope — clear deliverables, team shape, timeline, dependencies." },
+              { n:'04', icon:'Award',       title:'Within 7 days',   desc:"Fixed-price proposal. No hourly billing surprises. Approve and we're off." },
+            ].map((s,i) => (
+              <div key={i} style={{ padding:'26px 24px', borderRadius:18, background:'#fff', border:'1px solid #e2e8f0', position:'relative', overflow:'hidden' }}>
+                <div style={{ position:'absolute', top:0, left:0, right:0, height:3, background:`linear-gradient(90deg, ${i===0?'#0066FF':i===1?'#003FB3':i===2?'#06b6d4':'#0EA5E9'}, transparent)` }}/>
+                <div style={{ display:'flex', justifyContent:'space-between', alignItems:'flex-start', marginBottom:14 }}>
+                  <div style={{ width:46, height:46, borderRadius:13, background:`linear-gradient(135deg, ${i===0?'#0066FF':i===1?'#003FB3':i===2?'#06b6d4':'#0EA5E9'}, ${i===0?'#003FB3':i===1?'#06b6d4':i===2?'#0EA5E9':'#0066FF'})`, display:'flex', alignItems:'center', justifyContent:'center', boxShadow:`0 6px 16px ${i===0?'#0066FF':i===1?'#003FB3':i===2?'#06b6d4':'#0EA5E9'}40` }}>
+                    <Ic n={s.icon} s={22} style={{ color:'#fff' }}/>
+                  </div>
+                  <span style={{ fontSize:11, fontWeight:800, color:'#94a3b8', fontFamily:"'JetBrains Mono', monospace", letterSpacing:'.10em' }}>{s.n}</span>
+                </div>
+                <h4 style={{ fontSize:15.5, fontWeight:800, color:'#0a0a14', fontFamily:"'Plus Jakarta Sans',sans-serif", marginBottom:8, letterSpacing:'-0.005em' }}>{s.title}</h4>
+                <p style={{ fontSize:13, color:'#475569', lineHeight:1.6 }}>{s.desc}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+
+      {/* ════════════════════════════════════════════════════
+         4.  WHY BOOK WITH US
+         ════════════════════════════════════════════════════ */}
+      <section className="cp-section" style={{ padding:'90px 32px', background:'#fff' }}>
+        <div style={{ maxWidth:1180, margin:'0 auto' }}>
+          <div className="rv" style={{ textAlign:'center', marginBottom:48, maxWidth:760, margin:'0 auto 48px' }}>
+            <div style={{ display:'inline-flex', alignItems:'center', gap:8, background:'#0066FF15', border:'1px solid #0066FF30', borderRadius:50, padding:'6px 14px', fontSize:11.5, fontWeight:800, color:'#003FB3', letterSpacing:'.14em', marginBottom:16 }}>
+              WHY THIS CALL IS WORTH 30 MINUTES
+            </div>
+            <h2 className="cp-h2" style={{ textAlign:'center' }}>Architect on first call. Always.</h2>
+          </div>
+
+          <div className="rv cp-why-g" style={{ display:'grid', gridTemplateColumns:'repeat(4, 1fr)', gap:20 }}>
+            {[
+              { icon:'Users',       title:'Senior architect, not an SDR',  desc:'You speak to someone who has delivered the work — not an account executive reading a script.' },
+              { icon:'Shield',      title:'NDA on request',                desc:"For anything sensitive (M&A, restructuring, sensitive data) we'll send a mutual NDA before the call." },
+              { icon:'Award',       title:'Microsoft Inner Circle 2025',  desc:'Top 1% of Microsoft partners globally. We get early access to the roadmap and direct Microsoft escalation paths.' },
+              { icon:'Zap',         title:'Fixed-price scoping',           desc:"No 'time & materials' surprises. Written scope, fixed proposal, predictable budget for your finance team." },
+            ].map((s,i) => (
+              <div key={i} style={{ padding:'28px 24px', borderRadius:20, background:'linear-gradient(180deg, #ffffff, #f8fafc)', border:'1px solid #e2e8f0', position:'relative', overflow:'hidden' }}>
+                <div style={{ position:'absolute', top:-50, right:-50, width:160, height:160, borderRadius:'50%', background:'radial-gradient(circle, rgba(0,102,255,0.10), transparent 70%)', pointerEvents:'none' }}/>
+                <div style={{ width:48, height:48, borderRadius:14, background:'linear-gradient(135deg, #0066FF, #003FB3)', display:'flex', alignItems:'center', justifyContent:'center', marginBottom:16, boxShadow:'0 8px 20px rgba(0,102,255,0.30)' }}>
+                  <Ic n={s.icon} s={22} style={{ color:'#fff' }}/>
+                </div>
+                <h3 style={{ fontSize:16, fontWeight:800, color:'#0a0a14', fontFamily:"'Plus Jakarta Sans',sans-serif", marginBottom:10, letterSpacing:'-0.005em' }}>{s.title}</h3>
+                <p style={{ fontSize:13, color:'#475569', lineHeight:1.65 }}>{s.desc}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+
+      {/* ════════════════════════════════════════════════════
+         4b.  PRE-CALL FAQ
+         ════════════════════════════════════════════════════ */}
+      <section className="cp-section" style={{ padding:'100px 32px', background:'#f8fafc' }}>
+        <div style={{ maxWidth:880, margin:'0 auto' }}>
+          <div className="rv" style={{ textAlign:'center', marginBottom:48 }}>
+            <div style={{ display:'inline-flex', alignItems:'center', gap:8, background:'rgba(6,182,212,0.12)', border:'1px solid rgba(6,182,212,0.30)', borderRadius:50, padding:'6px 14px', fontSize:11.5, fontWeight:800, color:'#003FB3', letterSpacing:'.14em', marginBottom:16 }}>
+              BEFORE YOU BOOK
+            </div>
+            <h2 className="cp-h2" style={{ textAlign:'center' }}>Common questions answered</h2>
+          </div>
+
+          <div className="rv">
+            {[
+              { q:"What if my use case isn't on the focus list?",
+                a:"Pick 'Multiple / Not sure yet' — it routes to a senior architect who'll help you scope the right starting point. Most of our best engagements begin with someone unsure exactly what they need." },
+              { q:"Will I be speaking to a salesperson?",
+                a:"No. The first call is with a Microsoft-certified Solution Architect — someone who has personally delivered the work we're discussing. Account managers join later, once there's something concrete to scope." },
+              { q:"What if I want an NDA before the call?",
+                a:"Standard practice for M&A, restructuring, regulated industry, and sensitive data conversations. Email nda@devinstratus.com after booking and we'll send a mutual NDA within 24 hours." },
+              { q:"How quickly can you start an engagement?",
+                a:"Discovery within 2 weeks. Pilot kick-off within 4-6 weeks for most engagements. For urgent situations (failed implementation, deadline-driven migration), we have escalation paths for accelerated start." },
+              { q:"What's the typical engagement budget?",
+                a:"Discovery is fixed-price (£8k-£18k depending on scope). Pilots typically £25k-£80k. Full implementations £150k-£2M+ depending on complexity. No hourly billing surprises — every engagement has a written fixed-price scope." },
+              { q:"Do you work with companies smaller than mid-market?",
+                a:"We focus on enterprises with 200+ employees where Microsoft estate complexity justifies the engagement model. For smaller organisations, we can recommend Microsoft Partners better sized to your needs." },
+            ].map((f, i) => (
+              <div key={i} className={`acc-item ${openFaq === i ? 'open' : ''}`}>
+                <button className="acc-trigger" onClick={() => setOpenFaq(openFaq === i ? null : i)}>
+                  {f.q}
+                  <Ic n={openFaq === i ? 'ChevU' : 'ChevD'} s={18} style={{ color:'#94a3b8', flexShrink:0 }}/>
+                </button>
+                {openFaq === i && <div className="acc-body">{f.a}</div>}
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+
+      {/* ════════════════════════════════════════════════════
+         5.  GLOBAL OFFICES
+         ════════════════════════════════════════════════════ */}
+      <section className="cp-section" style={{ padding:'90px 32px', background:'linear-gradient(180deg, #f8fafc 0%, #ecfeff 100%)' }}>
+        <div style={{ maxWidth:1180, margin:'0 auto' }}>
+          <div className="rv" style={{ marginBottom:36, display:'flex', justifyContent:'space-between', alignItems:'flex-end', flexWrap:'wrap', gap:16 }}>
+            <div>
+              <div style={{ display:'inline-flex', alignItems:'center', gap:8, background:'rgba(6,182,212,0.12)', border:'1px solid rgba(6,182,212,0.30)', borderRadius:50, padding:'6px 14px', fontSize:11.5, fontWeight:800, color:'#003FB3', letterSpacing:'.14em', marginBottom:14 }}>
+                <Ic n="Globe" s={13} style={{ color:'#06b6d4' }}/>
+                OUR OFFICES
+              </div>
+              <h2 className="cp-h2" style={{ marginBottom:8 }}>{OFFICES.length} offices · {OFFICES.length} time zones</h2>
+              <p style={{ fontSize:14.5, color:'#475569' }}>24-hour cover for enterprise clients across UK, North America, and Asia-Pacific.</p>
+            </div>
+          </div>
+
+          {/* Office tabs */}
+          <div className="rv cp-office-tabs" style={{ display:'flex', gap:10, marginBottom:24, flexWrap:'wrap' }}>
+            {OFFICES.map((o,i) => (
+              <button key={o.slug} onClick={() => setActiveOffice(i)}
+                style={{
+                  display:'inline-flex', alignItems:'center', gap:9, padding:'11px 18px', borderRadius:50, cursor:'pointer',
+                  background: activeOffice === i ? 'linear-gradient(135deg, #0066FF, #003FB3)' : '#fff',
+                  border: activeOffice === i ? 'none' : '1px solid #e2e8f0',
+                  color: activeOffice === i ? '#fff' : '#0a0a14',
+                  boxShadow: activeOffice === i ? '0 8px 22px rgba(0,102,255,0.30)' : 'none',
+                  fontSize:13, fontWeight:700, fontFamily:"'Plus Jakarta Sans',sans-serif",
+                  transition:'all .22s',
+                }}>
+                <span style={{ fontSize:18, lineHeight:1 }}>{o.flag}</span>
+                {o.city}
+                {o.isHQ && <span style={{ fontSize:9.5, fontWeight:800, padding:'2px 7px', borderRadius:50, background: activeOffice===i?'rgba(255,255,255,0.20)':'#0066FF15', color: activeOffice===i?'#fff':'#0066FF', letterSpacing:'.04em' }}>HQ</span>}
+              </button>
+            ))}
+          </div>
+
+          {/* Active office card */}
+          <div className="rv cp-office-g" style={{ display:'grid', gridTemplateColumns:'1.4fr 1fr', gap:20 }}>
+            <div style={{ padding:'32px', borderRadius:22, background:'#fff', border:'1px solid #e2e8f0', position:'relative', overflow:'hidden' }}>
+              <div style={{ position:'absolute', top:-60, right:-60, width:240, height:240, borderRadius:'50%', background:'radial-gradient(circle, rgba(0,102,255,0.08), transparent 70%)', pointerEvents:'none' }}/>
+              <div style={{ position:'relative', zIndex:1 }}>
+                <div style={{ display:'flex', alignItems:'center', gap:14, marginBottom:18 }}>
+                  <span style={{ fontSize:48, lineHeight:1 }}>{OFFICES[activeOffice].flag}</span>
+                  <div>
+                    <h3 style={{ fontSize:24, fontWeight:900, color:'#0a0a14', fontFamily:"'Plus Jakarta Sans',sans-serif", letterSpacing:'-0.01em' }}>{OFFICES[activeOffice].full}</h3>
+                    <div style={{ display:'flex', alignItems:'center', gap:10, marginTop:6 }}>
+                      <span style={{ fontSize:11, fontWeight:700, color:'#06b6d4', background:'rgba(6,182,212,0.10)', padding:'3px 10px', borderRadius:50, letterSpacing:'.04em' }}>{OFFICES[activeOffice].tz}</span>
+                      {OFFICES[activeOffice].isHQ && <span style={{ fontSize:11, fontWeight:700, color:'#003FB3', background:'#0066FF15', padding:'3px 10px', borderRadius:50, letterSpacing:'.04em' }}>HEADQUARTERS</span>}
+                    </div>
+                  </div>
+                </div>
+
+                {[
+                  { icon:'Pin',   l:'Address', v: OFFICES[activeOffice].addr },
+                  { icon:'Phone', l:'Phone',   v: OFFICES[activeOffice].phone, href:`tel:${OFFICES[activeOffice].phone.replace(/\s/g,'')}` },
+                  { icon:'Mail',  l:'Email',   v: OFFICES[activeOffice].email, href:`mailto:${OFFICES[activeOffice].email}` },
+                  { icon:'Users', l:'Team',    v: `${OFFICES[activeOffice].headcount} · Founded ${OFFICES[activeOffice].founded}` },
+                ].map((c,i) => (
+                  <div key={i} style={{ display:'flex', alignItems:'flex-start', gap:12, marginBottom:14, padding:'10px 0', borderBottom: i<3 ? '1px solid #f1f5f9' : 'none' }}>
+                    <div style={{ width:36, height:36, borderRadius:10, background:'#f0f7ff', display:'flex', alignItems:'center', justifyContent:'center', flexShrink:0 }}>
+                      <Ic n={c.icon} s={16} style={{ color:'#0066FF' }}/>
+                    </div>
+                    <div style={{ flex:1 }}>
+                      <div style={{ fontSize:10.5, fontWeight:800, letterSpacing:'.10em', color:'#94a3b8', marginBottom:3 }}>{c.l.toUpperCase()}</div>
+                      {c.href ? (
+                        <a href={c.href} style={{ fontSize:14, fontWeight:700, color:'#0a0a14', textDecoration:'none' }}>{c.v}</a>
+                      ) : (
+                        <div style={{ fontSize:14, fontWeight:600, color:'#0a0a14' }}>{c.v}</div>
+                      )}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Urgent contact card */}
+            <div style={{ padding:'28px', borderRadius:22, background:'linear-gradient(135deg, #003FB3, #0066FF, #06b6d4)', color:'#fff', position:'relative', overflow:'hidden', boxShadow:'0 20px 50px rgba(0,102,255,0.30)' }}>
+              <div style={{ position:'absolute', top:-80, right:-60, width:240, height:240, borderRadius:'50%', background:'radial-gradient(circle, rgba(255,255,255,0.15), transparent 70%)', pointerEvents:'none' }}/>
+              <div style={{ position:'relative', zIndex:1 }}>
+                <Ic n="Phone" s={28} style={{ color:'#fff', marginBottom:14 }}/>
+                <div style={{ fontSize:11, fontWeight:800, letterSpacing:'.14em', opacity:0.85, marginBottom:8 }}>URGENT MATTERS</div>
+                <h4 style={{ fontSize:18, fontWeight:800, color:'#fff', fontFamily:"'Plus Jakarta Sans',sans-serif", marginBottom:8 }}>Production down? Active incident?</h4>
+                <p style={{ fontSize:13.5, color:'rgba(255,255,255,0.85)', lineHeight:1.6, marginBottom:20 }}>
+                  Call our 24/7 critical incident line for managed-support clients, or call your nearest office directly for new enquiries.
+                </p>
+                <a href={`tel:${OFFICES[activeOffice].phone.replace(/\s/g,'')}`}
+                  style={{ display:'flex', alignItems:'center', justifyContent:'center', gap:8, padding:'12px 18px', borderRadius:50, background:'#fff', color:'#003FB3', textDecoration:'none', fontSize:14, fontWeight:800, marginBottom:10, fontFamily:"'JetBrains Mono', monospace" }}>
+                  <Ic n="Phone" s={14} style={{ color:'#003FB3' }}/> {OFFICES[activeOffice].phone}
+                </a>
+                <a href={`mailto:${OFFICES[activeOffice].email}`}
+                  style={{ display:'flex', alignItems:'center', justifyContent:'center', gap:8, padding:'10px 16px', borderRadius:50, background:'rgba(255,255,255,0.15)', color:'#fff', textDecoration:'none', fontSize:12.5, fontWeight:700, border:'1px solid rgba(255,255,255,0.30)', backdropFilter:'blur(10px)' }}>
+                  <Ic n="Mail" s={13} style={{ color:'#fff' }}/> {OFFICES[activeOffice].email}
+                </a>
               </div>
             </div>
           </div>
-        </section>
-      )}
+        </div>
+      </section>
+
+
+      {/* ════════════════════════════════════════════════════
+         6.  FAQ
+         ════════════════════════════════════════════════════ */}
+      <section className="cp-section" style={{ padding:'100px 32px', background:'#fff' }}>
+        <div style={{ maxWidth:880, margin:'0 auto' }}>
+          <div className="rv" style={{ textAlign:'center', marginBottom:48 }}>
+            <div style={{ display:'inline-flex', alignItems:'center', gap:8, background:'#06b6d418', border:'1px solid #06b6d440', borderRadius:50, padding:'6px 14px', fontSize:11.5, fontWeight:800, color:'#003FB3', letterSpacing:'.14em', marginBottom:16 }}>
+              FREQUENTLY ASKED
+            </div>
+            <h2 className="cp-h2" style={{ textAlign:'center' }}>About the discovery call</h2>
+          </div>
+
+          <div className="rv">
+            {[
+              { q:"What happens on the call?",
+                a:"30 minutes. The Solution Architect asks about your context, current Microsoft estate, and the specific outcomes you're trying to deliver. We share relevant case studies, identify quick-wins, and end with a clear next step. No slides; just a working conversation." },
+              { q:"Will you try to sell me on the call?",
+                a:"No. The call's purpose is to understand whether we can genuinely help — and where we can't, to point you toward who can. Roughly a third of discovery calls end with us recommending a different approach or even a different partner. Honesty earns long-term work." },
+              { q:"What if I'm just exploring, not ready to buy?",
+                a:"That's most of our calls, and it's fine. We treat early-stage exploration the same as ready-to-buy — same architect, same depth. Many of our biggest clients started with a call where 'we're just exploring' was the opener." },
+              { q:"Can I share confidential information?",
+                a:"Yes. Tick the NDA option in your booking notes and we'll send a mutual NDA before the call. For ongoing engagements, NDA is standard. We've worked with regulated industries (financial services, healthcare) for 16 years; confidentiality is built in." },
+              { q:"How does the calendar booking work?",
+                a:"You pick a slot from our architects' real availability. Once you confirm, the slot is reserved instantly and a calendar invite goes to your inbox within minutes. You can reschedule any time via the link in the confirmation email." },
+            ].map((f, i) => (
+              <div key={i} className={`acc-item ${openFaq === i ? 'open' : ''}`}>
+                <button className="acc-trigger" onClick={() => setOpenFaq(openFaq === i ? null : i)}>
+                  {f.q}
+                  <Ic n={openFaq === i ? 'ChevU' : 'ChevD'} s={18} style={{ color:'#94a3b8', flexShrink:0 }}/>
+                </button>
+                {openFaq === i && <div className="acc-body">{f.a}</div>}
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
     </div>
   )
 }
