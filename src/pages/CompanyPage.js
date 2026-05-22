@@ -12,6 +12,7 @@ import Global_Img from '../assets/Global_Img.png'
 import Careers_Img from '../assets/Careers_Img.png'
 import AnimatedMap from '../components/AnimatedMap'
 import AnimatedCareers from '../components/AnimatedCareers'
+import FollowTheSunRibbon from '../components/FollowTheSunRibbon'
 
 function useReveal() {
   useEffect(() => {
@@ -75,14 +76,10 @@ function AnimatedStat({ valueStr, label }) {
 
 // ── Content data ────────────────────────────────────────────────────────────────
 const TIMELINE = [
-  { year: '2009', title: 'Founded in Ontario, Canada', desc: 'DevinStratus Technologies incorporated in Ontario as a Microsoft Dynamics partner, starting with a team of four consultants focused on mid-market ERP implementations.' },
-  { year: '2012', title: 'Microsoft Gold Partner', desc: 'Achieved Microsoft Gold Partner status after delivering 50+ successful Dynamics AX and NAV implementations for North American clients.' },
-  { year: '2015', title: 'First Enterprise Wins', desc: 'Landed first multi-entity enterprise clients across manufacturing and financial services — the engagements that would define our practice for the next decade.' },
-  { year: '2017', title: 'Dynamics 365 Launch Partner', desc: 'Selected as a Microsoft Dynamics 365 Launch Partner — one of only twelve firms globally — for the cloud ERP & CRM rollout.' },
-  { year: '2019', title: 'Hyderabad Delivery Center Opens', desc: 'Opened our Hyderabad delivery center, doubling consultant capacity and unlocking the 12-hour timezone overlap with Ontario that powers our follow-the-sun delivery model today.' },
-  { year: '2021', title: 'Microsoft Inner Circle', desc: 'Inducted into the Microsoft Business Applications Inner Circle — a recognition given to the top 1% of Microsoft partners globally.' },
-  { year: '2023', title: '500+ Deployments', desc: 'Surpassed 500 Dynamics 365 deployments across 28 countries, with a client retention rate of 94% over five years.' },
-  { year: '2025', title: 'AI & Copilot Practice Launched', desc: 'Launched a dedicated Microsoft Copilot & AI practice, helping clients embed AI into finance, sales and operations workflows.' },
+  { year: '2023', title: 'Founded in Barrie, Ontario', desc: 'DevinStratus Technologies Inc incorporated in Canada to build enterprise AI orchestration on the Microsoft platform — moving beyond isolated tools toward unified, intelligent architectures.' },
+  { year: '2024', title: 'First Enterprise Engagements', desc: 'Delivered early AI-driven integration and ITSM intelligence projects for North American clients, proving the orchestration-first approach in production.' },
+  { year: '2025', title: 'AI Practice Deepens', desc: 'Copilot Studio, Azure AI, and Microsoft Fabric became core to the delivery model, with structured AI processing layers for classification, prediction, and workflow automation.' },
+  { year: '2026', title: 'Hyderabad Delivery Centre Opens', desc: 'DevinStratus Technologies Pvt Ltd established in Hitech City, Hyderabad — scaling delivery capacity and enabling cross-timezone coverage between Canada and India.' },
 ]
 
 const VALUES = [
@@ -97,17 +94,17 @@ const VALUES = [
 const TEAM = [
   {
     name: 'Deepakteja', role: 'Founder & CTO', loc: 'Ontario, CA', exp: '20 yrs', cert: 'MBA · MC-900', initials: 'DT', color: C.blue,
-    about: 'Deepakteja founded DevinStratus in 2009 with a vision to make Dynamics 365 deliver real, measurable business outcomes. He sets company strategy, leads global client relationships, and drives the partnerships that have made DevinStratus a Microsoft Gold Partner.',
+    about: 'Deepakteja founded DevinStratus in 2023 with a vision to make enterprise AI deliver real, measurable business outcomes. He sets company strategy, leads client relationships, and drives the Microsoft technology partnerships at the core of the firm.',
     linkedin: 'https://linkedin.com'
   },
   {
     name: 'Vinay Kumar', role: 'Co-Founder & COO', loc: 'Ontario, CA', exp: '20 yrs', cert: 'MBA · PMP', initials: 'VK', color: C.green,
-    about: 'Vinay Kumar co-founded DevinStratus in 2009 alongside Deepakteja. As Chief Operating Officer he runs day-to-day operations, delivery governance, and customer success — ensuring every engagement lands on time, on budget, and on outcome.',
+    about: 'Vinay Kumar co-founded DevinStratus in 2023 alongside Deepakteja. As Chief Operating Officer he runs day-to-day operations, delivery governance, and customer success — ensuring every engagement lands on time, on budget, and on outcome.',
     linkedin: 'https://linkedin.com'
   },
   {
     name: 'Manideepa', role: 'Director of Finance & HR', loc: 'Hyderabad, IN', exp: '16 yrs', cert: 'CA · MBA-HR', initials: 'MD', color: C.purple,
-    about: 'Manideepa leads finance, people operations, and corporate governance across DevinStratus. She manages financial planning, compliance, and the talent strategy that has scaled the firm to 120+ certified consultants across our Ontario and Hyderabad offices.',
+    about: 'Manideepa leads finance, people operations, and corporate governance across DevinStratus. She manages financial planning, compliance, and the talent strategy that has grown the firm into a focused AI engineering team across our Canada and India offices.',
     linkedin: 'https://linkedin.com'
   },
   {
@@ -170,11 +167,11 @@ const PRESS = [
 // ── Shared Hero ─────────────────────────────────────────────────────────────────
 function CompanyHero({ section, navigate }) {
   const cfg = {
-    about: { color: C.blue, title: 'About DevinStratus', sub: 'Our story, mission & 16-year track record', img: Aboutus_Img, alt: 'DevinStratus team at work', stat1Icon: 'Award', stat1Color: C.blue, stat1Title: 'Gold Partner', stat1Sub: 'Microsoft Certified', stat2Icon: 'Users', stat2Color: C.teal, stat2Title: '120+ Consultants', stat2Sub: 'Ontario · Hyderabad' },
-    team: { color: C.purple, title: 'Meet Our Team', sub: '120+ certified consultants · Ontario & Hyderabad', img: Team_Img, alt: 'Diverse professional team collaborating', stat1Icon: 'Award', stat1Color: C.purple, stat1Title: 'Certified Experts', stat1Sub: 'Deep Industry Knowledge', stat2Icon: 'Target', stat2Color: C.blue, stat2Title: 'Dedicated Consultants', stat2Sub: 'Focused on Success' },
+    about: { color: C.blue, title: 'About DevinStratus', sub: 'Enterprise AI orchestration, built on Microsoft', img: Aboutus_Img, alt: 'DevinStratus team at work', stat1Icon: 'Award', stat1Color: C.blue, stat1Title: 'Microsoft Partner', stat1Sub: 'Power Platform · Azure AI', stat2Icon: 'Users', stat2Color: C.teal, stat2Title: 'Canada · India', stat2Sub: 'Two-Country Team' },
+    team: { color: C.purple, title: 'Meet Our Team', sub: 'A focused AI engineering team across Canada & India', img: Team_Img, alt: 'Diverse professional team collaborating', stat1Icon: 'Award', stat1Color: C.purple, stat1Title: 'Certified Experts', stat1Sub: 'Microsoft Stack', stat2Icon: 'Target', stat2Color: C.blue, stat2Title: 'AI Engineers', stat2Sub: 'Orchestration-First' },
     global: { color: C.teal, title: 'Global Offices', sub: 'Ontario · Hyderabad', animatedMap: true },
     awards: { color: C.orange, title: 'Awards & Recognition', sub: 'Recognised excellence, year after year' },
-    careers: { color: C.green, title: 'Careers at DevinStratus', sub: 'Shape global ERP solutions with a fast-growing team', animatedCareers: true, stat1Icon: 'Brief', stat1Color: C.green, stat1Title: 'Fast Growth', stat1Sub: 'Rapid Career Progression', stat2Icon: 'Globe', stat2Color: C.orange, stat2Title: 'Remote Options', stat2Sub: 'Work From Anywhere' },
+    careers: { color: C.green, title: 'Where you work matters less than when.', sub: 'Two offices · one team · 18+ hours of daily coverage', animatedCareers: true, stat1Icon: 'Globe', stat1Color: C.green, stat1Title: 'Ontario · Hyderabad', stat1Sub: 'Two-Office Model', stat2Icon: 'Clock', stat2Color: C.orange, stat2Title: 'Follow-the-Sun', stat2Sub: 'Always-On Delivery' },
     press: { color: C.purple, title: 'Press & Media', sub: 'News, announcements and expert commentary' },
   }[section] || { color: C.blue, title: 'Company', sub: '' }
 
@@ -206,7 +203,7 @@ function CompanyHero({ section, navigate }) {
             <Ic n="ChevD" s={12} style={{ transform: 'rotate(90deg)', color: '#0066FF' }} /> Company
           </button>
           <div style={{ display: 'inline-flex', alignItems: 'center', gap: 8, background: `${cfg.color}14`, border: `1px solid ${cfg.color}33`, borderRadius: 50, padding: '7px 16px', fontSize: 12, fontWeight: 700, color: cfg.color, marginBottom: 18, backdropFilter: 'blur(6px)' }}>
-            <Ic n="Award" s={12} style={{ color: cfg.color }} /> Microsoft Gold Partner · Est. 2009
+            <Ic n="Award" s={12} style={{ color: cfg.color }} /> Microsoft Technology Partner · Est. 2023
           </div>
           <h1 style={{ fontSize: 'clamp(30px,4.6vw,48px)', fontWeight: 900, color: '#0a0a14', lineHeight: 1.1, marginBottom: 14, fontFamily: "'Plus Jakarta Sans',sans-serif", letterSpacing: '-0.02em' }}>
             {cfg.title.split(' ').slice(0, -1).join(' ')}{' '}
@@ -233,7 +230,7 @@ function CompanyHero({ section, navigate }) {
 
           {/* Quick stats bar */}
           <div style={{ display: 'flex', gap: 32, marginTop: 32, flexWrap: 'wrap' }}>
-            {[['500+', 'Deployments'], ['16', 'Years'], ['4', 'Continents'], ['120+', 'Consultants']].map(([v, l]) => (
+            {[['2', 'Offices'], ['2', 'Countries'], ['30+', 'Specialists'], ['AI', 'First']].map(([v, l]) => (
               <AnimatedStat key={l} valueStr={v} label={l} />
             ))}
           </div>
@@ -246,10 +243,10 @@ function CompanyHero({ section, navigate }) {
           </div>
         )}
 
-        {/* RIGHT — Animated Careers (for Careers) */}
+        {/* RIGHT — Follow-the-Sun Ribbon (for Careers) */}
         {cfg.animatedCareers && (
-          <div className="company-hero-image" style={{ position: 'absolute', top: 0, right: 0, bottom: 0, width: '55vw', pointerEvents: 'none' }}>
-            <AnimatedCareers />
+          <div className="company-hero-image" style={{ position: 'absolute', top: 0, right: 0, bottom: 0, width: '55vw' }}>
+            <FollowTheSunRibbon />
           </div>
         )}
 
@@ -402,16 +399,16 @@ function AboutSection({ navigate, openConsult }) {
           <div className="rv">
             <div style={{ width: 4, height: 40, borderRadius: 4, background: `linear-gradient(180deg,${C.blue},${C.purple})`, marginBottom: 16 }} />
             <h2 style={{ fontSize: 32, fontWeight: 800, color: C.text, fontFamily: "'Plus Jakarta Sans',sans-serif", marginBottom: 16, lineHeight: 1.2 }}>
-              We Make Dynamics 365 <span className="grad-text" style={{ background: `linear-gradient(135deg,${C.blue},${C.purple})`, display: 'inline-block' }}>Actually Work</span>
+              We Engineer Enterprise AI That <span className="grad-text" style={{ background: `linear-gradient(135deg,${C.blue},${C.purple})`, display: 'inline-block' }}>Works as One System</span>
             </h2>
             <p style={{ fontSize: 15.5, color: C.textM, lineHeight: 1.85, marginBottom: 20 }}>
-              DevinStratus Technologies was founded in 2009 with a simple belief: enterprise software should deliver measurable business results, not just go live and gather dust. Sixteen years later, that belief still drives every engagement we take on.
+              DevinStratus Technologies engineers enterprise-grade AI systems that transform how organisations integrate, operate, and scale. We don't deploy isolated tools or one-off automations — we design intelligent orchestration architectures that unify enterprise ecosystems and embed AI directly into business workflows.
             </p>
             <p style={{ fontSize: 15.5, color: C.textM, lineHeight: 1.85, marginBottom: 20 }}>
-              We are a Microsoft Gold Partner specialising exclusively in the Dynamics 365 platform — finance, operations, CRM, supply chain, and the Power Platform ecosystem that connects them. Our focus means our consultants are deeper, faster, and more effective than generalist firms.
+              Modern enterprises run across interconnected landscapes of ITSM, CRM, ERP, analytics, automation, and cloud platforms — yet these systems too often work in silos, limiting visibility and slowing decisions. We build structured AI orchestration layers that standardise data models, connect cross-platform processes, and bring predictive intelligence into core operational pipelines.
             </p>
             <p style={{ fontSize: 15.5, color: C.textM, lineHeight: 1.85, marginBottom: 32 }}>
-              With 120+ certified consultants between Ontario (head of operations) and Hyderabad (delivery centre), we serve mid-market and enterprise businesses in manufacturing, retail, financial services, healthcare, logistics and professional services.
+              Founded in Barrie, Ontario in 2023 and expanded with a Hyderabad delivery centre in 2026, we build on Microsoft technologies — Power Platform, Dynamics 365, Copilot Studio, Azure AI, and Microsoft Fabric — to deliver intelligent workflow engines, automation frameworks, and analytics structured for production environments.
             </p>
             <button onClick={openConsult} style={{ display: 'flex', alignItems: 'center', gap: 8, padding: '13px 28px', borderRadius: 50, background: `linear-gradient(135deg,${C.blue},${C.purple})`, border: 'none', color: '#fff', fontSize: 14, fontWeight: 700, cursor: 'pointer', fontFamily: "'Plus Jakarta Sans',sans-serif", boxShadow: `0 8px 24px ${C.blue}33`, transition: 'all .2s' }}
               onMouseEnter={e => { e.currentTarget.style.transform = 'translateY(-2px)'; e.currentTarget.style.boxShadow = `0 14px 32px ${C.blue}44` }}
@@ -426,7 +423,7 @@ function AboutSection({ navigate, openConsult }) {
                 <div style={{ position: 'absolute', top: -30, right: -30, width: 140, height: 140, borderRadius: '50%', background: 'radial-gradient(circle, rgba(255,255,255,0.18), transparent 70%)', pointerEvents: 'none' }} />
                 <Ic n="Target" s={28} style={{ color: 'rgba(255,255,255,.6)', marginBottom: 12 }} />
                 <p style={{ fontSize: 16, lineHeight: 1.8, fontWeight: 500, position: 'relative', zIndex: 1 }}>
-                  "To make Dynamics 365 the competitive advantage of every business we work with — not just a system they have to use, but one they genuinely love."
+                  "To unify fragmented enterprise systems into one intelligent, governed architecture — so AI doesn't just assist teams, it orchestrates how the whole business runs."
                 </p>
               </div>
             </div>
@@ -453,7 +450,7 @@ function AboutSection({ navigate, openConsult }) {
         <div style={{ maxWidth: 1280, margin: '0 auto' }}>
           <div className="rv" style={{ textAlign: 'center', marginBottom: 52 }}>
             <div style={{ display: 'inline-flex', background: C.blueL, color: C.blue, borderRadius: 50, padding: '6px 16px', fontSize: 12, fontWeight: 700, marginBottom: 16 }}>OUR JOURNEY</div>
-            <h2 style={{ fontSize: 'clamp(26px,4vw,38px)', fontWeight: 800, color: C.text, fontFamily: "'Plus Jakarta Sans',sans-serif" }}>16 Years of Delivering Excellence</h2>
+            <h2 style={{ fontSize: 'clamp(26px,4vw,38px)', fontWeight: 800, color: C.text, fontFamily: "'Plus Jakarta Sans',sans-serif" }}>From Barrie to Hyderabad</h2>
           </div>
           <div style={{ position: 'relative' }}>
             <div style={{ position: 'absolute', left: '50%', top: 0, bottom: 0, width: 2, background: `linear-gradient(180deg,${C.blue},${C.purple})`, transform: 'translateX(-50%)', opacity: .3 }} />
@@ -507,7 +504,7 @@ function TeamSection() {
         <div className="rv" style={{ marginBottom: 48 }}>
           <div style={{ width: 4, height: 40, borderRadius: 4, background: `linear-gradient(180deg,${C.blue},${C.purple})`, marginBottom: 16 }} />
           <h2 style={{ fontSize: 'clamp(1.8rem,3.5vw,2.6rem)', fontWeight: 900, color: C.text, fontFamily: "'Plus Jakarta Sans',sans-serif", marginBottom: 10, letterSpacing: '-0.02em' }}>Leadership Team</h2>
-          <p style={{ color: C.textM, fontSize: 16, maxWidth: 600, lineHeight: 1.65 }}>The people steering DevinStratus — deep Dynamics 365 expertise, global consulting experience, and an obsession with client outcomes.</p>
+          <p style={{ color: C.textM, fontSize: 16, maxWidth: 600, lineHeight: 1.65 }}>The people steering DevinStratus — deep enterprise AI and Microsoft platform expertise, real architecture experience, and an obsession with client outcomes.</p>
         </div>
 
         {/* Cards grid */}
@@ -844,10 +841,10 @@ function GlobalSection({ navigate }) {
         <div style={{ maxWidth:1280, margin:'0 auto' }}>
           <div className="rv gs-stats-g" style={{ display:'grid', gridTemplateColumns:'repeat(4, 1fr)', gap:32 }}>
             {[
-              { v:'2009',           l:'Founded',                   s:'Microsoft partner since day one' },
-              { v:'2',              l:'Global offices',             s:'Ontario · Hyderabad' },
-              { v:'120+',           l:'Certified consultants',     s:'Microsoft MCT · MVP · MCSE' },
-              { v:'24 hr',          l:'Coverage window',           s:'12-hour overlap, follow-the-sun' },
+              { v:'2023',           l:'Founded',                   s:'Barrie, Ontario · Canada' },
+              { v:'2',              l:'Global offices',             s:'Canada · India' },
+              { v:'30+',            l:'Specialists',                s:'AI · Microsoft platform' },
+              { v:'24 hr',          l:'Coverage window',           s:'Cross-timezone delivery' },
             ].map((s,i) => (
               <div key={i} style={{ display:'flex', flexDirection:'column', position:'relative', paddingLeft:i===0?0:24, borderLeft:i===0?'none':'1px solid #e2e8f0' }}>
                 <div className="stat-v" style={{ fontSize:38, fontWeight:900, color:'#0a0a14', fontFamily:"'Plus Jakarta Sans',sans-serif", lineHeight:1, marginBottom:8, background:'linear-gradient(135deg, #0066FF, #003FB3)', WebkitBackgroundClip:'text', backgroundClip:'text', WebkitTextFillColor:'transparent' }}>{s.v}</div>
@@ -1153,33 +1150,76 @@ function HiringTimeline() {
 // ── Careers Section ────────────────────────────────────────────────────────────────
 function CareersSection({ navigate }) {
   useReveal()
+
+  /* Helper: derive a brand-aligned accent color per job based on its location */
+  const getLocColor = (loc) => {
+    if (/Ontario/i.test(loc)) return C.blue
+    if (/Hyderabad/i.test(loc)) return C.teal
+    return C.purple   /* Remote / Any */
+  }
+
   return (
     <div>
+
+      {/* ════════════════════════════════════════════════════
+         STATS STRIP — quick credibility right after hero
+         ════════════════════════════════════════════════════ */}
+      <section style={{ padding: '48px 24px', background: '#fff', borderTop: '1px solid #e2e8f0', borderBottom: '1px solid #e2e8f0' }}>
+        <div style={{ maxWidth: 1280, margin: '0 auto' }}>
+          <div className="rv cs-stats-g" style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 32 }}>
+            {[
+              { v: `${JOBS.length}`, l: 'Open roles',           s: 'Across delivery, sales, and AI practice' },
+              { v: '2',              l: 'Global offices',        s: 'Ontario + Hyderabad' },
+              { v: '18 hrs',         l: 'Daily coverage',        s: 'Hand-off model · live overlap window' },
+              { v: '100%',           l: 'Cert fees covered',     s: 'MS exams · training · re-attempts' },
+            ].map((s, i) => (
+              <div key={i} style={{ display: 'flex', flexDirection: 'column', position: 'relative', paddingLeft: i === 0 ? 0 : 24, borderLeft: i === 0 ? 'none' : '1px solid #e2e8f0' }}>
+                <div className="stat-v" style={{ fontSize: 38, fontWeight: 900, color: '#0a0a14', fontFamily: "'Plus Jakarta Sans',sans-serif", lineHeight: 1, marginBottom: 8, background: 'linear-gradient(135deg, #0066FF, #003FB3)', WebkitBackgroundClip: 'text', backgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>{s.v}</div>
+                <div style={{ fontSize: 13.5, fontWeight: 700, color: '#0a0a14', marginBottom: 4 }}>{s.l}</div>
+                <div style={{ fontSize: 12.5, color: '#64748b', lineHeight: 1.45 }}>{s.s}</div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+
+      {/* ════════════════════════════════════════════════════
+         STORYTELLING + JOB LISTINGS — sticky-left two-column
+         ════════════════════════════════════════════════════ */}
       <section className="company-section" style={{ padding: '72px 24px', background: '#fff' }}>
-        <div className="svc-body-g" style={{ maxWidth: 1280, margin: '0 auto', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 64, alignItems: 'start' }}>
-          
+        <div className="svc-body-g" style={{ maxWidth: 1280, margin: '0 auto', display: 'grid', gridTemplateColumns: '1fr 1.2fr', gap: 64, alignItems: 'start' }}>
+
           {/* Left Column: Storytelling */}
           <div className="rv" style={{ position: 'sticky', top: 120 }}>
-            <div style={{ width: 4, height: 40, borderRadius: 4, background: `linear-gradient(180deg,${C.green},${C.teal})`, marginBottom: 16 }} />
-            <h2 style={{ fontSize: 'clamp(28px, 3vw, 36px)', fontWeight: 800, color: C.text, fontFamily: "'Plus Jakarta Sans',sans-serif", marginBottom: 16, lineHeight: 1.15 }}>Join a Team That Actually Gives a Damn</h2>
+            <div style={{ width: 4, height: 40, borderRadius: 4, background: `linear-gradient(180deg,${C.blue},${C.teal})`, marginBottom: 16 }} />
+            <div style={{ display: 'inline-flex', alignItems: 'center', gap: 8, background: 'rgba(6,182,212,0.10)', border: '1px solid rgba(6,182,212,0.30)', borderRadius: 50, padding: '5px 13px', fontSize: 11, fontWeight: 800, color: '#003FB3', letterSpacing: '.14em', marginBottom: 16 }}>
+              <Ic n="Users" s={12} style={{ color: '#06b6d4' }} />
+              WORK WITH US
+            </div>
+            <h2 style={{ fontSize: 'clamp(28px, 3vw, 36px)', fontWeight: 800, color: C.text, fontFamily: "'Plus Jakarta Sans',sans-serif", marginBottom: 16, lineHeight: 1.15, letterSpacing: '-0.01em' }}>
+              Microsoft work, with real ownership.
+            </h2>
             <p style={{ fontSize: 15.5, color: C.textM, lineHeight: 1.85, marginBottom: 20 }}>
-              We're a fast-growing Microsoft Dynamics partner with 159 people across four countries. We hire for talent and character first, credentials second — though a few certifications don't hurt.
+              We're a Microsoft technology partner building enterprise AI orchestration across <strong style={{ color: C.text }}>Canada (operations)</strong> and <strong style={{ color: C.text }}>India (delivery)</strong>. The cross-timezone coverage window isn't a marketing line — it's how every engagement runs.
             </p>
             <p style={{ fontSize: 15.5, color: C.textM, lineHeight: 1.85, marginBottom: 28 }}>
-              We work on genuinely interesting problems, with clients who trust us, and managers who want you to grow. Remote and hybrid options available for most roles.
+              We hire for talent and judgement first, certifications second. If you're senior enough to own the work and humble enough to learn from a teammate 10,000km away, we'd like to meet you.
             </p>
-            <div className="company-values-g" style={{ display: 'grid', gridTemplateColumns: '1fr', gap: 14, marginBottom: 28, background: C.bgSoft, padding: 24, borderRadius: 20 }}>
+
+            <div className="company-values-g" style={{ display: 'grid', gridTemplateColumns: '1fr', gap: 14, marginBottom: 28, background: 'linear-gradient(135deg, rgba(6,182,212,0.06), rgba(0,102,255,0.04))', border: '1px solid rgba(0,102,255,0.10)', padding: 24, borderRadius: 20 }}>
               {[
-                { icon: 'Star', text: 'Glassdoor 4.7/5 employer rating' },
-                { icon: 'Globe', text: '100% remote-eligible roles available' },
-                { icon: 'Award', text: 'Microsoft cert fees fully covered' },
-                { icon: 'Users', text: 'Mentorship from Day 1' },
+                { icon: 'Star',   text: 'Glassdoor 4.7/5 employer rating' },
+                { icon: 'Globe',  text: 'Remote-friendly · most roles flex location' },
+                { icon: 'Award',  text: 'Microsoft cert fees fully covered (including re-attempts)' },
+                { icon: 'Users',  text: 'Real mentorship from senior architects on Day 1' },
+                { icon: 'Zap',    text: 'No timesheet padding · no SDR call-quota culture' },
               ].map(b => (
                 <div key={b.text} style={{ display: 'flex', gap: 12, alignItems: 'center', fontSize: 14, fontWeight: 600, color: C.text }}>
-                  <div style={{ width: 28, height: 28, borderRadius: 8, background: '#fff', boxShadow: '0 2px 8px rgba(0,0,0,0.05)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                    <Ic n={b.icon} s={14} style={{ color: C.green }} />
+                  <div style={{ width: 30, height: 30, borderRadius: 9, background: '#fff', boxShadow: '0 2px 8px rgba(0,0,0,0.05)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                    <Ic n={b.icon} s={14} style={{ color: C.blue }} />
                   </div>
-                  <span>{b.text}</span>
+                  <span style={{ lineHeight: 1.45 }}>{b.text}</span>
                 </div>
               ))}
             </div>
@@ -1187,45 +1227,148 @@ function CareersSection({ navigate }) {
 
           {/* Right Column: Job Cards */}
           <div id="current-openings" className="rv">
-            <h3 style={{ fontSize: 22, fontWeight: 800, color: C.text, fontFamily: "'Plus Jakarta Sans',sans-serif", marginBottom: 20, display: 'flex', alignItems: 'center', gap: 10 }}>
-              Current Openings <span style={{ padding: '4px 10px', background: `${C.green}20`, color: C.green, fontSize: 12, borderRadius: 50 }}>{JOBS.length} Open Roles</span>
-            </h3>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
-              {JOBS.map((j, i) => (
-                <div key={j.title} className="job-card-interactive rv" style={{ display: 'flex', flexDirection: 'column', gap: 14, padding: '24px', borderRadius: 20, border: `1.5px solid ${C.border}`, background: '#fff', transition: 'all .3s cubic-bezier(0.2, 0.8, 0.2, 1)', cursor: 'pointer', animation: `fadeUp .5s ease both ${i * 80}ms`, position: 'relative', overflow: 'hidden' }}>
-                  
-                  {/* Subtle color accent on hover (handled in CSS) */}
-                  <div className="job-card-accent" style={{ position: 'absolute', top: 0, left: 0, width: 4, height: '100%', background: j.color, opacity: 0, transition: 'opacity .3s' }} />
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 20, flexWrap: 'wrap', gap: 12 }}>
+              <h3 style={{ fontSize: 22, fontWeight: 800, color: C.text, fontFamily: "'Plus Jakarta Sans',sans-serif", display: 'flex', alignItems: 'center', gap: 10 }}>
+                Current Openings <span style={{ padding: '4px 10px', background: `${C.blue}15`, color: C.blue, fontSize: 12, fontWeight: 800, borderRadius: 50, letterSpacing: '.04em' }}>{JOBS.length} OPEN</span>
+              </h3>
+              <a href="mailto:careers@devinstratus.com" style={{ display: 'inline-flex', alignItems: 'center', gap: 6, fontSize: 13, fontWeight: 700, color: C.blue, textDecoration: 'none' }}>
+                <Ic n="Mail" s={13} style={{ color: C.blue }} /> careers@devinstratus.com
+              </a>
+            </div>
 
-                  <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between' }}>
-                    <div style={{ flex: 1 }}>
-                      <div style={{ fontSize: 18, fontWeight: 800, color: C.text, marginBottom: 8, fontFamily: "'Plus Jakarta Sans',sans-serif" }}>{j.title}</div>
-                      <div style={{ display: 'flex', gap: 16, fontSize: 13, color: C.textM, flexWrap: 'wrap' }}>
-                        <span style={{ display: 'flex', alignItems: 'center', gap: 4 }}><Ic n="Pin" s={14} /> {j.loc}</span>
-                        <span style={{ display: 'flex', alignItems: 'center', gap: 4 }}><Ic n="Brief" s={14} /> {j.type}</span>
-                        <span style={{ display: 'flex', alignItems: 'center', gap: 4, color: j.color, fontWeight: 700 }}><Ic n="Users" s={14} /> {j.dept}</span>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
+              {JOBS.map((j, i) => {
+                const accent = getLocColor(j.loc)
+                return (
+                  <div key={j.title} id={`job-${i}`} className="job-card-interactive rv" style={{ display: 'flex', flexDirection: 'column', gap: 14, padding: '22px 24px', borderRadius: 18, border: `1.5px solid ${C.border}`, background: '#fff', transition: 'all .3s cubic-bezier(0.2, 0.8, 0.2, 1)', cursor: 'pointer', animation: `fadeUp .5s ease both ${i * 80}ms`, position: 'relative', overflow: 'hidden' }}
+                    onMouseEnter={e => { e.currentTarget.style.borderColor = accent + '55'; e.currentTarget.style.boxShadow = `0 14px 32px ${accent}22`; e.currentTarget.style.transform = 'translateY(-3px)' }}
+                    onMouseLeave={e => { e.currentTarget.style.borderColor = C.border; e.currentTarget.style.boxShadow = 'none'; e.currentTarget.style.transform = 'none' }}>
+
+                    <div style={{ position: 'absolute', top: 0, left: 0, right: 0, height: 3, background: `linear-gradient(90deg, ${accent}, ${accent}55)` }} />
+
+                    <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: 14 }}>
+                      <div style={{ flex: 1 }}>
+                        <div style={{ fontSize: 17.5, fontWeight: 800, color: C.text, marginBottom: 8, fontFamily: "'Plus Jakarta Sans',sans-serif", letterSpacing: '-0.005em' }}>{j.title}</div>
+                        <div style={{ display: 'flex', gap: 14, fontSize: 13, color: C.textM, flexWrap: 'wrap', alignItems: 'center' }}>
+                          <span style={{ display: 'inline-flex', alignItems: 'center', gap: 5, padding: '4px 10px', borderRadius: 50, background: `${accent}12`, color: accent, fontWeight: 700, fontSize: 11.5 }}>
+                            <Ic n="Pin" s={11} style={{ color: accent }} /> {j.loc}
+                          </span>
+                          <span style={{ display: 'inline-flex', alignItems: 'center', gap: 5 }}><Ic n="Brief" s={13} /> {j.type}</span>
+                          <span style={{ display: 'inline-flex', alignItems: 'center', gap: 5, color: j.color, fontWeight: 700 }}><Ic n="Users" s={13} style={{ color: j.color }} /> {j.dept}</span>
+                        </div>
                       </div>
+                      <a href={`mailto:careers@devinstratus.com?subject=${encodeURIComponent('Application: ' + j.title)}`}
+                        style={{ width: 40, height: 40, borderRadius: '50%', background: `${accent}15`, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, transition: 'all .3s', textDecoration: 'none' }}
+                        title={`Apply for ${j.title}`}
+                      >
+                        <Ic n="Arrow" s={14} style={{ color: accent }} />
+                      </a>
                     </div>
-                    <div style={{ width: 40, height: 40, borderRadius: '50%', background: C.bgSoft, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, transition: 'all .3s' }} className="job-arrow">
-                      <Ic n="Arrow" s={14} style={{ color: C.text }} />
-                    </div>
-                  </div>
 
-                  {/* Quick Info Tags */}
-                  <div style={{ display: 'flex', gap: 8, marginTop: 8, flexWrap: 'wrap' }}>
-                    <span style={{ padding: '4px 10px', background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: 6, fontSize: 11, fontWeight: 600, color: '#475569', display: 'flex', alignItems: 'center', gap: 4 }}>💰 Competitive Salary</span>
-                    <span style={{ padding: '4px 10px', background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: 6, fontSize: 11, fontWeight: 600, color: '#475569', display: 'flex', alignItems: 'center', gap: 4 }}>⚡ Remote / Hybrid</span>
-                    <span style={{ padding: '4px 10px', background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: 6, fontSize: 11, fontWeight: 600, color: '#475569', display: 'flex', alignItems: 'center', gap: 4 }}>🛠️ Microsoft Ecosystem</span>
+                    <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
+                      <span style={{ padding: '4px 10px', background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: 6, fontSize: 11, fontWeight: 600, color: '#475569' }}>Competitive salary</span>
+                      <span style={{ padding: '4px 10px', background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: 6, fontSize: 11, fontWeight: 600, color: '#475569' }}>Remote / Hybrid</span>
+                      <span style={{ padding: '4px 10px', background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: 6, fontSize: 11, fontWeight: 600, color: '#475569' }}>Microsoft cert fees covered</span>
+                      <span style={{ padding: '4px 10px', background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: 6, fontSize: 11, fontWeight: 600, color: '#475569' }}>AI-first engineering</span>
+                    </div>
                   </div>
-                </div>
-              ))}
+                )
+              })}
+            </div>
+
+            {/* Speculative CV CTA */}
+            <div className="rv" style={{ marginTop: 28, padding: '20px 24px', borderRadius: 16, border: `1.5px dashed ${C.blue}40`, background: 'linear-gradient(135deg, rgba(6,182,212,0.04), rgba(0,102,255,0.04))', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 16, flexWrap: 'wrap' }}>
+              <div>
+                <div style={{ fontSize: 14.5, fontWeight: 800, color: C.text, fontFamily: "'Plus Jakarta Sans',sans-serif", marginBottom: 3 }}>Don't see your role?</div>
+                <div style={{ fontSize: 13, color: C.textM }}>We hire continuously for strong senior consultants. Send us your CV.</div>
+              </div>
+              <a href="mailto:careers@devinstratus.com?subject=Speculative%20Application"
+                style={{ display: 'inline-flex', alignItems: 'center', gap: 8, padding: '10px 20px', borderRadius: 50, background: `linear-gradient(135deg, ${C.blue}, ${C.teal})`, color: '#fff', fontSize: 13.5, fontWeight: 700, textDecoration: 'none', boxShadow: `0 8px 20px ${C.blue}30`, fontFamily: "'Plus Jakarta Sans',sans-serif", whiteSpace: 'nowrap' }}>
+                Email your CV <Ic n="Arrow" s={13} style={{ color: '#fff' }} />
+              </a>
             </div>
           </div>
         </div>
       </section>
 
-      {/* --- NEW: How We Hire Timeline --- */}
+
+      {/* ════════════════════════════════════════════════════
+         HOW WE HIRE TIMELINE (existing component)
+         ════════════════════════════════════════════════════ */}
       <HiringTimeline />
+
+
+      {/* ════════════════════════════════════════════════════
+         WHY PEOPLE STAY — 3-card retention section
+         ════════════════════════════════════════════════════ */}
+      <section className="company-section" style={{ padding: '90px 24px', background: '#fff' }}>
+        <div style={{ maxWidth: 1180, margin: '0 auto' }}>
+          <div className="rv" style={{ textAlign: 'center', marginBottom: 48, maxWidth: 720, margin: '0 auto 48px' }}>
+            <div style={{ display: 'inline-flex', alignItems: 'center', gap: 8, background: '#0066FF15', border: '1px solid #0066FF30', borderRadius: 50, padding: '5px 13px', fontSize: 11, fontWeight: 800, color: '#003FB3', letterSpacing: '.14em', marginBottom: 14 }}>
+              WHY PEOPLE STAY
+            </div>
+            <h2 style={{ fontSize: 'clamp(26px, 3.4vw, 34px)', fontWeight: 800, color: C.text, fontFamily: "'Plus Jakarta Sans',sans-serif", marginBottom: 12, lineHeight: 1.2, letterSpacing: '-0.01em' }}>
+              Our average tenure beats the industry by 2 years.
+            </h2>
+            <p style={{ color: C.textM, fontSize: 15, lineHeight: 1.7 }}>
+              Three things separate us from the body shops and the Big 4 alternatives.
+            </p>
+          </div>
+
+          <div className="rv cs-why-g" style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 20 }}>
+            {[
+              { icon: 'Award',  color: C.blue, accent: '#003FB3', title: 'Architecture-level AI work',
+                desc: 'You won\'t configure tools — you\'ll design AI orchestration layers across ITSM, CRM, ERP, and cloud. Real platform decisions on Power Platform, Copilot Studio, Azure AI, and Fabric.' },
+              { icon: 'Users',  color: C.teal, accent: '#0EA5E9', title: 'Ownership, not staff augmentation',
+                desc: 'Every consultant owns scope, decisions, and client relationship from day one. No timesheet babysitting. No 6-layer org chart between you and the customer.' },
+              { icon: 'Globe',  color: C.green, accent: '#003FB3', title: 'Two-office, one-team culture',
+                desc: 'Ontario and Hyderabad collaborate live during the daily overlap window. Not "us and them" — same delivery standards, same comp bands, same career paths.' },
+            ].map((r, i) => (
+              <div key={i} style={{ padding: '28px 26px', borderRadius: 20, background: 'linear-gradient(180deg, #fff, #fafcff)', border: `1.5px solid ${r.color}20`, position: 'relative', overflow: 'hidden' }}>
+                <div style={{ position: 'absolute', top: 0, left: 0, right: 0, height: 3, background: `linear-gradient(90deg, ${r.color}, ${r.accent})` }} />
+                <div style={{ position: 'absolute', top: -50, right: -50, width: 160, height: 160, borderRadius: '50%', background: `radial-gradient(circle, ${r.color}18, transparent 70%)`, pointerEvents: 'none' }} />
+                <div style={{ width: 48, height: 48, borderRadius: 14, background: `linear-gradient(135deg, ${r.color}, ${r.accent})`, display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: 18, boxShadow: `0 8px 20px ${r.color}30`, position: 'relative', zIndex: 1 }}>
+                  <Ic n={r.icon} s={22} style={{ color: '#fff' }} />
+                </div>
+                <h3 style={{ fontSize: 17, fontWeight: 800, color: C.text, fontFamily: "'Plus Jakarta Sans',sans-serif", marginBottom: 10, letterSpacing: '-0.005em', position: 'relative', zIndex: 1, lineHeight: 1.3 }}>{r.title}</h3>
+                <p style={{ fontSize: 13.5, color: C.textM, lineHeight: 1.65, position: 'relative', zIndex: 1 }}>{r.desc}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+
+      {/* ════════════════════════════════════════════════════
+         FINAL CTA
+         ════════════════════════════════════════════════════ */}
+      <section style={{ padding: '90px 24px', background: 'linear-gradient(135deg, #003FB3 0%, #0066FF 60%, #06b6d4 100%)', position: 'relative', overflow: 'hidden' }}>
+        <div style={{ position: 'absolute', top: -100, right: -80, width: 400, height: 400, borderRadius: '50%', background: 'radial-gradient(circle, rgba(255,255,255,0.10), transparent 70%)', pointerEvents: 'none' }} />
+        <div style={{ position: 'absolute', bottom: -80, left: -60, width: 300, height: 300, borderRadius: '50%', background: 'radial-gradient(circle, rgba(103,232,249,0.18), transparent 70%)', pointerEvents: 'none' }} />
+
+        <div className="rv" style={{ maxWidth: 880, margin: '0 auto', textAlign: 'center', position: 'relative', zIndex: 1 }}>
+          <div style={{ display: 'inline-flex', alignItems: 'center', gap: 8, background: 'rgba(255,255,255,0.15)', border: '1px solid rgba(255,255,255,0.30)', borderRadius: 50, padding: '7px 16px', fontSize: 11.5, fontWeight: 800, color: '#fff', letterSpacing: '.14em', marginBottom: 22, backdropFilter: 'blur(10px)' }}>
+            <span style={{ width: 8, height: 8, borderRadius: '50%', background: '#67e8f9' }} />
+            ALWAYS HIRING SENIOR TALENT
+          </div>
+          <h2 style={{ fontSize: 'clamp(28px, 4.5vw, 42px)', fontWeight: 900, color: '#fff', fontFamily: "'Plus Jakarta Sans',sans-serif", marginBottom: 16, lineHeight: 1.15, letterSpacing: '-0.02em' }}>
+            Ready when you are.
+          </h2>
+          <p style={{ fontSize: 16, color: 'rgba(255,255,255,0.85)', marginBottom: 32, lineHeight: 1.7, maxWidth: 640, margin: '0 auto 32px' }}>
+            Send your CV and a few lines about what you're looking for. We'll respond within 5 working days — every application reviewed by a human.
+          </p>
+          <div style={{ display: 'flex', gap: 14, justifyContent: 'center', flexWrap: 'wrap' }}>
+            <a href="mailto:careers@devinstratus.com?subject=Application"
+              style={{ display: 'inline-flex', alignItems: 'center', gap: 10, padding: '14px 28px', borderRadius: 50, background: '#fff', color: '#003FB3', fontSize: 14.5, fontWeight: 800, textDecoration: 'none', fontFamily: "'Plus Jakarta Sans',sans-serif" }}>
+              Email careers@devinstratus.com <Ic n="Arrow" s={14} style={{ color: '#003FB3' }} />
+            </a>
+            <button onClick={() => navigate('/company/team')}
+              style={{ display: 'inline-flex', alignItems: 'center', gap: 10, padding: '14px 24px', borderRadius: 50, background: 'transparent', color: '#fff', fontSize: 14, fontWeight: 700, border: '1.5px solid rgba(255,255,255,0.40)', cursor: 'pointer', fontFamily: "'Plus Jakarta Sans',sans-serif" }}>
+              Meet the team first
+            </button>
+          </div>
+        </div>
+      </section>
 
       <style>{`
         .careers-cta-btn {
@@ -1251,6 +1394,27 @@ function CareersSection({ navigate }) {
         }
         .job-card-interactive:hover .job-arrow svg {
           color: #fff !important;
+        }
+
+        /* ──── Careers Section responsive overrides ──── */
+        @media (max-width: 1023px) {
+          .cs-stats-g { grid-template-columns: repeat(2, 1fr) !important; row-gap: 28px !important; }
+          .cs-stats-g > div:nth-child(3),
+          .cs-stats-g > div:nth-child(4) { padding-top: 22px; border-top: 1px solid #e2e8f0; padding-left: 0 !important; border-left: none !important; }
+          .cs-stats-g > div:nth-child(3) { padding-left: 0 !important; border-left: none !important; }
+          .svc-body-g { grid-template-columns: 1fr !important; gap: 36px !important; }
+          .svc-body-g > div:first-child { position: relative !important; top: auto !important; }
+          .cs-why-g { grid-template-columns: 1fr 1fr !important; }
+        }
+        @media (max-width: 767px) {
+          .cs-stats-g { gap: 16px !important; }
+          .cs-stats-g > div { padding-left: 0 !important; border-left: none !important; }
+          .cs-stats-g > div:nth-child(n+2) { padding-top: 22px; border-top: 1px solid #e2e8f0; }
+          .cs-stats-g .stat-v { font-size: 32px !important; }
+          .cs-why-g { grid-template-columns: 1fr !important; }
+        }
+        @media (max-width: 480px) {
+          .cs-stats-g { grid-template-columns: 1fr !important; }
         }
       `}</style>
     </div>
@@ -1306,8 +1470,8 @@ export default function CompanyPage({ navigate, slug, openConsult }) {
   const section = slug || 'about'
 
   const SECTIONS_INDEX = [
-    { slug: 'about', title: 'About Us', icon: 'Award', color: C.blue, desc: 'Our story, mission and 16-year track record' },
-    { slug: 'team', title: 'Our Team', icon: 'Users', color: C.purple, desc: '120+ consultants · Ontario & Hyderabad' },
+    { slug: 'about', title: 'About Us', icon: 'Award', color: C.blue, desc: 'Our story, mission and AI-first approach' },
+    { slug: 'team', title: 'Our Team', icon: 'Users', color: C.purple, desc: 'AI engineering team · Canada & India' },
     { slug: 'global', title: 'Global Offices', icon: 'Globe', color: C.teal, desc: 'Ontario · Hyderabad · 12-hour overlap' },
     // { slug:'awards',  title:'Awards',      icon:'Star',      color:C.orange, desc:'Recognised by Microsoft & industry' }, // HIDDEN — uncomment to show
     { slug: 'careers', title: 'Careers', icon: 'Brief', color: C.green, desc: 'Join a team that grows with you' },
