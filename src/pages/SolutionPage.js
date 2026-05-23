@@ -193,7 +193,7 @@ export default function SolutionPage({ categorySlug, itemSlug, navigate, openCon
               <div style={{ background:category.color+'12', border:`1px solid ${category.color}28`, borderRadius:12, padding:'13px 16px', display:'flex', alignItems:'center', gap:10 }}>
                 <Ic n="CheckCircle" s={18} style={{ color:category.color, flexShrink:0 }}/>
                 <div style={{ fontSize:12.5, color:category.color, fontWeight:700, lineHeight:1.4 }}>
-                  Delivered by Microsoft Inner Circle consultants
+                  Delivered by Microsoft-certified engineers
                 </div>
               </div>
             </div>

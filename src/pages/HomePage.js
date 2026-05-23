@@ -5,7 +5,7 @@
 // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 import { useState, useEffect, useRef } from 'react'
 import { C, Ic } from '../components/ui'
-import { SOLUTIONS, SERVICES } from '../data/content'
+import { SOLUTIONS } from '../data/content'
 
 /* ── global styles injected once ─────────────────────── */
 const STYLES = `
@@ -707,13 +707,13 @@ function Solutions({ navigate, openConsult }) {
         {/* ── Section header ────────────────────────────────────────────── */}
         <div className="ds-section-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: 56, flexWrap: 'wrap', gap: 20 }}>
           <div style={{ maxWidth: 760 }}>
-            <div style={{ fontSize: 11, fontWeight: 800, letterSpacing: '.18em', color: '#0066FF', marginBottom: 12, textTransform: 'uppercase' }}>ENTERPRISE SOLUTIONS · INNER CIRCLE PARTNER</div>
+            <div style={{ fontSize: 11, fontWeight: 800, letterSpacing: '.18em', color: '#0066FF', marginBottom: 12, textTransform: 'uppercase' }}>ENTERPRISE SOLUTIONS · MICROSOFT-CERTIFIED TEAM</div>
             <h2 style={{ fontSize: 'clamp(1.8rem,3.5vw,2.8rem)', fontWeight: 900, color: '#0f172a', fontFamily: "'Plus Jakarta Sans',sans-serif", lineHeight: 1.15, margin: 0 }}>
               30 enterprise capabilities,<br />
               <span className="grad-text" style={{ background: 'linear-gradient(135deg,#0066FF,#003FB3)' }}>engineered on Microsoft.</span>
             </h2>
             <p style={{ fontSize: 15.5, color: '#475569', lineHeight: 1.65, marginTop: 18, maxWidth: 640 }}>
-              From AI and automation to data and modern workplace — every capability is grounded in your Microsoft estate and delivered by Inner Circle consultants. <span style={{ color: '#0a0a14', fontWeight: 600 }}>350+ implementations · 96% on-time · zero failed projects.</span>
+              From AI and automation to data and modern workplace — every capability is grounded in your Microsoft estate and delivered by a Microsoft-certified engineering team. <span style={{ color: '#0a0a14', fontWeight: 600 }}>AI orchestration · structured delivery · enterprise-grade from day one.</span>
             </p>
           </div>
           <button className="ds-view-all-btn" onClick={() => navigate('/solutions')} style={{ display: 'flex', alignItems: 'center', gap: 8, padding: '12px 24px', borderRadius: 50, background: '#f8fafc', border: '1.5px solid #e2e8f0', color: '#475569', fontSize: 14, fontWeight: 700, cursor: 'pointer', transition: 'all .2s', whiteSpace: 'nowrap' }}

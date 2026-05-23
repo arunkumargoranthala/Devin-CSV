@@ -684,12 +684,12 @@ export const SOLUTIONS = [
       {
         slug:"dynamics-365-solutions", n:"Package", t:"Dynamics 365 Solutions",
         d:"Sales, Service, Finance, Supply Chain on D365",
-        hero:"Full Dynamics 365 implementations across Sales, Customer Service, Finance, Supply Chain, Field Service, and Commerce. Microsoft Inner Circle partner with 350+ enterprise implementations delivered. UK, US, Canada, and India delivery teams covering the full project lifecycle — from discovery to managed support.",
+        hero:"Full Dynamics 365 implementations across Sales, Customer Service, Finance, Supply Chain, Field Service, and Commerce. A Microsoft-certified engineering team covering the full project lifecycle — from discovery to managed support — with delivery across Canada and India.",
         problem:"Dynamics 365 implementations done badly become multi-million failures. Done well, they become competitive advantages. Methodology, tenure, and Microsoft alignment matter — and we have all three.",
         capabilities:[
           { n:"Layers",    t:"All D365 modules",              d:"Sales, Customer Service, Field Service, Marketing, Finance, Supply Chain, Commerce, Business Central, Project Operations." },
           { n:"Users",     t:"Certified consultants",         d:"100+ Microsoft-certified consultants — including functional, technical, architecture, and integration specialists." },
-          { n:"Shield",    t:"Proven methodology",            d:"Our 5-phase methodology (Discover, Design, Build, Validate, Deploy) has delivered 350+ successful go-lives with 96% on-time rate." },
+          { n:"Shield",    t:"Proven methodology",            d:"A clear 5-phase methodology — Discover, Design, Build, Validate, Deploy — for structured, on-time delivery with no surprises." },
           { n:"Globe",     t:"Multi-country delivery",        d:"On-site and remote teams in UK, US, Canada, India — supporting complex multi-country, multi-currency rollouts." },
         ],
         features:[
@@ -704,10 +704,10 @@ export const SOLUTIONS = [
         ],
         microsoftStack:["Dynamics 365 (full suite)","Power Platform","Azure Integration Services","Microsoft Dataverse","Microsoft Fabric"],
         benefits:[
-          {v:"350+",u:"",l:"D365 implementations delivered"},
-          {v:"96%",u:"",l:"On-time go-live rate"},
-          {v:"Inner Circle",u:"",l:"MS Partner (top 1%)"},
-          {v:"4 regions",u:"",l:"Global delivery"},
+          {v:"6",u:"",l:"Microsoft certifications"},
+          {v:"AI",u:"-first",l:"Orchestration by design"},
+          {v:"2",u:"",l:"Delivery countries (CA · IN)"},
+          {v:"2023",u:"",l:"Founded — and growing"},
         ],
         useCases:[
           "Enterprises moving off Salesforce, SAP, Oracle, or legacy systems",
@@ -1522,61 +1522,3 @@ export const SOLUTIONS = [
 ]
 
 
-/* ════════════════════════════════════════════════════════════════════════════
- *  SERVICES — unchanged in Phase 1; will be revisited when we tackle the
- *  Services nav item. Kept here so Footer, Header, and Service pages
- *  continue to render.
- * ════════════════════════════════════════════════════════════════════════════ */
-
-export const SERVICES = [
-  {
-    slug:"implementation", n:"Rocket", t:"D365 Implementation", color:C.blue, bg:C.blueL,
-    tagline:"Your go-live, done right — on time and on budget",
-    overview:"We've delivered 350+ Dynamics 365 implementations across every module and industry. Our proven 5-phase methodology eliminates the surprises that derail most ERP and CRM projects.",
-    features:["Detailed fit-gap analysis & scoping","Phased project plan with clear milestones","Dedicated project manager & solution architect","Full data migration & validation","User acceptance testing (UAT) management","Hypercare support post go-live","Change management & communications plan","Executive steering committee cadence"],
-    process:["Discovery & scoping (Weeks 1–2)","Solution design & client sign-off (Weeks 3–4)","Build, configure & integrate (Weeks 5–10)","Test, train & validate (Weeks 11–13)","Go-live & hypercare (Weeks 14–16)"],
-    stats:[{v:"350+",l:"Implementations delivered"},{v:"96%",l:"On-time go-live rate"},{v:"6–16",l:"Typical weeks to go-live"},{v:"Zero",l:"Failed implementations"}],
-    testimonial:{q:"Go-live was seamless. The team was there on the day and the week after. We were up and running without a single day of downtime.",name:"Sarah Mitchell",role:"CFO, Ashford Manufacturing"},
-    faq:[{q:"What size of business do you implement for?",a:"We work with businesses from 20 to 2,000+ users — from first-time ERP adopters to enterprises replacing SAP or Oracle."},{q:"What if our requirements change during the project?",a:"We use an agile delivery approach with sprint reviews, so scope changes are managed transparently with no surprise costs."},{q:"Do you provide post go-live support?",a:"Yes — all implementations include a hypercare period and we offer ongoing managed support packages to continue supporting your team."}],
-  },
-  {
-    slug:"upgrade-migration", n:"Layers", t:"Upgrade & Migration", color:C.purple, bg:C.purpleL,
-    tagline:"Move from NAV, AX, GP or any legacy ERP — without the risk",
-    overview:"Whether you're on Dynamics NAV, AX, GP or a completely different ERP, we migrate your data, customisations and workflows to modern Dynamics 365 — preserving what works and improving what doesn't.",
-    features:["Legacy system audit & full assessment","Data cleansing & transformation plan","Customisation re-evaluation & rebuild","Parallel running period support","Full historical data migration","User retraining & change management","Business process reengineering where needed","Post-migration optimisation sprint"],
-    process:["Legacy audit & gap analysis (Week 1)","Migration strategy & design (Weeks 2–3)","Data extraction, cleanse & map (Weeks 4–6)","Configure, build & test (Weeks 7–10)","Cutover planning & go-live (Weeks 11–12)"],
-    stats:[{v:"200+",l:"Migrations completed"},{v:"100%",l:"Data integrity guaranteed"},{v:"Zero",l:"Business interruptions"},{v:"All versions",l:"NAV/AX/GP supported"}],
-    testimonial:{q:"We moved from Dynamics NAV 2013 to Business Central in 10 weeks. The data migration was flawless — not a single record lost.",name:"Raj Patel",role:"IT Director, PrimeLine Distribution"},
-    faq:[{q:"Can you migrate from non-Microsoft ERP systems?",a:"Yes — we've migrated from SAP, Sage, Epicor, SYSPRO, NetSuite and many others. Our data migration tooling handles most source formats."},{q:"How do you handle customisations from our old system?",a:"We audit every customisation, advise on what standard D365 functionality now covers, and rebuild or replace only what's genuinely needed."},{q:"Is there downtime during the migration?",a:"We run a parallel period so the business continues on the old system until we're 100% confident. Cutover is typically done over a weekend."}],
-  },
-  {
-    slug:"customisation", n:"Settings", t:"Customisation & Development", color:C.teal, bg:C.tealL,
-    tagline:"Extend Dynamics 365 to work exactly the way your business does",
-    overview:"When standard functionality doesn't go far enough, our development team builds exactly what you need — using Microsoft's best-practice extension framework so your upgrades are never blocked.",
-    features:["Custom module development (AL / X++)","Business Central & F&SCM extensions","Power Platform custom connectors","API integrations & middleware build","Custom reporting & SSRS / RDLC","ISV solution customisation","Mobile app development (Power Apps)","Performance optimisation & refactoring"],
-    process:["Requirements capture & user stories (Week 1)","Technical design & architecture (Week 2)","Development sprints with demos (Weeks 3–8)","QA, regression & UAT (Weeks 9–10)","Deployment, documentation & handover (Week 11)"],
-    stats:[{v:"500+",l:"Custom solutions built"},{v:"Zero",l:"Upgrade-blocking customisations"},{v:"100%",l:"Documented & supported"},{v:"48hrs",l:"Typical bug-fix turnaround"}],
-    testimonial:{q:"They built a completely bespoke manufacturing module that integrated with our production line. It's been running without issues for 3 years.",name:"James Whitmore",role:"Operations Director, Crestwood Manufacturing"},
-    faq:[{q:"Will customisations block future Microsoft updates?",a:"No — all our development follows Microsoft's extension-based model (AL for BC, X++ for F&SCM), which is upgrade-safe by design."},{q:"Do you provide documentation for custom code?",a:"Yes — every piece of custom code is documented, and we provide a developer handover pack so your team or any future partner can maintain it."},{q:"Can you take over customisations built by another partner?",a:"Yes — we assess and take over third-party code regularly. We'll be honest about quality and advise on the most cost-effective approach."}],
-  },
-  {
-    slug:"integration", n:"Globe", t:"Integration Services", color:C.orange, bg:C.orangeL,
-    tagline:"Connect Dynamics 365 to every system in your business",
-    overview:"Your Dynamics 365 should talk to your entire technology stack. We design, build and support integrations with any system — from legacy ERP to modern SaaS — using Azure Integration Services.",
-    features:["Azure Logic Apps & Service Bus architecture","Azure API Management & custom APIs","REST & SOAP API development","EDI & 3PL logistics integration","E-commerce integration (Shopify, WooCommerce)","Payroll & HR system connectors","Legacy system bridges","Real-time & batch integration patterns"],
-    process:["Integration assessment & mapping (Week 1)","Architecture design & approval (Weeks 2–3)","Development (Weeks 4–8)","Testing, monitoring & alerting setup (Weeks 9–10)","Deployment & runbook documentation (Week 11)"],
-    stats:[{v:"1,000+",l:"Integrations built"},{v:"500+",l:"Third-party systems connected"},{v:"Real-time",l:"Data synchronisation"},{v:"99.95%",l:"Integration uptime"}],
-    testimonial:{q:"They integrated our D365 with our 3PL, our Shopify store, and our legacy payroll system. Everything talks to everything now.",name:"Emma Clarke",role:"CTO, NovaTel Retail"},
-    faq:[{q:"What's your preferred integration platform?",a:"Azure Integration Services (Logic Apps, Service Bus, API Management) for most scenarios — it's enterprise-grade, scalable and Microsoft-native."},{q:"Can you integrate with very old legacy systems with no API?",a:"Yes — for systems with no modern API, we use file-based integration (SFTP, flat files) or RPA via Power Automate Desktop to automate interactions."},{q:"What monitoring do you put in place?",a:"All integrations include Azure Monitor alerting, dead-letter queue handling, retry logic and a runbook so issues can be diagnosed and resolved quickly."}],
-  },
-  {
-    slug:"managed-support", n:"LifeBuoy", t:"Managed Support", color:C.green, bg:C.greenL,
-    tagline:"A named expert, not a ticket queue",
-    overview:"SLA-backed managed support with consultants who know your system — proactive monitoring, rapid incident response and regular optimisation sessions to keep your Dynamics 365 at peak performance.",
-    features:["24/7 incident monitoring & alerting","Named support consultant (not a call centre)","SLA-backed response (1hr critical, 4hr standard)","Proactive system health monitoring","Monthly optimisation & review sessions","D365 update testing & safe deployment","User query & ad-hoc training support","Licence management advisory"],
-    process:["System onboarding & documentation (Week 1)","Monitoring & alerting setup (Week 2)","First monthly optimisation review (Week 4)","Ongoing monthly reviews & quarterly business reviews","Annual licence, roadmap & renewal review"],
-    stats:[{v:"1hr",l:"Critical incident SLA"},{v:"99.9%",l:"Client system uptime"},{v:"4.9★",l:"Average support rating"},{v:"Named",l:"Consultant, not a queue"}],
-    testimonial:{q:"Having a named consultant who knows our system is worth everything. They spotted a performance issue before we even noticed it.",name:"David Chen",role:"Finance Director, BluePeak Group"},
-    faq:[{q:"What's included in the monthly support?",a:"Proactive monitoring, SLA-backed incident response, monthly review calls, user query support, and update testing. Ad-hoc development hours are available as an add-on."},{q:"Is there a minimum contract term?",a:"We prefer 12-month terms to build proper knowledge of your system, but we offer flexible arrangements for businesses with short-term needs."},{q:"What happens when Microsoft releases updates?",a:"We test all major updates in your sandbox environment before they go to production, and we manage the deployment to minimise any disruption."}],
-  },
-]

@@ -36,7 +36,7 @@ export default function Footer({ navigate, openConsult }) {
           <div style={{ position:'absolute', bottom:-30, left:120, width:160, height:160, borderRadius:'50%', background:'radial-gradient(circle, rgba(255,255,255,.12), transparent 70%)', filter:'blur(20px)', pointerEvents:'none' }}/>
           <div style={{ position:'relative', zIndex:1, minWidth:0, flex:'1 1 280px', color:'#fff' }}>
             <div style={{ fontSize:28, fontWeight:800, fontFamily:"'Plus Jakarta Sans',sans-serif", marginBottom:8, lineHeight:1.2 }}>Ready to transform your business?</div>
-            <div style={{ fontSize:15, opacity:.85, lineHeight:1.65, maxWidth:480 }}>Join 350+ businesses who chose DevinStratus for their Dynamics 365 journey.</div>
+            <div style={{ fontSize:15, opacity:.85, lineHeight:1.65, maxWidth:480 }}>Engineering enterprise AI orchestration on Microsoft — from Canada and India.</div>
           </div>
           <div className="foot-cta-buttons" style={{ display:'flex', gap:12, position:'relative', zIndex:1, flexWrap:'wrap' }}>
             <button onClick={openConsult} style={{ padding:'14px 28px', borderRadius:50, background:'#fff', color:'#003FB3', border:'none', fontSize:14, fontWeight:700, cursor:'pointer', fontFamily:"'Plus Jakarta Sans',sans-serif", transition:'all .2s', whiteSpace:'nowrap', boxShadow:'0 8px 20px rgba(0,0,0,0.15)' }}

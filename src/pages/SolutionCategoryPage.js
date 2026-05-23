@@ -153,7 +153,7 @@ export default function SolutionCategoryPage({ categorySlug, navigate, openConsu
               <div className="cat-trust-pills" style={{ display:'flex', flexWrap:'wrap', gap:10, marginBottom:30 }}>
                 {[
                   `${category.items.length} solutions in this category`,
-                  'Inner Circle Partner',
+                  'Microsoft-certified team',
                   'Microsoft-native delivery',
                 ].map((t,i) => (
                   <div key={i} style={{ display:'inline-flex', alignItems:'center', gap:7, padding:'7px 14px', borderRadius:50, background:'rgba(255,255,255,0.65)', border:'1px solid rgba(0,102,255,0.18)', backdropFilter:'blur(10px)', fontSize:12.5, fontWeight:700, color:'#0a0a14' }}>
@@ -190,9 +190,9 @@ export default function SolutionCategoryPage({ categorySlug, navigate, openConsu
           <div className="rv cat-stats-g" style={{ display:'grid', gridTemplateColumns:'repeat(4, 1fr)', gap:32 }}>
             {[
               { v:category.items.length, l:'Solutions in this category',  s:'Fully scoped & priced' },
-              { v:'350+',                  l:'Implementations delivered',   s:'Across all platforms' },
-              { v:'96%',                   l:'On-time go-live',              s:'Track record' },
-              { v:'4',                     l:'Delivery regions',             s:'UK · US · CA · IN' },
+              { v:'6',                     l:'Microsoft certifications',    s:'AI · data · identity' },
+              { v:'AI',                    l:'Orchestration-first',         s:'Beyond point tooling' },
+              { v:'2',                     l:'Delivery countries',          s:'Canada · India' },
             ].map((s,i) => (
               <div key={i} style={{ display:'flex', flexDirection:'column', position:'relative', paddingLeft:i===0?0:24, borderLeft:i===0?'none':'1px solid #e2e8f0' }}>
                 <div className="stat-v" style={{ fontSize:42, fontWeight:900, color:'#0a0a14', fontFamily:"'Plus Jakarta Sans',sans-serif", lineHeight:1, marginBottom:8, background:`linear-gradient(135deg, #0066FF, #003FB3)`, WebkitBackgroundClip:'text', backgroundClip:'text', WebkitTextFillColor:'transparent' }}>{s.v}</div>

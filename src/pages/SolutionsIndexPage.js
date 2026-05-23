@@ -114,7 +114,7 @@ export default function SolutionsIndexPage({ navigate, openConsult }) {
           {/* Eyebrow pill */}
           <div style={{ display:'inline-flex', alignItems:'center', gap:10, background:'rgba(6,182,212,0.10)', border:'1px solid rgba(6,182,212,0.30)', borderRadius:50, padding:'7px 16px', fontSize:12, fontWeight:800, color:'#003FB3', letterSpacing:'.06em', marginBottom:24 }}>
             <span style={{ width:8, height:8, borderRadius:'50%', background:'#06b6d4', boxShadow:'0 0 0 4px rgba(6,182,212,0.20)', animation:'heroFloat 2s ease-in-out infinite' }} />
-            MICROSOFT INNER CIRCLE PARTNER · 30 ENTERPRISE SOLUTIONS
+            MICROSOFT-CERTIFIED TEAM · 30 ENTERPRISE SOLUTIONS
           </div>
 
           {/* Headline */}
@@ -127,16 +127,16 @@ export default function SolutionsIndexPage({ navigate, openConsult }) {
 
           {/* Subhead */}
           <p style={{ fontSize:17.5, color:'#334155', lineHeight:1.7, maxWidth:780, marginBottom:32 }}>
-            From <strong style={{ color:'#0a0a14' }}>Copilot Studio</strong> to <strong style={{ color:'#0a0a14' }}>Microsoft Fabric</strong>, from <strong style={{ color:'#0a0a14' }}>Power Apps</strong> to <strong style={{ color:'#0a0a14' }}>Foundry</strong> — we design, deliver, and operate enterprise solutions across 5 Microsoft platforms. <strong style={{ color:'#0a0a14' }}>350+ implementations.</strong> 96% on-time go-live rate. Zero failed projects since founding.
+            From <strong style={{ color:'#0a0a14' }}>Copilot Studio</strong> to <strong style={{ color:'#0a0a14' }}>Microsoft Fabric</strong>, from <strong style={{ color:'#0a0a14' }}>Power Apps</strong> to <strong style={{ color:'#0a0a14' }}>Foundry</strong> — we design, deliver, and operate enterprise solutions across 5 Microsoft platforms. <strong style={{ color:'#0a0a14' }}>AI orchestration, engineered end-to-end</strong> — structured delivery, on time, built to grow.
           </p>
 
           {/* Trust pills */}
           <div className="sip-trust-pills" style={{ display:'flex', flexWrap:'wrap', gap:14, marginBottom:40 }}>
             {[
-              { icon:'Award', text:'Inner Circle (Top 1%) Partner' },
-              { icon:'Target', text:'350+ Implementations Delivered' },
+              { icon:'Award', text:'Microsoft Technology Partner' },
+              { icon:'Target', text:'AI Orchestration Specialists' },
               { icon:'Globe', text:'UK · USA · Canada · India' },
-              { icon:'CheckCircle', text:'96% On-Time Go-Live Rate' },
+              { icon:'CheckCircle', text:'Structured, On-Time Delivery' },
             ].map((t,i) => (
               <div key={i} style={{ display:'inline-flex', alignItems:'center', gap:8, padding:'9px 16px', borderRadius:50, background:'rgba(255,255,255,0.65)', border:'1px solid rgba(0,102,255,0.18)', backdropFilter:'blur(10px)', fontSize:13, fontWeight:700, color:'#0a0a14' }}>
                 <Ic n={t.icon} s={14} style={{ color:'#0066FF' }}/>
@@ -165,9 +165,9 @@ export default function SolutionsIndexPage({ navigate, openConsult }) {
           <div className="rv sip-stats-g" style={{ display:'grid', gridTemplateColumns:'repeat(4, 1fr)', gap:32 }}>
             {[
               { v:'30',    l:'Enterprise solutions',  s:'Across 5 Microsoft platforms' },
-              { v:'350+',  l:'Implementations',       s:'Delivered since 2007' },
-              { v:'96%',   l:'On-time go-live',        s:'Track record every quarter' },
-              { v:'100+',  l:'Certified consultants',  s:'UK · US · CA · IN' },
+              { v:'6',     l:'Microsoft certifications', s:'AI, data, identity & agents' },
+              { v:'2',     l:'Delivery countries',    s:'Canada · India' },
+              { v:'AI',    l:'First by design',       s:'Orchestration over tooling' },
             ].map((s,i) => (
               <div key={i} style={{ display:'flex', flexDirection:'column', position:'relative', paddingLeft:i===0?0:24, borderLeft:i===0?'none':'1px solid #e2e8f0' }}>
                 <div className="stat-v" style={{ fontSize:48, fontWeight:900, color:'#0a0a14', fontFamily:"'Plus Jakarta Sans',sans-serif", lineHeight:1, marginBottom:8, background:'linear-gradient(135deg, #0066FF, #003FB3)', WebkitBackgroundClip:'text', backgroundClip:'text', WebkitTextFillColor:'transparent' }}>{s.v}</div>
@@ -316,15 +316,15 @@ export default function SolutionsIndexPage({ navigate, openConsult }) {
               The partner enterprises choose when failure isn't an option
             </h2>
             <p style={{ fontSize:16, color:'#475569', lineHeight:1.7 }}>
-              We're not a generalist consultancy with a Microsoft practice. We're a Microsoft-native firm with Inner Circle status — recognised by Redmond as one of the top 1% of partners worldwide.
+              We're not a generalist consultancy with a Microsoft practice. We're a Microsoft-native, AI-first firm — our engineers are certified across Azure AI, Fabric, identity, and agent development, and we build on the Microsoft stack end-to-end.
             </p>
           </div>
 
           <div className="rv sip-why-g" style={{ display:'grid', gridTemplateColumns:'repeat(4, 1fr)', gap:20 }}>
             {[
-              { icon:'Award', accent:'#0066FF', title:'Inner Circle Partner', desc:'Top 1% of Microsoft partners worldwide. Direct line to product engineering, early access to Foundry, Fabric, and Copilot Studio releases.' },
+              { icon:'Award', accent:'#0066FF', title:'Microsoft-Certified Team', desc:'Certified across Azure AI, Microsoft Fabric, identity, and agent development — building on Power Platform, Dynamics 365, Copilot Studio, and Azure AI.' },
               { icon:'Users', accent:'#003FB3', title:'100+ Certified Consultants', desc:'Functional, technical, architecture, integration, and data specialists across the full Microsoft stack. Average tenure: 7+ years in Dynamics.' },
-              { icon:'Target', accent:'#06b6d4', title:'Proven Methodology', desc:'5-phase delivery framework refined over 350+ implementations. Fixed-price scope before any commitment. 96% on-time. Zero failed projects.' },
+              { icon:'Target', accent:'#06b6d4', title:'Structured Delivery', desc:'A clear 5-phase delivery framework — Discover, Design, Build, Validate, Deploy. Fixed-price scope before any commitment. On time, no surprises.' },
               { icon:'Globe', accent:'#0EA5E9', title:'4 Delivery Regions', desc:'UK, USA, Canada, and India teams — supporting global rollouts, follow-the-sun support, and multi-country, multi-currency operations.' },
             ].map((item,i) => (
               <div key={i} style={{ padding:'30px 26px', borderRadius:20, background:'#fff', border:'1px solid #e2e8f0', position:'relative', overflow:'hidden', transition:'all .25s' }}>
@@ -354,7 +354,7 @@ export default function SolutionsIndexPage({ navigate, openConsult }) {
               How we deliver — without surprises
             </h2>
             <p style={{ fontSize:16, color:'#475569', lineHeight:1.7 }}>
-              Refined over 350+ enterprise implementations. Fixed-price scope before commitment. Weekly demos. Quality gates at every phase. No "scope creep" surprises in week 12.
+              A disciplined, repeatable delivery framework. Fixed-price scope before commitment. Weekly demos. Quality gates at every phase. No "scope creep" surprises in week 12.
             </p>
           </div>
 
