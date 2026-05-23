@@ -654,10 +654,10 @@ function Trust() {
 function ImpactNumbers() {
   const [sRef, on] = useOnScreen(0.2)
   const stats = [
-    { target: 350, sfx: '+', label: 'Businesses transformed', sub: 'Across 28 countries', c: '#0066FF' },
-    { target: 500, sfx: '+', label: 'Successful go-lives', sub: 'Zero project failures', c: '#06B6D4' },
-    { target: 40, sfx: '%', label: 'Faster month-end close', sub: 'Finance clients average', c: '#003FB3' },
-    { target: 3, sfx: 'x', label: 'Average ROI at 12 months', sub: 'Measured across all clients', c: '#0EA5E9' },
+    { target: 6, sfx: '', label: 'Microsoft certifications', sub: 'AI, data, identity & agents', c: '#0066FF' },
+    { target: 5, sfx: '', label: 'Microsoft platforms', sub: 'Power Platform to Fabric', c: '#06B6D4' },
+    { target: 3, sfx: '', label: 'Pillars in every build', sub: 'Integration · Intelligence · Governance', c: '#003FB3' },
+    { target: 2, sfx: '', label: 'Delivery countries', sub: 'Canada & India', c: '#0EA5E9' },
   ]
   return (
     <section ref={sRef} className="ds-section" style={{ padding: '100px 32px', background: 'transparent', position: 'relative', overflow: 'hidden' }}>
@@ -665,10 +665,10 @@ function ImpactNumbers() {
       <div style={{ position: 'absolute', top: '20%', left: '50%', width: 600, height: 600, borderRadius: '50%', background: 'radial-gradient(circle,rgba(0,102,255,.05) 0%,transparent 68%)', filter: 'blur(70px)', transform: 'translateX(-50%)', pointerEvents: 'none' }} />
       <div style={{ maxWidth: 1300, margin: '0 auto', position: 'relative', zIndex: 1 }}>
         <div className="ds-section-header" style={{ textAlign: 'center', marginBottom: 72 }}>
-          <div style={{ display: 'inline-block', fontSize: 11, fontWeight: 800, letterSpacing: '.18em', color: '#0066FF', marginBottom: 16, textTransform: 'uppercase', background: 'rgba(0,102,255,.08)', padding: '6px 16px', borderRadius: 50, border: '1px solid rgba(0,102,255,.18)' }}>PROVEN IMPACT</div>
+          <div style={{ display: 'inline-block', fontSize: 11, fontWeight: 800, letterSpacing: '.18em', color: '#0066FF', marginBottom: 16, textTransform: 'uppercase', background: 'rgba(0,102,255,.08)', padding: '6px 16px', borderRadius: 50, border: '1px solid rgba(0,102,255,.18)' }}>ENGINEERED ON MICROSOFT</div>
           <h2 style={{ fontSize: 'clamp(2rem,4vw,3.2rem)', fontWeight: 900, color: '#0f172a', fontFamily: "'Plus Jakarta Sans',sans-serif", lineHeight: 1.15 }}>
-            The numbers behind{' '}
-            <span className="grad-text" style={{ background: 'linear-gradient(135deg,#0066FF,#003FB3)' }}>our track record</span>
+            The foundation behind{' '}
+            <span className="grad-text" style={{ background: 'linear-gradient(135deg,#0066FF,#003FB3)' }}>every engagement</span>
           </h2>
         </div>
         <div className="axis-stats-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(4,1fr)', gap: 20 }}>

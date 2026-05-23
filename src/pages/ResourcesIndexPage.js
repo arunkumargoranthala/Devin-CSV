@@ -113,7 +113,7 @@ export default function ResourcesIndexPage({ navigate, openConsult }) {
           </h1>
 
           <p style={{ fontSize:17.5, color:'#334155', lineHeight:1.7, maxWidth:780, marginBottom:32 }}>
-            Case studies, solution demos, thought leadership, ROI tools, and industry playbooks — built from <strong style={{ color:'#0a0a14' }}>50+ enterprise Microsoft engagements</strong>. No gated content. No registration walls. Everything free to access.
+            Case studies, solution demos, thought leadership, ROI tools, and industry playbooks — built from hands-on enterprise Microsoft engagements. No gated content. No registration walls. Everything free to access.
           </p>
 
           <div className="rip-trust-pills" style={{ display:'flex', flexWrap:'wrap', gap:14, marginBottom:40 }}>

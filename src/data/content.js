@@ -475,7 +475,7 @@ export const SOLUTIONS = [
         roi:"Tech client (700 hires/year) cut new-hire onboarding admin from 11 hours to 90 minutes per hire — saving 7,300 HR hours/year.",
         faq:[
           {q:"Will this replace our HRIS?",a:"No — we integrate with your existing HRIS (Workday, SuccessFactors, BambooHR, etc) as the system of record. The automation layer handles the orchestration, notifications, and cross-system tasks that HRIS systems don't do well."},
-          {q:"Can we customise per country or business unit?",a:"Yes — workflows have built-in branching for country-specific policies, legal requirements, language, and BU-specific approvals. We frequently support 20+ country variations within a single deployment."},
+          {q:"Can we customise per country or business unit?",a:"Yes — workflows have built-in branching for country-specific policies, legal requirements, language, and BU-specific approvals. Our deployments are designed to support multi-country variations."},
           {q:"How long to go-live for onboarding automation alone?",a:"6–8 weeks for a single BU, including HRIS integration and IT provisioning workflows. Multi-BU/multi-country deployments take 10–14 weeks."},
         ],
       },
@@ -1522,3 +1522,9 @@ export const SOLUTIONS = [
 ]
 
 
+
+/* ─── Backward-compatibility alias ───────────────────────────────────────────
+ * Legacy pages (ServicePage.js, ServicesListPage.js) import `SERVICES`.
+ * The data was renamed to SOLUTIONS; this alias keeps those imports resolving
+ * so the build compiles. Safe to remove once the legacy pages are deleted. */
+export const SERVICES = SOLUTIONS

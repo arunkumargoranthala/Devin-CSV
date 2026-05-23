@@ -107,15 +107,15 @@ export default function IndustriesIndexPage({ navigate, openConsult }) {
           </h1>
 
           <p style={{ fontSize:17.5, color:'#334155', lineHeight:1.7, maxWidth:780, marginBottom:32 }}>
-            From <strong style={{ color:'#0a0a14' }}>manufacturing</strong> shop floors to <strong style={{ color:'#0a0a14' }}>healthcare</strong> patient workflows, from <strong style={{ color:'#0a0a14' }}>financial services</strong> compliance to <strong style={{ color:'#0a0a14' }}>retail</strong> omnichannel — we deliver Microsoft solutions designed for your sector's specific operations, regulations, and outcomes. <strong style={{ color:'#0a0a14' }}>140+ industry-specific implementations.</strong> Zero compliance findings.
+            From <strong style={{ color:'#0a0a14' }}>manufacturing</strong> shop floors to <strong style={{ color:'#0a0a14' }}>healthcare</strong> patient workflows, from <strong style={{ color:'#0a0a14' }}>financial services</strong> compliance to <strong style={{ color:'#0a0a14' }}>retail</strong> omnichannel — we deliver Microsoft solutions designed for your sector's specific operations, regulations, and outcomes. Built for your sector's specific operations, regulations, and outcomes — with compliance designed in from day one.
           </p>
 
           <div className="iip-trust-pills" style={{ display:'flex', flexWrap:'wrap', gap:14, marginBottom:40 }}>
             {[
-              { icon:'Award',       text:'Inner Circle Partner' },
+              { icon:'Award',       text:'Microsoft-certified team' },
               { icon:'Shield',      text:'Sector compliance built-in' },
               { icon:'Globe',       text:'UK · USA · CA · IN delivery' },
-              { icon:'CheckCircle', text:'Zero failed go-lives' },
+              { icon:'CheckCircle', text:'Structured, on-time delivery' },
             ].map((t,i) => (
               <div key={i} style={{ display:'inline-flex', alignItems:'center', gap:8, padding:'9px 16px', borderRadius:50, background:'rgba(255,255,255,0.65)', border:'1px solid rgba(0,102,255,0.18)', backdropFilter:'blur(10px)', fontSize:13, fontWeight:700, color:'#0a0a14' }}>
                 <Ic n={t.icon} s={14} style={{ color:'#0066FF' }}/>
@@ -144,7 +144,7 @@ export default function IndustriesIndexPage({ navigate, openConsult }) {
             {[
               { v:'6',     l:'Industries served',       s:'With deep sector expertise' },
               { v:'18',    l:'Industry-specific solutions', s:'Pre-scoped, ready to deploy' },
-              { v:'140+',  l:'Sector implementations',  s:'Manufacturing to professional services' },
+              { v:'AI',    l:'Orchestration-first',     s:'Manufacturing to professional services' },
               { v:'12+',   l:'Compliance frameworks',   s:'HIPAA, FCA, ISO, SOC2 & more' },
             ].map((s,i) => (
               <div key={i} style={{ display:'flex', flexDirection:'column', position:'relative', paddingLeft:i===0?0:24, borderLeft:i===0?'none':'1px solid #e2e8f0' }}>
@@ -241,14 +241,14 @@ export default function IndustriesIndexPage({ navigate, openConsult }) {
               The partner enterprises in your sector choose
             </h2>
             <p style={{ fontSize:16, color:'#475569', lineHeight:1.7 }}>
-              Generalist consultancies don't know your sector. Boutique sector specialists don't have Microsoft depth. We have both — Inner Circle Microsoft partnership and deep sector expertise.
+              Generalist consultancies don't know your sector. Boutique sector specialists don't have Microsoft depth. We have both — a Microsoft-certified engineering team and deep sector expertise.
             </p>
           </div>
 
           <div className="rv iip-why-g" style={{ display:'grid', gridTemplateColumns:'repeat(4, 1fr)', gap:20 }}>
             {[
               { icon:'Brain',  accent:'#0066FF', title:'Sector-fluent architects', desc:'Solution architects with prior experience in your industry. We speak your language — MES, HL7, FINREP, SLAs — not generic IT-consultant jargon.' },
-              { icon:'Shield', accent:'#003FB3', title:'Compliance built-in', desc:'HIPAA, FCA, ISO 9001, SOC2, GDPR, PCI — we design for your regulators from day one. Zero compliance findings in 140+ industry implementations.' },
+              { icon:'Shield', accent:'#003FB3', title:'Compliance built-in', desc:'HIPAA, FCA, ISO 9001, SOC2, GDPR, PCI — we design for your regulators from day one, with full audit documentation.' },
               { icon:'Layers', accent:'#06b6d4', title:'Industry integrations',  desc:"We integrate with Epic, Cerner, Aderant, Wonderware, Manhattan, D365 — the systems specific to your sector. No \"we'll figure it out\" approach." },
               { icon:'Award',  accent:'#0EA5E9', title:'Reference clients',     desc:'Reference clients in your industry, willing to talk to you. Real outcomes, real numbers, real challenges they overcame with us.' },
             ].map((item,i) => (
@@ -317,13 +317,13 @@ export default function IndustriesIndexPage({ navigate, openConsult }) {
           <div className="rv">
             {[
               { q:"Do you have prior experience in our specific sector?",
-                a:"For each industry on this page, we have at least 18 prior implementations and a named sector lead with 7+ years of experience. We provide reference clients in your sector at the discovery stage — happy to talk before any commitment." },
+                a:"We bring deep Microsoft platform expertise and sector-specific solution design. We're happy to walk through our approach and relevant work during the discovery stage — before any commitment." },
               { q:"How do you handle our specific compliance regime?",
                 a:"Compliance is designed in from day one, not bolted on. Our solution architects work directly with your compliance team during Discovery. We deliver to FCA, PRA, HIPAA, GDPR, ISO 9001, SOC2, PCI, FDA Part 11, and more — with full audit documentation for your regulators." },
               { q:"Will the solution integrate with our existing industry systems?",
                 a:"Yes — our solutions sit on top of and integrate with your existing operational systems (Epic, Cerner, Aderant, Wonderware, Manhattan, etc). We don't rip and replace what works; we orchestrate, modernise interfaces, and add Microsoft-native capabilities around your existing estate." },
               { q:"What about multi-country, multi-currency, multi-entity rollouts?",
-                a:"Multi-country and multi-entity is the norm for our industry work. We routinely deliver across 15+ country variants within a single solution, handling localisation, regulatory variation, currency, and language. Most enterprise rollouts span 8–24 weeks depending on number of sites and complexity." },
+                a:"Our solutions are built for multi-country, multi-entity rollouts — handling localisation, regulatory variation, currency, and language within a single solution. Most enterprise rollouts span 8–24 weeks depending on number of sites and complexity." },
               { q:"How long until we see industry-relevant ROI?",
                 a:"Most industry implementations have measurable ROI within 6–9 months. Workflow automation and approval projects pay back in 4–6 months. Larger initiatives (full warehouse management, clinical workflow transformation) reach ROI in 12–18 months but deliver multi-year TCO impact." },
             ].map((f, i) => (

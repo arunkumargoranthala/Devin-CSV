@@ -88,7 +88,7 @@ export default function SolutionsIndexPage({ navigate, openConsult }) {
       `}}/>
 
       {/* ════════════════════════════════════════════════════
-         1.  HERO  — Inner Circle Partner positioning
+         1.  HERO  — Microsoft-certified team positioning
          ════════════════════════════════════════════════════ */}
       <section style={{
         position:'relative', paddingTop:68, overflow:'hidden',
@@ -323,7 +323,7 @@ export default function SolutionsIndexPage({ navigate, openConsult }) {
           <div className="rv sip-why-g" style={{ display:'grid', gridTemplateColumns:'repeat(4, 1fr)', gap:20 }}>
             {[
               { icon:'Award', accent:'#0066FF', title:'Microsoft-Certified Team', desc:'Certified across Azure AI, Microsoft Fabric, identity, and agent development — building on Power Platform, Dynamics 365, Copilot Studio, and Azure AI.' },
-              { icon:'Users', accent:'#003FB3', title:'100+ Certified Consultants', desc:'Functional, technical, architecture, integration, and data specialists across the full Microsoft stack. Average tenure: 7+ years in Dynamics.' },
+              { icon:'Users', accent:'#003FB3', title:'Microsoft-Certified Engineers', desc:'Functional, technical, architecture, integration, and data specialists across the full Microsoft stack — certified in Azure AI, Fabric, identity, and agent development.' },
               { icon:'Target', accent:'#06b6d4', title:'Structured Delivery', desc:'A clear 5-phase delivery framework — Discover, Design, Build, Validate, Deploy. Fixed-price scope before any commitment. On time, no surprises.' },
               { icon:'Globe', accent:'#0EA5E9', title:'4 Delivery Regions', desc:'UK, USA, Canada, and India teams — supporting global rollouts, follow-the-sun support, and multi-country, multi-currency operations.' },
             ].map((item,i) => (
@@ -410,7 +410,7 @@ export default function SolutionsIndexPage({ navigate, openConsult }) {
               { q:"What's the engagement model — fixed price or time-and-materials?",
                 a:"For well-scoped deliveries (most implementations, automations, Power Apps builds), we work fixed-price. We use a paid Discovery phase first to nail the scope, then commit. For exploratory work or ongoing managed services, time-and-materials with weekly sprint reviews. Either way: no surprise bills." },
               { q:"Can your solutions span multiple business units, countries, or currencies?",
-                a:"Yes — multi-entity, multi-country, multi-currency is the norm in our enterprise work. We routinely deliver across 20+ country variations within a single solution. Localisation, language, tax rules, and regulatory variants are designed in from day one — not bolted on after." },
+                a:"Yes — multi-entity, multi-country, multi-currency is the norm in our enterprise work. Our solutions are designed for multi-country, multi-entity, multi-currency rollouts. Localisation, language, tax rules, and regulatory variants are designed in from day one — not bolted on after." },
               { q:"How are projects governed and reported on?",
                 a:"Every engagement has a named Solution Architect, a Project Manager, a weekly steering committee with your stakeholders, and a fortnightly executive review. We provide live RAID logs (Risks, Actions, Issues, Decisions), burndown charts, and budget tracking — all visible to you in real-time, not just at month-end." },
             ].map((f, i) => (

@@ -305,8 +305,8 @@ export default function ContactPage({ navigate, openConsult }) {
         <div style={{ maxWidth:1300, margin:'0 auto' }}>
           <div className="rv cp-stats-g" style={{ display:'grid', gridTemplateColumns:'repeat(4, 1fr)', gap:32 }}>
             {[
-              { v:'350+',  l:'Enterprise engagements',  s:'Delivered across UK, US, Canada and India' },
-              { v:'120+',  l:'Certified consultants',   s:'Microsoft MCT / MVP / Inner Circle' },
+              { v:'AI',    l:'Orchestration-first',     s:'Beyond point tooling' },
+              { v:'6',     l:'Microsoft certifications', s:'AI · data · identity · agents' },
               { v:'2',     l:'Global offices',           s:'Canada · India' },
               { v:'30 min', l:'First call',              s:'With a Solution Architect — not an SDR' },
             ].map((s,i) => (
@@ -712,7 +712,7 @@ export default function ContactPage({ navigate, openConsult }) {
             {[
               { icon:'Users',       title:'Senior architect, not an SDR',  desc:'You speak to someone who has delivered the work — not an account executive reading a script.' },
               { icon:'Shield',      title:'NDA on request',                desc:"For anything sensitive (M&A, restructuring, sensitive data) we'll send a mutual NDA before the call." },
-              { icon:'Award',       title:'Microsoft Inner Circle 2025',  desc:'Top 1% of Microsoft partners globally. We get early access to the roadmap and direct Microsoft escalation paths.' },
+              { icon:'Award',       title:'Microsoft-Certified Team',  desc:'Certified across Azure AI, Microsoft Fabric, identity, and agent development — building production AI on the Microsoft stack.' },
               { icon:'Zap',         title:'Fixed-price scoping',           desc:"No 'time & materials' surprises. Written scope, fixed proposal, predictable budget for your finance team." },
             ].map((s,i) => (
               <div key={i} style={{ padding:'28px 24px', borderRadius:20, background:'linear-gradient(180deg, #ffffff, #f8fafc)', border:'1px solid #e2e8f0', position:'relative', overflow:'hidden' }}>
@@ -890,7 +890,7 @@ export default function ContactPage({ navigate, openConsult }) {
               { q:"What if I'm just exploring, not ready to buy?",
                 a:"That's most of our calls, and it's fine. We treat early-stage exploration the same as ready-to-buy — same architect, same depth. Many of our biggest clients started with a call where 'we're just exploring' was the opener." },
               { q:"Can I share confidential information?",
-                a:"Yes. Tick the NDA option in your booking notes and we'll send a mutual NDA before the call. For ongoing engagements, NDA is standard. We've worked with regulated industries (financial services, healthcare) for 16 years; confidentiality is built in." },
+                a:"Yes. Tick the NDA option in your booking notes and we'll send a mutual NDA before the call. For ongoing engagements, NDA is standard. We design for regulated industries (financial services, healthcare) with confidentiality built in from day one." },
               { q:"How does the calendar booking work?",
                 a:"You pick a slot from our architects' real availability. Once you confirm, the slot is reserved instantly and a calendar invite goes to your inbox within minutes. You can reschedule any time via the link in the confirmation email." },
             ].map((f, i) => (

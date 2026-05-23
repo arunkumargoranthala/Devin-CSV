@@ -6,9 +6,6 @@ import HomePage from './pages/HomePage'
 import SolutionPage from './pages/SolutionPage'
 import SolutionCategoryPage from './pages/SolutionCategoryPage'
 import SolutionsIndexPage from './pages/SolutionsIndexPage'
-import ServicePage from './pages/ServicePage'
-import ServicesListPage from './pages/ServicesListPage'
-import IndustriesPage from './pages/IndustriesPage'
 import IndustriesIndexPage from './pages/IndustriesIndexPage'
 import IndustryCategoryPage from './pages/IndustryCategoryPage'
 import IndustryPage from './pages/IndustryPage'
@@ -16,7 +13,6 @@ import UseCasesIndexPage from './pages/UseCasesIndexPage'
 import UseCaseCategoryPage from './pages/UseCaseCategoryPage'
 import UseCasePage from './pages/UseCasePage'
 import CompanyPage from './pages/CompanyPage'
-import ResourcesPage from './pages/ResourcesPage'
 import ResourcesIndexPage from './pages/ResourcesIndexPage'
 import ResourceCategoryPage from './pages/ResourceCategoryPage'
 import CaseStudyPage from './pages/CaseStudyPage'
@@ -106,8 +102,6 @@ export default function App() {
   // #/                            → HomePage
   // #/solutions/erp               → SolutionCategoryPage
   // #/solution/erp/finance        → SolutionPage
-  // #/services                    → ServicesListPage
-  // #/service/implementation      → ServicePage
   // #/industries                  → IndustriesPage (list)
   // #/industries/manufacturing    → IndustriesPage (detail)
   // #/contact                     → ContactPage
@@ -123,10 +117,6 @@ export default function App() {
     page = <SolutionCategoryPage categorySlug={parts[1]} navigate={navigate} openConsult={openConsult} />
   } else if (parts[0] === 'solution' && parts[1] && parts[2]) {
     page = <SolutionPage categorySlug={parts[1]} itemSlug={parts[2]} navigate={navigate} openConsult={openConsult} />
-  } else if (parts[0] === 'services') {
-    page = <ServicesListPage navigate={navigate} openConsult={openConsult} />
-  } else if (parts[0] === 'service' && parts[1]) {
-    page = <ServicePage serviceSlug={parts[1]} navigate={navigate} openConsult={openConsult} />
   } else if (parts[0] === 'industries' && !parts[1]) {
     page = <IndustriesIndexPage navigate={navigate} openConsult={openConsult} />
   } else if (parts[0] === 'industries' && parts[1]) {

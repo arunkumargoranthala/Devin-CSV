@@ -180,7 +180,7 @@ export default function InsightPage({ categorySlug, itemSlug, navigate, openCons
                   {item.author?.name || 'DevinStratus Editorial'}
                 </div>
                 <div style={{ fontSize:13, color:'#64748b' }}>
-                  {item.author?.role || 'Microsoft Inner Circle Partner'}
+                  {item.author?.role || 'Microsoft Technology Partner'}
                 </div>
               </div>
             </div>

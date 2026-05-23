@@ -375,7 +375,7 @@ export const RESOURCES = [
       {
         slug:"why-70-percent-ai-projects-fail", n:"Target", t:"Why 70% of AI Projects Fail",
         d:"And what successful enterprises do differently — based on 50+ Microsoft AI engagements",
-        hero:"MIT, BCG, and Gartner all report 70-80% AI project failure rates. After 50+ enterprise AI engagements, we know exactly why most fail and what successful clients do differently. Spoiler: it's almost never the technology.",
+        hero:"MIT, BCG, and Gartner all report 70-80% AI project failure rates. From our enterprise AI engagements, we know why most fail and what successful clients do differently. Spoiler: it's almost never the technology.",
         excerpt:"Every analyst firm reports the same number: 70-80% of enterprise AI projects fail to deliver value. Most articles blame the technology, the team, or the strategy. After 50+ Microsoft AI engagements, we can be more specific: 4 patterns explain 90% of failures, and they're all preventable. This article identifies what we see in projects that fail and what successful clients do differently — including the unsexy organisational moves that matter far more than the technology choice.",
         publishDate:"2026-04-12",
         readTime:"13 min read",

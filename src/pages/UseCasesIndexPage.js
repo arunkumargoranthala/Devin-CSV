@@ -113,7 +113,7 @@ export default function UseCasesIndexPage({ navigate, openConsult }) {
               { icon:'Zap',         text:'4–14 week delivery' },
               { icon:'Calc',        text:'Fixed-price scope' },
               { icon:'CheckCircle', text:'Pre-validated use cases' },
-              { icon:'Award',       text:'Microsoft Inner Circle' },
+              { icon:'Award',       text:'Microsoft-certified team' },
             ].map((t,i) => (
               <div key={i} style={{ display:'inline-flex', alignItems:'center', gap:8, padding:'9px 16px', borderRadius:50, background:'rgba(255,255,255,0.65)', border:'1px solid rgba(0,102,255,0.18)', backdropFilter:'blur(10px)', fontSize:13, fontWeight:700, color:'#0a0a14' }}>
                 <Ic n={t.icon} s={14} style={{ color:'#0066FF' }}/>
@@ -143,7 +143,7 @@ export default function UseCasesIndexPage({ navigate, openConsult }) {
               { v:totalUseCases.toString(), l:'Enterprise use cases',  s:'Pre-scoped, ready to deploy' },
               { v:'5',                       l:'Use case categories',   s:'AI, workflow, apps, analytics, workplace' },
               { v:'4–14 wk',                 l:'Typical delivery',      s:'Fixed-price, fixed-timeline' },
-              { v:'350+',                    l:'Total implementations', s:'Across all use cases & sectors' },
+              { v:'AI',                      l:'Orchestration-first',   s:'Across all use cases & sectors' },
             ].map((s,i) => (
               <div key={i} style={{ display:'flex', flexDirection:'column', position:'relative', paddingLeft:i===0?0:24, borderLeft:i===0?'none':'1px solid #e2e8f0' }}>
                 <div className="stat-v" style={{ fontSize:48, fontWeight:900, color:'#0a0a14', fontFamily:"'Plus Jakarta Sans',sans-serif", lineHeight:1, marginBottom:8, background:'linear-gradient(135deg, #0066FF, #003FB3)', WebkitBackgroundClip:'text', backgroundClip:'text', WebkitTextFillColor:'transparent' }}>{s.v}</div>

@@ -128,7 +128,7 @@ export default function IndustryCategoryPage({ industrySlug, navigate, openConsu
                 {[
                   `${industry.items.length} sector solutions`,
                   'Compliance built-in',
-                  'Inner Circle delivery',
+                  'Microsoft-certified delivery',
                 ].map((t,i) => (
                   <div key={i} style={{ display:'inline-flex', alignItems:'center', gap:7, padding:'7px 14px', borderRadius:50, background:'rgba(255,255,255,0.65)', border:'1px solid rgba(0,102,255,0.18)', backdropFilter:'blur(10px)', fontSize:12.5, fontWeight:700, color:'#0a0a14' }}>
                     <Ic n="CheckCircle" s={13} style={{ color:industry.color }}/>
