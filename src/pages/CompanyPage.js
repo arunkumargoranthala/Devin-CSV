@@ -214,7 +214,7 @@ function CompanyHero({ section, navigate }) {
 
         {/* RIGHT — Follow-the-Sun Ribbon (for Careers) */}
         {cfg.animatedCareers && (
-          <div className="careers-hero-image" style={{ position: 'relative', width: '100%', height: 520 }}>
+          <div className="careers-hero-image" style={{ position: 'relative', width: '100%', height: 350 }}>
             <CareersHeroAnimation />
           </div>
         )}
@@ -740,17 +740,19 @@ function GlobalSection({ navigate }) {
         /* Careers hero — animation sits beside text on desktop (1fr 1fr),
            and drops BELOW the full text block on tablet/mobile. Own class so the
            shared .company-hero-image rules never fight it (was causing overlap).
-           Heights hug the animation and the careers-only gap is tightened so the
-           illustration sits right under the stats (less empty space / scrolling). */
-        @media (max-width: 1023px) {
-          .careers-hero-image { height: 340px !important; }
-          .company-hero-grid.careers-hero-grid { gap: 16px !important; }
+           Desktop height is inline (520); these !important rules override it
+           per device. Heights are tuned per screen so the animation stays fully
+           visible with minimal empty space, and we override ui.js's 108px mobile
+           top padding (header is 68px). */
+        @media (max-width: 1023px) {            /* tablet */
+          .careers-hero-image { height: 400px !important; }
+          .company-hero-grid.careers-hero-grid { gap: 16px !important; padding-top: 72px !important; }
         }
-        @media (max-width: 767px) {
-          .careers-hero-image { height: 260px !important; }
+        @media (max-width: 767px) {             /* mobile */
+          .careers-hero-image { height: 300px !important; }
         }
-        @media (max-width: 480px) {
-          .careers-hero-image { height: 220px !important; }
+        @media (max-width: 480px) {             /* small mobile */
+          .careers-hero-image { height: 300px !important; }
         }
 
         /* GlobalSection-specific responsive */
