@@ -214,7 +214,7 @@ function CompanyHero({ section, navigate }) {
 
         {/* RIGHT — Follow-the-Sun Ribbon (for Careers) */}
         {cfg.animatedCareers && (
-          <div className="careers-hero-image" style={{ position: 'relative', width: '100%', height: 560 }}>
+          <div className="careers-hero-image" style={{ position: 'relative', width: '100%', height: 500 }}>
             <CareersHeroAnimation />
           </div>
         )}
