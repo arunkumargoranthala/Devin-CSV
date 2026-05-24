@@ -162,7 +162,7 @@ function CompanyHero({ section, navigate }) {
         <div style={{ position: 'absolute', inset: 0, backgroundImage: 'linear-gradient(rgba(0, 102, 255, 0.04) 1px, transparent 1px), linear-gradient(90deg, rgba(0, 102, 255, 0.04) 1px, transparent 1px)', backgroundSize: '48px 48px', maskImage: 'radial-gradient(ellipse at center, #000 30%, transparent 75%)', WebkitMaskImage: 'radial-gradient(ellipse at center, #000 30%, transparent 75%)', pointerEvents: 'none' }} />
       )}
 
-      <div className="company-hero-grid" style={{ maxWidth: 1400, margin: '0 auto', padding: '92px 24px 48px', position: 'relative', zIndex: 1, display: 'grid', gridTemplateColumns: cfg.animatedCareers ? '1fr 1fr' : ((cfg.img || cfg.animatedMap) ? '0.5fr 1.5fr' : '1fr'), gap: 40, alignItems: 'center', height: 560 }}>
+      <div className={cfg.animatedCareers ? 'company-hero-grid careers-hero-grid' : 'company-hero-grid'} style={{ maxWidth: 1400, margin: '0 auto', padding: '62px 24px 48px', position: 'relative', zIndex: 1, display: 'grid', gridTemplateColumns: cfg.animatedCareers ? '1fr 1fr' : ((cfg.img || cfg.animatedMap) ? '0.5fr 1.5fr' : '1fr'), gap: 40, alignItems: 'center', height: 560 }}>
         {/* LEFT — content */}
         <div>
           <button onClick={() => navigate('/company/about')}
@@ -739,15 +739,18 @@ function GlobalSection({ navigate }) {
 
         /* Careers hero — animation sits beside text on desktop (1fr 1fr),
            and drops BELOW the full text block on tablet/mobile. Own class so the
-           shared .company-hero-image rules never fight it (was causing overlap). */
+           shared .company-hero-image rules never fight it (was causing overlap).
+           Heights hug the animation and the careers-only gap is tightened so the
+           illustration sits right under the stats (less empty space / scrolling). */
         @media (max-width: 1023px) {
-          .careers-hero-image { height: 380px !important; }
+          .careers-hero-image { height: 340px !important; }
+          .company-hero-grid.careers-hero-grid { gap: 16px !important; }
         }
         @media (max-width: 767px) {
-          .careers-hero-image { height: 300px !important; }
+          .careers-hero-image { height: 260px !important; }
         }
         @media (max-width: 480px) {
-          .careers-hero-image { height: 250px !important; }
+          .careers-hero-image { height: 220px !important; }
         }
 
         /* GlobalSection-specific responsive */
