@@ -162,7 +162,7 @@ function CompanyHero({ section, navigate }) {
         <div style={{ position: 'absolute', inset: 0, backgroundImage: 'linear-gradient(rgba(0, 102, 255, 0.04) 1px, transparent 1px), linear-gradient(90deg, rgba(0, 102, 255, 0.04) 1px, transparent 1px)', backgroundSize: '48px 48px', maskImage: 'radial-gradient(ellipse at center, #000 30%, transparent 75%)', WebkitMaskImage: 'radial-gradient(ellipse at center, #000 30%, transparent 75%)', pointerEvents: 'none' }} />
       )}
 
-      <div className="company-hero-grid" style={{ maxWidth: 1400, margin: '0 auto', padding: '92px 24px 48px', position: 'relative', zIndex: 1, display: 'grid', gridTemplateColumns: (cfg.img || cfg.animatedMap || cfg.animatedCareers) ? '0.5fr 1.5fr' : '1fr', gap: 40, alignItems: 'center', height: 560 }}>
+      <div className="company-hero-grid" style={{ maxWidth: 1400, margin: '0 auto', padding: '92px 24px 48px', position: 'relative', zIndex: 1, display: 'grid', gridTemplateColumns: cfg.animatedCareers ? '1fr 1fr' : ((cfg.img || cfg.animatedMap) ? '0.5fr 1.5fr' : '1fr'), gap: 40, alignItems: 'center', height: 560 }}>
         {/* LEFT — content */}
         <div>
           <button onClick={() => navigate('/company/about')}
@@ -214,7 +214,7 @@ function CompanyHero({ section, navigate }) {
 
         {/* RIGHT — Follow-the-Sun Ribbon (for Careers) */}
         {cfg.animatedCareers && (
-          <div className="company-hero-image" style={{ position: 'absolute', top: 0, right: 0, bottom: 0, width: '55vw' }}>
+          <div className="careers-hero-image" style={{ position: 'relative', width: '100%', height: 520 }}>
             <CareersHeroAnimation />
           </div>
         )}
@@ -735,6 +735,19 @@ function GlobalSection({ navigate }) {
         }
         @media (max-width: 480px) {
           .company-hero-image { height: 220px !important; }
+        }
+
+        /* Careers hero — animation sits beside text on desktop (1fr 1fr),
+           and drops BELOW the full text block on tablet/mobile. Own class so the
+           shared .company-hero-image rules never fight it (was causing overlap). */
+        @media (max-width: 1023px) {
+          .careers-hero-image { height: 380px !important; }
+        }
+        @media (max-width: 767px) {
+          .careers-hero-image { height: 300px !important; }
+        }
+        @media (max-width: 480px) {
+          .careers-hero-image { height: 250px !important; }
         }
 
         /* GlobalSection-specific responsive */
