@@ -12,7 +12,7 @@ import Global_Img from '../assets/Global_Img.png'
 import Careers_Img from '../assets/Careers_Img.png'
 import AnimatedMap from '../components/AnimatedMap'
 import AnimatedCareers from '../components/AnimatedCareers'
-import FollowTheSunRibbon from '../components/FollowTheSunRibbon'
+import CareersHeroAnimation from '../components/CareersHeroAnimation'
 
 function useReveal() {
   useEffect(() => {
@@ -215,7 +215,7 @@ function CompanyHero({ section, navigate }) {
         {/* RIGHT — Follow-the-Sun Ribbon (for Careers) */}
         {cfg.animatedCareers && (
           <div className="company-hero-image" style={{ position: 'absolute', top: 0, right: 0, bottom: 0, width: '55vw' }}>
-            <FollowTheSunRibbon />
+            <CareersHeroAnimation />
           </div>
         )}
 
