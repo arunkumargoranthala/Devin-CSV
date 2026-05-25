@@ -8,6 +8,7 @@ import Leader_3 from '../assets/Leader_3.jpg'
 import Leader_4 from '../assets/Leader_4.jpg'
 import Aboutus_Img from '../assets/Aboutus_Img.png'
 import Team_Img from '../assets/Team_Img.png'
+import AboutHeroAnimation from '../components/AboutHeroAnimation'
 import Global_Img from '../assets/Global_Img.png'
 import Careers_Img from '../assets/Careers_Img.png'
 import AnimatedMap from '../components/AnimatedMap'
@@ -138,7 +139,7 @@ const JOBS = [
 // ── Shared Hero ─────────────────────────────────────────────────────────────────
 function CompanyHero({ section, navigate }) {
   const cfg = {
-    about: { color: C.blue, title: 'About DevinStratus', sub: 'Enterprise AI orchestration, built on Microsoft', img: Aboutus_Img, alt: 'DevinStratus team at work', stat1Icon: 'Award', stat1Color: C.blue, stat1Title: 'Microsoft Partner', stat1Sub: 'Power Platform · Azure AI', stat2Icon: 'Users', stat2Color: C.teal, stat2Title: 'Canada · India', stat2Sub: 'Two-Country Team' },
+    about: { color: C.blue, title: 'About DevinStratus', sub: 'Enterprise AI orchestration, built on Microsoft', img: Aboutus_Img, animatedAbout: true, alt: 'DevinStratus team at work', stat1Icon: 'Award', stat1Color: C.blue, stat1Title: 'Microsoft Partner', stat1Sub: 'Power Platform · Azure AI', stat2Icon: 'Users', stat2Color: C.teal, stat2Title: 'Canada · India', stat2Sub: 'Two-Country Team' },
     team: { color: C.purple, title: 'Meet Our Team', sub: 'A focused AI engineering team across Canada & India', img: Team_Img, alt: 'Diverse professional team collaborating', stat1Icon: 'Award', stat1Color: C.purple, stat1Title: 'Certified Experts', stat1Sub: 'Microsoft Stack', stat2Icon: 'Target', stat2Color: C.blue, stat2Title: 'AI Engineers', stat2Sub: 'Orchestration-First' },
     global: { color: C.teal, title: 'Global Offices', sub: 'Barrie · Hyderabad', animatedMap: true },
     careers: { color: C.green, title: 'Where you work matters less than when.', sub: 'Two offices · one team · 18+ hours of daily coverage', animatedCareers: true, stat1Icon: 'Globe', stat1Color: C.green, stat1Title: 'Canada · India', stat1Sub: 'Two-Office Model', stat2Icon: 'Clock', stat2Color: C.orange, stat2Title: 'Follow-the-Sun', stat2Sub: 'Always-On Delivery' },
@@ -153,6 +154,30 @@ function CompanyHero({ section, navigate }) {
       `,
       paddingTop: 0, position: 'relative', overflow: 'hidden', borderBottom: '1px solid rgba(0, 102, 255, 0.10)'
     }}>
+      {/* Careers hero responsive — mounted here in CompanyHero so it loads on the
+          Careers route. (Previously these rules lived in GlobalSection's <style>,
+          which only mounts on the Global Offices page, so the inline height:560
+          and 2-column grid were never overridden on the Careers route.)
+          Careers-scoped selectors only — other heroes are untouched. */}
+      <style>{`
+        @media (max-width: 1023px) {
+          .company-hero-grid.careers-hero-grid {
+            grid-template-columns: 1fr !important;
+            height: auto !important;
+            padding-top: 72px !important;
+            padding-bottom: 32px !important;
+            gap: 16px !important;
+          }
+          .careers-hero-image { height: 400px !important; }
+        }
+        @media (max-width: 767px) {
+          .careers-hero-image { height: 300px !important; }
+        }
+        @media (max-width: 480px) {
+          .careers-hero-image { height: 300px !important; }
+        }
+      `}</style>
+
       {/* Soft floating decorative orbs */}
       <div style={{ position: 'absolute', top: '15%', right: '-5%', width: 380, height: 380, borderRadius: '50%', background: 'radial-gradient(circle, rgba(6, 182, 212, 0.30), transparent 70%)', filter: 'blur(50px)', animation: 'heroFloat 8s ease-in-out infinite', pointerEvents: 'none' }} />
       <div style={{ position: 'absolute', bottom: '-15%', left: '-5%', width: 300, height: 300, borderRadius: '50%', background: 'radial-gradient(circle, rgba(0, 102, 255, 0.18), transparent 70%)', filter: 'blur(50px)', animation: 'heroFloat 11s ease-in-out infinite reverse', pointerEvents: 'none' }} />
@@ -214,13 +239,42 @@ function CompanyHero({ section, navigate }) {
 
         {/* RIGHT — Follow-the-Sun Ribbon (for Careers) */}
         {cfg.animatedCareers && (
-          <div className="careers-hero-image" style={{ position: 'relative', width: '100%', height: 500 }}>
+          <div className="careers-hero-image" style={{ position: 'relative', width: '100%', height: 520 }}>
             <CareersHeroAnimation />
           </div>
         )}
 
-        {/* RIGHT — Image */}
-        {cfg.img && (
+        {/* RIGHT — AI Orchestration animation (About only) */}
+        {cfg.animatedAbout && (
+          <div className="company-hero-image" style={{ position: 'relative', width: '100%', height: '88%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+            <AboutHeroAnimation color={cfg.color} />
+
+            {/* Floating stat 1 — top-right (overhanging edge) */}
+            <div className="hero-float-stat hero-float-stat-tr" style={{ position: 'absolute', top: 24, right: -18, padding: '12px 16px', borderRadius: 14, background: 'rgba(255,255,255,0.98)', backdropFilter: 'blur(14px)', WebkitBackdropFilter: 'blur(14px)', border: `1px solid ${cfg.color}22`, boxShadow: '0 16px 36px rgba(0, 53, 128, 0.22)', zIndex: 3, display: 'flex', alignItems: 'center', gap: 11 }}>
+              <div style={{ width: 38, height: 38, borderRadius: 10, background: `linear-gradient(135deg, ${cfg.stat1Color}, ${C.purple})`, display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: `0 6px 14px ${cfg.stat1Color}48`, flexShrink: 0 }}>
+                <Ic n={cfg.stat1Icon} s={18} style={{ color: '#fff' }} />
+              </div>
+              <div>
+                <div style={{ fontSize: 15, fontWeight: 900, color: '#0a0a14', fontFamily: "'Plus Jakarta Sans',sans-serif", lineHeight: 1.05, letterSpacing: '-0.01em' }}>{cfg.stat1Title}</div>
+                <div style={{ fontSize: 10, color: '#64748b', marginTop: 3, fontWeight: 600, letterSpacing: '.04em' }}>{cfg.stat1Sub}</div>
+              </div>
+            </div>
+
+            {/* Floating stat 2 — bottom-left (overhanging edge) */}
+            <div className="hero-float-stat hero-float-stat-bl" style={{ position: 'absolute', bottom: 24, left: -18, padding: '12px 16px', borderRadius: 14, background: 'rgba(255,255,255,0.98)', backdropFilter: 'blur(14px)', WebkitBackdropFilter: 'blur(14px)', border: `1px solid ${cfg.color}22`, boxShadow: '0 16px 36px rgba(0, 53, 128, 0.22)', zIndex: 3, display: 'flex', alignItems: 'center', gap: 11 }}>
+              <div style={{ width: 38, height: 38, borderRadius: 10, background: `linear-gradient(135deg, ${cfg.stat2Color}, ${C.blue})`, display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: `0 6px 14px ${cfg.stat2Color}48`, flexShrink: 0 }}>
+                <Ic n={cfg.stat2Icon} s={18} style={{ color: '#fff' }} />
+              </div>
+              <div>
+                <div style={{ fontSize: 15, fontWeight: 900, color: '#0a0a14', fontFamily: "'Plus Jakarta Sans',sans-serif", lineHeight: 1.05, letterSpacing: '-0.01em' }}>{cfg.stat2Title}</div>
+                <div style={{ fontSize: 10, color: '#64748b', marginTop: 3, fontWeight: 600, letterSpacing: '.04em' }}>{cfg.stat2Sub}</div>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* RIGHT — Image (Team) */}
+        {cfg.img && !cfg.animatedAbout && (
           <div className="company-hero-image" style={{ position: 'relative', width: '100%', height: '80%' }}>
             {/* Back frame — offset top-right */}
             <div style={{ position: 'absolute', top: -14, right: -14, left: 14, bottom: 14, borderRadius: 20, background: `linear-gradient(135deg, ${cfg.color}3a, ${C.teal}3a)`, border: `1px solid ${cfg.color}25`, zIndex: 0 }} />
@@ -735,24 +789,6 @@ function GlobalSection({ navigate }) {
         }
         @media (max-width: 480px) {
           .company-hero-image { height: 220px !important; }
-        }
-
-        /* Careers hero — animation sits beside text on desktop (1fr 1fr),
-           and drops BELOW the full text block on tablet/mobile. Own class so the
-           shared .company-hero-image rules never fight it (was causing overlap).
-           Desktop height is inline (520); these !important rules override it
-           per device. Heights are tuned per screen so the animation stays fully
-           visible with minimal empty space, and we override ui.js's 108px mobile
-           top padding (header is 68px). */
-        @media (max-width: 1023px) {            /* tablet */
-          .careers-hero-image { height: 400px !important; }
-          .company-hero-grid.careers-hero-grid { gap: 16px !important; padding-top: 72px !important; }
-        }
-        @media (max-width: 767px) {             /* mobile */
-          .careers-hero-image { height: 300px !important; }
-        }
-        @media (max-width: 480px) {             /* small mobile */
-          .careers-hero-image { height: 300px !important; }
         }
 
         /* GlobalSection-specific responsive */
