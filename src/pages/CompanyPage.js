@@ -1263,10 +1263,19 @@ function CareersSection({ navigate }) {
 
               {!loading && !error && roles.map((j, i) => {
                 const accent = getLocColor(j.location)
-                const applyHref = j.applyUrl
-                  ? j.applyUrl
-                  : `mailto:careers@devinstratus.com?subject=${encodeURIComponent('Application: ' + j.title)}`
-                const isExternalApply = j.applyUrl && /^https?:\/\//i.test(j.applyUrl)
+                /* All applications route to careers@devinstratus.com so candidates send
+                   their CV as an email attachment. We ignore the SharePoint ApplyUrl
+                   field entirely (the client kept putting admin/internal URLs there
+                   that candidates couldn't reach anyway). */
+                const applyHref =
+                  `mailto:careers@devinstratus.com` +
+                  `?subject=${encodeURIComponent('Application: ' + j.title)}` +
+                  `&body=${encodeURIComponent(
+                    `Hi DevinStratus team,\n\n` +
+                    `I'd like to apply for the ${j.title}${j.location ? ' (' + j.location + ')' : ''} position. ` +
+                    `Please find my CV attached.\n\n` +
+                    `Thanks,\n`
+                  )}`
                 return (
                   <div key={j.id || j.slug || j.title} id={`job-${j.slug || i}`} className="job-card-interactive rv" style={{ display: 'flex', flexDirection: 'column', gap: 14, padding: '22px 24px', borderRadius: 18, border: `1.5px solid ${C.border}`, background: '#fff', transition: 'all .3s cubic-bezier(0.2, 0.8, 0.2, 1)', animation: `fadeUp .5s ease both ${i * 80}ms`, position: 'relative', overflow: 'hidden' }}
                     onMouseEnter={e => { e.currentTarget.style.borderColor = accent + '55'; e.currentTarget.style.boxShadow = `0 14px 32px ${accent}22`; e.currentTarget.style.transform = 'translateY(-3px)' }}
@@ -1296,9 +1305,8 @@ function CareersSection({ navigate }) {
                       </div>
 
                       <a href={applyHref}
-                        {...(isExternalApply ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
                         style={{ width: 40, height: 40, borderRadius: '50%', background: `${accent}15`, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, transition: 'all .3s', textDecoration: 'none' }}
-                        title={`Apply for ${j.title}`}>
+                        title={`Apply for ${j.title} — email careers@devinstratus.com with your CV`}>
                         <Ic n="Arrow" s={14} style={{ color: accent }} />
                       </a>
                     </div>

@@ -39,7 +39,8 @@ function getNextBusinessDays(n = 5) {
   const days = []
   const d = new Date()
   d.setHours(0,0,0,0)
-  d.setDate(d.getDate() + 1)
+  // Include today — if today's remaining slots are past the lead-time, the backend
+  // will mark them unavailable; the UI filters past slots out of the grid below.
   while (days.length < n) {
     const dow = d.getDay()
     if (dow !== 0 && dow !== 6) days.push(new Date(d))
@@ -189,8 +190,11 @@ export default function ContactPage({ navigate, openConsult }) {
       fetchSlots().then(({ slots, source }) => {
         setSlots(slots)
         setSlotsSource(source)
-        const days = [...new Set(slots.map(s => s.date))]
-        if (days.length > 0) setActiveDay(days[0])
+        // Prefer the first day that has at least one available slot; fall back
+        // to the earliest day so the picker isn't blank when everything is booked.
+        const daysWithOpen = [...new Set(slots.filter(s => s.available).map(s => s.date))]
+        const allDays = [...new Set(slots.map(s => s.date))]
+        setActiveDay(daysWithOpen[0] || allDays[0] || null)
         setSlotsLoading(false)
       })
     }
@@ -295,6 +299,8 @@ export default function ContactPage({ navigate, openConsult }) {
           .cp-stats-g > div:nth-child(4) { padding-top: 22px !important; border-top: 1px solid #e2e8f0; }
           .cp-stats-g .stat-v { font-size: 32px !important; }
           .cp-focus-g { grid-template-columns: 1fr !important; gap: 12px !important; }
+          .cp-mm { grid-template-columns: 1fr !important; gap: 12px !important; }
+          .cp-subfocus-g { grid-template-columns: 1fr !important; }
           .cp-form-g { grid-template-columns: 1fr !important; }
           .cp-slot-days { overflow-x: auto; flex-wrap: nowrap !important; padding-bottom: 8px; }
           .cp-slot-times-g { grid-template-columns: repeat(2, 1fr) !important; }
@@ -444,77 +450,142 @@ export default function ContactPage({ navigate, openConsult }) {
 
 
           {/* ──── STEP 1: Focus ──── */}
-          {step === 1 && (
-            <div className="rv" style={{ maxWidth:880, margin:'0 auto' }}>
+          {step === 1 && (() => {
+            const subItems = focus ? (CONTACT_SUB_FOCUS[focus.slug] || []) : []
+            const hasSubs = subItems.length > 0
+            return (
+            <div className="rv" style={{ maxWidth:1080, margin:'0 auto' }}>
               <div style={{ textAlign:'center', marginBottom:32 }}>
                 <h3 style={{ fontSize:22, fontWeight:800, color:'#0a0a14', fontFamily:"'Plus Jakarta Sans',sans-serif", marginBottom:8 }}>What can we help you with?</h3>
-                <p style={{ fontSize:14, color:'#475569' }}>Pick the area closest to your challenge — we'll route to the right architect.</p>
+                <p style={{ fontSize:14, color:'#475569' }}>Pick a solution area on the left, then the specific area on the right — we'll route to the right architect.</p>
               </div>
 
-              <div className="cp-focus-g" style={{ display:'grid', gridTemplateColumns:'repeat(2, 1fr)', gap:14, marginBottom:32 }}>
-                {CONTACT_FOCUS.map(f => (
-                  <button key={f.slug} onClick={() => pickFocus(f)}
-                    style={{
-                      display:'flex', alignItems:'flex-start', gap:14, padding:'20px 22px', textAlign:'left',
-                      borderRadius:16, cursor:'pointer', position:'relative', overflow:'hidden',
-                      background: focus?.slug === f.slug ? 'linear-gradient(135deg, rgba(0,102,255,0.08), rgba(6,182,212,0.08))' : '#fff',
-                      border: focus?.slug === f.slug ? '1.5px solid #0066FF' : '1px solid #e2e8f0',
-                      boxShadow: focus?.slug === f.slug ? '0 8px 24px rgba(0,102,255,0.18)' : '0 1px 3px rgba(0,53,128,0.04)',
-                      transition:'all .22s',
-                    }}
-                    onMouseEnter={e => { if (focus?.slug !== f.slug) { e.currentTarget.style.borderColor='#0066FF55'; e.currentTarget.style.transform='translateY(-2px)' } }}
-                    onMouseLeave={e => { if (focus?.slug !== f.slug) { e.currentTarget.style.borderColor='#e2e8f0'; e.currentTarget.style.transform='none' } }}>
-                    <div style={{ width:46, height:46, borderRadius:13, background:'linear-gradient(135deg, #0066FF, #003FB3)', display:'flex', alignItems:'center', justifyContent:'center', flexShrink:0, boxShadow:'0 6px 16px rgba(0,102,255,0.30)' }}>
-                      <Ic n={f.icon} s={22} style={{ color:'#fff' }}/>
-                    </div>
-                    <div style={{ flex:1 }}>
-                      <div style={{ fontSize:15.5, fontWeight:800, color:'#0a0a14', fontFamily:"'Plus Jakarta Sans',sans-serif", marginBottom:5 }}>{f.label}</div>
-                      <div style={{ fontSize:12.5, color:'#475569', lineHeight:1.55 }}>{f.desc}</div>
-                    </div>
-                    {focus?.slug === f.slug && (
-                      <div style={{ position:'absolute', top:14, right:14, width:24, height:24, borderRadius:'50%', background:'#0066FF', display:'flex', alignItems:'center', justifyContent:'center' }}>
-                        <Ic n="Check" s={14} style={{ color:'#fff' }}/>
-                      </div>
-                    )}
-                  </button>
-                ))}
-              </div>
+              {/* Mega-menu master-detail: left rail (mains) + right panel (subs) */}
+              <div className="cp-mm" style={{ display:'grid', gridTemplateColumns:'minmax(260px, 320px) 1fr', gap:18, marginBottom:32, alignItems:'stretch' }}>
 
-              {/* ── Sub-focus reveal (after a main focus is selected, if it has sub-options) ── */}
-              {focus && CONTACT_SUB_FOCUS[focus.slug] && CONTACT_SUB_FOCUS[focus.slug].length > 0 && (
-                <div className="rv" style={{ marginBottom: 32, animation: 'cpReveal .35s ease both' }}>
-                  <div style={{ fontSize: 11, fontWeight: 800, letterSpacing: '.14em', color: '#475569', marginBottom: 14, textTransform: 'uppercase' }}>
-                    Within {focus.label} — pick the closest area
-                  </div>
-                  <div className="cp-subfocus-g" style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: 10 }}>
-                    {CONTACT_SUB_FOCUS[focus.slug].map(sf => {
-                      const isOn = subFocus?.slug === sf.slug
+                {/* LEFT RAIL — main solutions */}
+                <div style={{ background:'linear-gradient(180deg, #f8fafc, #f1f5f9)', border:'1px solid #e2e8f0', borderRadius:16, padding:8 }}>
+                  <div style={{ fontSize:10, fontWeight:800, letterSpacing:'.16em', color:'#64748b', padding:'10px 14px 6px' }}>ALL SOLUTIONS</div>
+                  <div style={{ display:'flex', flexDirection:'column', gap:4 }}>
+                    {CONTACT_FOCUS.map(f => {
+                      const isOn = focus?.slug === f.slug
                       return (
-                        <button key={sf.slug} onClick={() => setSubFocus(sf)}
+                        <button key={f.slug} onClick={() => pickFocus(f)}
                           style={{
-                            display: 'flex', alignItems: 'flex-start', gap: 11, padding: '14px 16px', textAlign: 'left',
-                            borderRadius: 12, cursor: 'pointer', position: 'relative',
-                            background: isOn ? 'linear-gradient(135deg, rgba(0,102,255,0.06), rgba(6,182,212,0.06))' : '#fff',
-                            border: isOn ? '1.5px solid #0066FF' : '1px solid #e2e8f0',
-                            boxShadow: isOn ? '0 4px 14px rgba(0,102,255,0.14)' : 'none',
-                            transition: 'all .18s',
+                            display:'flex', alignItems:'center', gap:12, padding:'12px 14px', textAlign:'left',
+                            borderRadius:12, cursor:'pointer', border:'none',
+                            background: isOn ? '#fff' : 'transparent',
+                            boxShadow: isOn ? '0 6px 18px rgba(0, 102, 255, 0.10)' : 'none',
+                            transition:'all .18s',
+                            position:'relative',
                           }}
-                          onMouseEnter={e => { if (!isOn) { e.currentTarget.style.borderColor = '#0066FF55' } }}
-                          onMouseLeave={e => { if (!isOn) { e.currentTarget.style.borderColor = '#e2e8f0' } }}>
-                          <div style={{ width: 18, height: 18, borderRadius: '50%', border: `1.5px solid ${isOn ? '#0066FF' : '#cbd5e1'}`, flexShrink: 0, marginTop: 2, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                            {isOn && <div style={{ width: 8, height: 8, borderRadius: '50%', background: '#0066FF' }} />}
+                          onMouseEnter={e => { if (!isOn) e.currentTarget.style.background = 'rgba(255,255,255,0.7)' }}
+                          onMouseLeave={e => { if (!isOn) e.currentTarget.style.background = 'transparent' }}>
+                          {isOn && <span style={{ position:'absolute', left:0, top:8, bottom:8, width:3, borderRadius:'0 3px 3px 0', background:'linear-gradient(180deg, #0066FF, #06b6d4)' }} />}
+                          <div style={{ width:36, height:36, borderRadius:10, background: isOn ? 'linear-gradient(135deg, #0066FF, #003FB3)' : '#fff', display:'flex', alignItems:'center', justifyContent:'center', flexShrink:0, boxShadow: isOn ? '0 4px 12px rgba(0,102,255,0.30)' : '0 1px 3px rgba(0,53,128,0.06)' }}>
+                            <Ic n={f.icon} s={17} style={{ color: isOn ? '#fff' : '#0066FF' }}/>
                           </div>
-                          <div style={{ flex: 1, minWidth: 0 }}>
-                            <div style={{ fontSize: 13.5, fontWeight: 800, color: '#0a0a14', fontFamily: "'Plus Jakarta Sans',sans-serif", marginBottom: 2 }}>{sf.label}</div>
-                            <div style={{ fontSize: 11.5, color: '#64748b', lineHeight: 1.45 }}>{sf.desc}</div>
+                          <div style={{ flex:1, minWidth:0 }}>
+                            <div style={{ fontSize:13.5, fontWeight:800, color:'#0a0a14', fontFamily:"'Plus Jakarta Sans',sans-serif", lineHeight:1.2, marginBottom:2, whiteSpace:'nowrap', overflow:'hidden', textOverflow:'ellipsis' }}>{f.label}</div>
+                            <div style={{ fontSize:11, color:'#64748b', lineHeight:1.3, whiteSpace:'nowrap', overflow:'hidden', textOverflow:'ellipsis' }}>{f.desc}</div>
                           </div>
+                          {isOn && <Ic n="Arrow" s={13} style={{ color:'#0066FF', flexShrink:0 }} />}
                         </button>
                       )
                     })}
                   </div>
-                  <style>{`@keyframes cpReveal { from { opacity:0; transform:translateY(8px) } to { opacity:1; transform:translateY(0) } }`}</style>
                 </div>
-              )}
+
+                {/* RIGHT PANEL — sub-solutions for selected focus */}
+                <div style={{ background:'#fff', border:'1px solid #e2e8f0', borderRadius:16, padding:'18px 20px', minHeight:340, position:'relative' }}>
+                  {!focus && (
+                    <div style={{ display:'flex', alignItems:'center', justifyContent:'center', height:'100%', minHeight:300, color:'#94a3b8', textAlign:'center', flexDirection:'column', gap:10 }}>
+                      <div style={{ width:48, height:48, borderRadius:14, background:'#f1f5f9', display:'flex', alignItems:'center', justifyContent:'center' }}>
+                        <Ic n="Target" s={22} style={{ color:'#94a3b8' }}/>
+                      </div>
+                      <div style={{ fontSize:14, fontWeight:600, color:'#475569', fontFamily:"'Plus Jakarta Sans',sans-serif" }}>Pick a solution area on the left</div>
+                      <div style={{ fontSize:12.5, color:'#94a3b8', maxWidth:300, lineHeight:1.5 }}>Or choose <em>Multiple / Not sure yet</em> if you'd like us to scope it on the call.</div>
+                    </div>
+                  )}
+
+                  {focus && !hasSubs && (
+                    <div style={{ display:'flex', alignItems:'center', justifyContent:'center', height:'100%', minHeight:300, color:'#0a0a14', textAlign:'center', flexDirection:'column', gap:14, padding:'24px' }}>
+                      <div style={{ width:52, height:52, borderRadius:14, background:'linear-gradient(135deg, #0066FF, #003FB3)', display:'flex', alignItems:'center', justifyContent:'center', boxShadow:'0 8px 20px rgba(0,102,255,0.25)' }}>
+                        <Ic n={focus.icon} s={24} style={{ color:'#fff' }}/>
+                      </div>
+                      <div style={{ fontSize:16, fontWeight:800, color:'#0a0a14', fontFamily:"'Plus Jakarta Sans',sans-serif" }}>{focus.label}</div>
+                      <div style={{ fontSize:13.5, color:'#475569', maxWidth:360, lineHeight:1.55 }}>{focus.desc} — no sub-options to pick. Click <strong>Continue</strong> to proceed.</div>
+                    </div>
+                  )}
+
+                  {focus && hasSubs && (
+                    <div style={{ animation:'cpReveal .35s ease both' }}>
+                      <div style={{ display:'flex', alignItems:'center', justifyContent:'space-between', gap:12, marginBottom:14, flexWrap:'wrap' }}>
+                        <div style={{ display:'inline-flex', alignItems:'center', gap:10 }}>
+                          <div style={{ width:32, height:32, borderRadius:9, background:'linear-gradient(135deg, #0066FF, #003FB3)', display:'flex', alignItems:'center', justifyContent:'center', boxShadow:'0 4px 10px rgba(0,102,255,0.25)' }}>
+                            <Ic n={focus.icon} s={16} style={{ color:'#fff' }}/>
+                          </div>
+                          <div>
+                            <div style={{ fontSize:15, fontWeight:800, color:'#0a0a14', fontFamily:"'Plus Jakarta Sans',sans-serif", lineHeight:1.1 }}>{focus.label}</div>
+                            <div style={{ fontSize:11, color:'#64748b', marginTop:2 }}>Pick the closest area</div>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div className="cp-subfocus-g" style={{ display:'grid', gridTemplateColumns:'repeat(2, 1fr)', gap:12 }}>
+                        {subItems.map(sf => {
+                          const isOn = subFocus?.slug === sf.slug
+                          const accent = sf.color || focus.color || '#0066FF'
+                          return (
+                            <button key={sf.slug} onClick={() => setSubFocus(sf)}
+                              style={{
+                                position:'relative',
+                                display:'flex', flexDirection:'column', gap:10,
+                                padding:'16px 16px 14px', textAlign:'left',
+                                borderRadius:14, cursor:'pointer',
+                                background: isOn ? `linear-gradient(135deg, ${accent}0e, ${accent}05)` : '#fff',
+                                border: isOn ? `1.5px solid ${accent}` : '1px solid #e2e8f0',
+                                boxShadow: isOn ? `0 8px 22px ${accent}26` : '0 1px 3px rgba(0,53,128,0.04)',
+                                transition:'all .22s cubic-bezier(0.2, 0.8, 0.2, 1)',
+                                overflow:'hidden',
+                                minHeight:96,
+                              }}
+                              onMouseEnter={e => { if (!isOn) { e.currentTarget.style.borderColor = accent + '55'; e.currentTarget.style.transform = 'translateY(-2px)'; e.currentTarget.style.boxShadow = `0 6px 16px ${accent}1f` } }}
+                              onMouseLeave={e => { if (!isOn) { e.currentTarget.style.borderColor = '#e2e8f0'; e.currentTarget.style.transform = 'none'; e.currentTarget.style.boxShadow = '0 1px 3px rgba(0,53,128,0.04)' } }}>
+
+                              {/* Selected checkmark in corner */}
+                              {isOn && (
+                                <div style={{ position:'absolute', top:10, right:10, width:22, height:22, borderRadius:'50%', background:accent, display:'flex', alignItems:'center', justifyContent:'center', boxShadow:`0 2px 8px ${accent}66` }}>
+                                  <Ic n="Check" s={12} style={{ color:'#fff' }} />
+                                </div>
+                              )}
+
+                              {/* Top row: icon + title + tag */}
+                              <div style={{ display:'flex', alignItems:'flex-start', gap:11, paddingRight: isOn ? 28 : 0 }}>
+                                <div style={{ width:34, height:34, borderRadius:10, background:`${accent}14`, display:'flex', alignItems:'center', justifyContent:'center', flexShrink:0 }}>
+                                  <Ic n={sf.icon || 'Target'} s={17} style={{ color: accent }} />
+                                </div>
+                                <div style={{ flex:1, minWidth:0 }}>
+                                  <div style={{ display:'flex', alignItems:'center', gap:7, flexWrap:'wrap' }}>
+                                    <span style={{ fontSize:13.5, fontWeight:800, color:'#0a0a14', fontFamily:"'Plus Jakarta Sans',sans-serif", lineHeight:1.25 }}>{sf.label}</span>
+                                    {sf.tag && (
+                                      <span style={{ fontSize:9, fontWeight:800, color: accent, background:`${accent}14`, padding:'2px 7px', borderRadius:50, letterSpacing:'.04em', textTransform:'uppercase', whiteSpace:'nowrap' }}>{sf.tag}</span>
+                                    )}
+                                  </div>
+                                </div>
+                              </div>
+
+                              {/* Description */}
+                              <div style={{ fontSize:12, color:'#475569', lineHeight:1.5, paddingLeft:45 }}>{sf.desc}</div>
+                            </button>
+                          )
+                        })}
+                      </div>
+                      <style>{`@keyframes cpReveal { from { opacity:0; transform:translateY(6px) } to { opacity:1; transform:translateY(0) } }`}</style>
+                    </div>
+                  )}
+                </div>
+              </div>
 
               <div style={{ display:'flex', justifyContent:'flex-end' }}>
                 <button onClick={() => step1Valid && setStep(2)} disabled={!step1Valid}
@@ -530,7 +601,7 @@ export default function ContactPage({ navigate, openConsult }) {
                 </button>
               </div>
             </div>
-          )}
+          )})()}
 
 
           {/* ──── STEP 2: Details ──── */}
@@ -640,26 +711,60 @@ export default function ContactPage({ navigate, openConsult }) {
                     })}
                   </div>
 
-                  {/* Times for active day */}
-                  {activeDay && (
-                    <div className="cp-slot-times-g" style={{ display:'grid', gridTemplateColumns:'repeat(4, 1fr)', gap:10, marginBottom:32 }}>
-                      {slotsByDay[activeDay].map(s => (
-                        <button key={s.slotId} disabled={!s.available} onClick={() => s.available && setSelectedSlot(s.slotId)}
-                          style={{
-                            padding:'14px 16px', borderRadius:12, cursor: s.available ? 'pointer' : 'not-allowed',
-                            background: selectedSlot === s.slotId ? 'linear-gradient(135deg, #0066FF, #003FB3)' : (s.available ? '#fff' : '#f8fafc'),
-                            border: selectedSlot === s.slotId ? 'none' : '1px solid #e2e8f0',
-                            color: selectedSlot === s.slotId ? '#fff' : (s.available ? '#0a0a14' : '#cbd5e1'),
-                            fontSize:14, fontWeight:700,
-                            fontFamily:"'JetBrains Mono', monospace",
-                            transition:'all .15s',
-                            textDecoration: s.available ? 'none' : 'line-through',
-                          }}>
-                          {s.time}
-                        </button>
-                      ))}
-                    </div>
-                  )}
+                  {/* Times for active day — available slots only.
+                      Past slots and booked slots are hidden from the grid; the
+                      day tabs above already dim when a day has nothing open. */}
+                  {activeDay && (() => {
+                    const dayOpen = (slotsByDay[activeDay] || []).filter(s => s.available)
+                    const anyOpenAcrossAllDays = dayKeys.some(d => slotsByDay[d].some(s => s.available))
+
+                    if (dayOpen.length === 0 && anyOpenAcrossAllDays) {
+                      return (
+                        <div style={{ padding:'40px 20px', textAlign:'center', borderRadius:14, background:'#f8fafc', border:'1px dashed #cbd5e1', marginBottom:32 }}>
+                          <div style={{ fontSize:14, fontWeight:700, color:'#0a0a14', marginBottom:6 }}>All times on this day are booked</div>
+                          <div style={{ fontSize:12.5, color:'#64748b' }}>Pick another day above — we have openings on other dates.</div>
+                        </div>
+                      )
+                    }
+
+                    if (dayOpen.length === 0 && !anyOpenAcrossAllDays) {
+                      return (
+                        <div style={{ padding:'36px 28px', textAlign:'center', borderRadius:16, background:'linear-gradient(135deg, rgba(0,102,255,0.04), rgba(6,182,212,0.04))', border:'1.5px dashed rgba(0,102,255,0.30)', marginBottom:32 }}>
+                          <div style={{ width:56, height:56, borderRadius:14, background:'linear-gradient(135deg, #0066FF, #003FB3)', display:'inline-flex', alignItems:'center', justifyContent:'center', boxShadow:'0 8px 20px rgba(0,102,255,0.25)', marginBottom:14 }}>
+                            <Ic n="Mail" s={24} style={{ color:'#fff' }}/>
+                          </div>
+                          <div style={{ fontSize:16, fontWeight:800, color:'#0a0a14', fontFamily:"'Plus Jakarta Sans',sans-serif", marginBottom:8 }}>The next week is fully booked</div>
+                          <div style={{ fontSize:13.5, color:'#475569', lineHeight:1.6, maxWidth:460, margin:'0 auto 18px' }}>
+                            Email us directly with a few times that work for you — we'll find a slot that fits, including outside our standard hours when needed.
+                          </div>
+                          <a href={`mailto:contact@devinstratus.com?subject=${encodeURIComponent('Consultation request — ' + (focus?.label || ''))}&body=${encodeURIComponent('Hi DevinStratus team,\n\nI tried to book online but the next week is fully booked. Could we find a custom time?\n\nA few times that work for me:\n- \n- \n- \n\nWhat I want to discuss: ' + (subFocus?.label || focus?.label || 'a consultation') + '\n\nThanks,')}`}
+                            style={{ display:'inline-flex', alignItems:'center', gap:8, padding:'12px 22px', borderRadius:50, background:'linear-gradient(135deg, #0066FF, #003FB3)', color:'#fff', fontSize:13.5, fontWeight:700, textDecoration:'none', boxShadow:'0 8px 20px rgba(0,102,255,0.30)', fontFamily:"'Plus Jakarta Sans',sans-serif" }}>
+                            <Ic n="Mail" s={14} style={{ color:'#fff' }}/> Email contact@devinstratus.com
+                          </a>
+                        </div>
+                      )
+                    }
+
+                    return (
+                      <div className="cp-slot-times-g" style={{ display:'grid', gridTemplateColumns:'repeat(4, 1fr)', gap:10, marginBottom:32 }}>
+                        {dayOpen.map(s => (
+                          <button key={s.slotId} onClick={() => setSelectedSlot(s.slotId)}
+                            style={{
+                              padding:'14px 16px', borderRadius:12, cursor:'pointer',
+                              background: selectedSlot === s.slotId ? 'linear-gradient(135deg, #0066FF, #003FB3)' : '#fff',
+                              border: selectedSlot === s.slotId ? 'none' : '1px solid #e2e8f0',
+                              color: selectedSlot === s.slotId ? '#fff' : '#0a0a14',
+                              fontSize:14, fontWeight:700,
+                              fontFamily:"'JetBrains Mono', monospace",
+                              transition:'all .15s',
+                              boxShadow: selectedSlot === s.slotId ? '0 6px 18px rgba(0,102,255,0.30)' : 'none',
+                            }}>
+                            {s.time}
+                          </button>
+                        ))}
+                      </div>
+                    )
+                  })()}
 
                   <div style={{ display:'flex', justifyContent:'space-between', alignItems:'center', flexWrap:'wrap', gap:12 }}>
                     <button onClick={() => setStep(2)} style={{ display:'inline-flex', alignItems:'center', gap:8, padding:'12px 22px', borderRadius:50, background:'#fff', border:'1px solid #e2e8f0', cursor:'pointer', fontSize:13.5, fontWeight:700, color:'#475569' }}>
