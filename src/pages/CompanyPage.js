@@ -1124,6 +1124,133 @@ function HiringTimeline() {
   )
 }
 
+// ── Careers helpers + role detail modal ─────────────────────────────────────────────
+
+/** All applications route to careers@devinstratus.com with the role pre-filled. */
+function buildApplyHref(role) {
+  return `mailto:careers@devinstratus.com` +
+    `?subject=${encodeURIComponent('Application: ' + role.title)}` +
+    `&body=${encodeURIComponent(
+      `Hi DevinStratus team,\n\n` +
+      `I'd like to apply for the ${role.title}${role.location ? ' (' + role.location + ')' : ''} position. ` +
+      `Please find my CV attached.\n\nThanks,\n`
+    )}`
+}
+
+/**
+ * Heuristic: is this line a sub-heading rather than a bullet?
+ * SharePoint editors often write section headings ("Technical Skills",
+ * "Governance & Security") inline with bullets; the HTML cleaner flattens them.
+ * We re-detect heading-like lines so the modal renders them as headings, not bullets —
+ * defensive against messy client content.
+ */
+function isHeadingLine(line) {
+  const t = (line || '').trim()
+  if (!t) return false
+  if (/:$/.test(t)) return true                 // ends with a colon → heading
+  if (/[.!?,;]/.test(t)) return false           // any sentence punctuation → it's a bullet
+  const words = t.split(/\s+/)
+  return words.length <= 6 && t.length <= 55     // short, punctuation-free → heading
+}
+
+/** Renders a titled section as heading-aware bullets. Returns null if empty. */
+function RoleSection({ title, items, accent }) {
+  if (!items || !items.length) return null
+  return (
+    <div style={{ marginBottom: 24 }}>
+      <h4 style={{ fontSize: 12.5, fontWeight: 800, letterSpacing: '.08em', textTransform: 'uppercase', color: accent, marginBottom: 12, fontFamily: "'Plus Jakarta Sans',sans-serif" }}>{title}</h4>
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 9 }}>
+        {items.map((line, idx) => (
+          isHeadingLine(line) ? (
+            <div key={idx} style={{ fontSize: 13.5, fontWeight: 800, color: '#0a0a14', marginTop: idx === 0 ? 0 : 8, fontFamily: "'Plus Jakarta Sans',sans-serif" }}>{line.replace(/:$/, '')}</div>
+          ) : (
+            <div key={idx} style={{ display: 'flex', gap: 10, alignItems: 'flex-start' }}>
+              <div style={{ width: 6, height: 6, borderRadius: '50%', background: accent, marginTop: 7, flexShrink: 0 }} />
+              <div style={{ fontSize: 13.5, color: '#475569', lineHeight: 1.6 }}>{line}</div>
+            </div>
+          )
+        ))}
+      </div>
+    </div>
+  )
+}
+
+/** Full role detail modal — rendered via portal at document root. */
+function RoleModal({ role, accent, onClose }) {
+  if (!role) return null
+  const chips = [
+    role.location && { icon: 'Pin', text: role.location, primary: true },
+    role.type && { icon: 'Brief', text: role.type },
+    role.level && { icon: 'Star', text: role.level },
+    role.workMode && { icon: 'Globe', text: role.workMode },
+    role.department && { icon: 'Users', text: role.department },
+  ].filter(Boolean)
+
+  return createPortal(
+    <div onClick={e => { if (e.target === e.currentTarget) onClose() }}
+      style={{ position: 'fixed', inset: 0, zIndex: 100000, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 20, background: 'rgba(15,23,42,0.55)', backdropFilter: 'blur(5px)', WebkitBackdropFilter: 'blur(5px)', animation: 'roleFade .2s ease' }}>
+      <div role="dialog" aria-modal="true" aria-label={role.title}
+        style={{ background: '#fff', borderRadius: 22, width: '100%', maxWidth: 720, maxHeight: '88vh', display: 'flex', flexDirection: 'column', overflow: 'hidden', boxShadow: '0 30px 90px rgba(0,0,0,0.28)', animation: 'rolePop .25s cubic-bezier(0.2,0.8,0.2,1)' }}>
+
+        <div style={{ height: 4, background: `linear-gradient(90deg, ${accent}, ${accent}66)`, flexShrink: 0 }} />
+
+        {/* Header */}
+        <div style={{ padding: '24px 28px 18px', borderBottom: '1px solid #eef2f7', flexShrink: 0 }}>
+          <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: 16 }}>
+            <div style={{ flex: 1, minWidth: 0 }}>
+              <h3 style={{ fontSize: 'clamp(20px, 3vw, 24px)', fontWeight: 800, color: '#0a0a14', fontFamily: "'Plus Jakarta Sans',sans-serif", lineHeight: 1.25, marginBottom: 14 }}>{role.title}</h3>
+              <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
+                {chips.map((c, i) => (
+                  <span key={i} style={{ display: 'inline-flex', alignItems: 'center', gap: 5, padding: '4px 11px', borderRadius: 50, background: c.primary ? `${accent}12` : '#f1f5f9', color: c.primary ? accent : '#475569', fontWeight: 700, fontSize: 11.5 }}>
+                    <Ic n={c.icon} s={11} style={{ color: c.primary ? accent : '#64748b' }} /> {c.text}
+                  </span>
+                ))}
+              </div>
+            </div>
+            <button onClick={onClose} aria-label="Close" style={{ background: '#f1f5f9', border: 'none', borderRadius: 10, width: 34, height: 34, cursor: 'pointer', fontSize: 22, color: '#64748b', flexShrink: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', lineHeight: 1 }}>×</button>
+          </div>
+        </div>
+
+        {/* Body (scrollable) */}
+        <div style={{ padding: '22px 28px', overflowY: 'auto', flex: 1 }}>
+          {role.salaryRange && (
+            <div style={{ display: 'inline-flex', alignItems: 'center', gap: 7, padding: '7px 14px', borderRadius: 10, background: `${accent}0d`, border: `1px solid ${accent}22`, marginBottom: 20 }}>
+              <Ic n="Dollar" s={14} style={{ color: accent }} />
+              <span style={{ fontSize: 13.5, fontWeight: 800, color: '#0a0a14' }}>{role.salaryRange}</span>
+            </div>
+          )}
+          {role.summary && (
+            <p style={{ fontSize: 14.5, color: '#334155', lineHeight: 1.7, marginBottom: 24 }}>{role.summary}</p>
+          )}
+          <RoleSection title="Responsibilities" items={role.responsibilities} accent={accent} />
+          <RoleSection title="Requirements" items={role.requirements} accent={accent} />
+          <RoleSection title="Nice to have" items={role.niceToHave} accent={accent} />
+          {role.skills && role.skills.length > 0 && (
+            <div>
+              <h4 style={{ fontSize: 12.5, fontWeight: 800, letterSpacing: '.08em', textTransform: 'uppercase', color: accent, marginBottom: 12, fontFamily: "'Plus Jakarta Sans',sans-serif" }}>Skills</h4>
+              <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
+                {role.skills.map(s => (
+                  <span key={s} style={{ padding: '5px 12px', background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: 8, fontSize: 12, fontWeight: 600, color: '#475569' }}>{s}</span>
+                ))}
+              </div>
+            </div>
+          )}
+        </div>
+
+        {/* Footer */}
+        <div style={{ padding: '16px 28px', borderTop: '1px solid #eef2f7', flexShrink: 0, display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 14, flexWrap: 'wrap' }}>
+          <div style={{ fontSize: 12.5, color: '#64748b' }}>Apply by emailing your CV to <strong style={{ color: '#0a0a14' }}>careers@devinstratus.com</strong></div>
+          <a href={buildApplyHref(role)} style={{ display: 'inline-flex', alignItems: 'center', gap: 8, padding: '12px 24px', borderRadius: 50, background: `linear-gradient(135deg, ${accent}, ${accent}cc)`, color: '#fff', fontSize: 14, fontWeight: 700, textDecoration: 'none', boxShadow: `0 8px 20px ${accent}40`, fontFamily: "'Plus Jakarta Sans',sans-serif", whiteSpace: 'nowrap' }}>
+            <Ic n="Mail" s={14} style={{ color: '#fff' }} /> Email your CV
+          </a>
+        </div>
+      </div>
+      <style>{`@keyframes roleFade{from{opacity:0}to{opacity:1}}@keyframes rolePop{from{opacity:0;transform:scale(.96) translateY(8px)}to{opacity:1;transform:scale(1) translateY(0)}}`}</style>
+    </div>,
+    document.body
+  )
+}
+
 // ── Careers Section ────────────────────────────────────────────────────────────────
 function CareersSection({ navigate }) {
   useReveal()
@@ -1134,6 +1261,17 @@ function CareersSection({ navigate }) {
   const [roles, setRoles] = useState([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
+  const [openRole, setOpenRole] = useState(null)
+
+  /* Modal: lock body scroll + close on Escape while a role is open */
+  useEffect(() => {
+    if (!openRole) return
+    const onKey = (e) => { if (e.key === 'Escape') setOpenRole(null) }
+    document.addEventListener('keydown', onKey)
+    const prev = document.body.style.overflow
+    document.body.style.overflow = 'hidden'
+    return () => { document.removeEventListener('keydown', onKey); document.body.style.overflow = prev }
+  }, [openRole])
 
   useEffect(() => {
     let cancelled = false
@@ -1277,7 +1415,11 @@ function CareersSection({ navigate }) {
                     `Thanks,\n`
                   )}`
                 return (
-                  <div key={j.id || j.slug || j.title} id={`job-${j.slug || i}`} className="job-card-interactive rv" style={{ display: 'flex', flexDirection: 'column', gap: 14, padding: '22px 24px', borderRadius: 18, border: `1.5px solid ${C.border}`, background: '#fff', transition: 'all .3s cubic-bezier(0.2, 0.8, 0.2, 1)', animation: `fadeUp .5s ease both ${i * 80}ms`, position: 'relative', overflow: 'hidden' }}
+                  <div key={j.id || j.slug || j.title} id={`job-${j.slug || i}`} className="job-card-interactive rv"
+                    onClick={() => setOpenRole(j)}
+                    role="button" tabIndex={0}
+                    onKeyDown={e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); setOpenRole(j) } }}
+                    style={{ display: 'flex', flexDirection: 'column', gap: 14, padding: '22px 24px', borderRadius: 18, border: `1.5px solid ${C.border}`, background: '#fff', transition: 'all .3s cubic-bezier(0.2, 0.8, 0.2, 1)', animation: `fadeUp .5s ease both ${i * 80}ms`, position: 'relative', overflow: 'hidden', cursor: 'pointer' }}
                     onMouseEnter={e => { e.currentTarget.style.borderColor = accent + '55'; e.currentTarget.style.boxShadow = `0 14px 32px ${accent}22`; e.currentTarget.style.transform = 'translateY(-3px)' }}
                     onMouseLeave={e => { e.currentTarget.style.borderColor = C.border; e.currentTarget.style.boxShadow = 'none'; e.currentTarget.style.transform = 'none' }}>
 
@@ -1300,14 +1442,16 @@ function CareersSection({ navigate }) {
 
                         {/* Summary (1–2 lines, optional) */}
                         {j.summary && (
-                          <div style={{ marginTop: 10, fontSize: 13.5, color: C.textM, lineHeight: 1.55 }}>{j.summary}</div>
+                          <div style={{ marginTop: 10, fontSize: 13.5, color: C.textM, lineHeight: 1.55, display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>{j.summary}</div>
                         )}
                       </div>
 
+                      {/* Apply arrow — separate action; stop it from opening the modal */}
                       <a href={applyHref}
+                        onClick={e => e.stopPropagation()}
                         style={{ width: 40, height: 40, borderRadius: '50%', background: `${accent}15`, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, transition: 'all .3s', textDecoration: 'none' }}
                         title={`Apply for ${j.title} — email careers@devinstratus.com with your CV`}>
-                        <Ic n="Arrow" s={14} style={{ color: accent }} />
+                        <Ic n="Mail" s={14} style={{ color: accent }} />
                       </a>
                     </div>
 
@@ -1319,6 +1463,11 @@ function CareersSection({ navigate }) {
                       {Array.isArray(j.skills) && j.skills.slice(0, 4).map(s => (
                         <span key={s} style={{ padding: '4px 10px', background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: 6, fontSize: 11, fontWeight: 600, color: '#475569' }}>{s}</span>
                       ))}
+                    </div>
+
+                    {/* View details affordance */}
+                    <div style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 12.5, fontWeight: 700, color: accent, marginTop: 2 }}>
+                      View full details <Ic n="Arrow" s={12} style={{ color: accent }} />
                     </div>
                   </div>
                 )
@@ -1339,6 +1488,9 @@ function CareersSection({ navigate }) {
           </div>
         </div>
       </section>
+
+      {/* Role detail modal (portal) */}
+      <RoleModal role={openRole} accent={openRole ? getLocColor(openRole.location) : C.blue} onClose={() => setOpenRole(null)} />
 
 
       {/* ════════════════════════════════════════════════════
