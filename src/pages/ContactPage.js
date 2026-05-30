@@ -27,16 +27,14 @@
 
 import { useState, useEffect } from 'react'
 import { C, Ic, Btn } from '../components/ui'
-import { OFFICES, CONTACT_FOCUS } from '../data/offices'
+import { OFFICES, CONTACT_FOCUS, CONTACT_SUB_FOCUS } from '../data/offices'
 import ContactJohnHero from '../components/ContactJohnHero'
+import { api, API_BASE } from '../config/api'
 
 /* ─── API configuration ──────────────────────────────────────────────────── */
-const API_BASE = process.env.REACT_APP_CALENDAR_API || ''
-const HAS_API  = Boolean(API_BASE)
+const HAS_API = Boolean(API_BASE)
 
-/* ─── Calendar fetch helpers (graceful fallback to demo data) ────────────── */
-const MOCK_SLOT_TIMES = ['09:00', '09:30', '10:00', '10:30', '11:00', '11:30', '14:00', '14:30', '15:00', '15:30', '16:00', '16:30']
-
+/* ─── Date/time helpers ───────────────────────────────────────────────────── */
 function getNextBusinessDays(n = 5) {
   const days = []
   const d = new Date()
@@ -50,57 +48,91 @@ function getNextBusinessDays(n = 5) {
   return days
 }
 
-function mockSlots() {
-  const days = getNextBusinessDays(5)
-  const out = []
-  days.forEach(d => {
-    MOCK_SLOT_TIMES.forEach(time => {
-      // Randomly mark ~30% as booked for realism
-      const available = Math.random() > 0.30
-      out.push({
-        slotId: `mock-${d.toISOString().slice(0,10)}-${time}`,
-        date: d.toISOString().slice(0,10),
-        time,
-        available,
-      })
-    })
-  })
-  return out
+function toIsoDate(d) {
+  // YYYY-MM-DD in local time (used to ask the backend for that *IST* business day)
+  const y = d.getFullYear()
+  const m = String(d.getMonth() + 1).padStart(2, '0')
+  const day = String(d.getDate()).padStart(2, '0')
+  return `${y}-${m}-${day}`
 }
 
+/** Visitor's local time for a UTC instant, e.g. "9:30 AM" (12-hour, visitor tz). */
+function fmtLocalTime(utcIso) {
+  if (!utcIso) return ''
+  try {
+    return new Date(utcIso).toLocaleTimeString(undefined, { hour: 'numeric', minute: '2-digit' })
+  } catch { return '' }
+}
+
+/** Visitor's local timezone short name, e.g. "GMT+5:30" or "EDT". Used in the "your time" hint. */
+function getLocalTzLabel() {
+  try {
+    const parts = new Intl.DateTimeFormat(undefined, { timeZoneName: 'short' }).formatToParts(new Date())
+    const tz = parts.find(p => p.type === 'timeZoneName')?.value
+    return tz || 'your time'
+  } catch { return 'your time' }
+}
+
+/* ─── Calendar fetch ──────────────────────────────────────────────────────── */
+/**
+ * Fetches availability for the next 5 business days in parallel.
+ * Each backend call is /api/contact/availability?date=YYYY-MM-DD (per IST business day).
+ * Returns slots flattened to the existing UI shape:
+ *   { slotId, start, end, date, time, available }
+ * - slotId  = UTC ISO of the slot start (also what we POST to /book)
+ * - date    = IST business date (YYYY-MM-DD) used to group on the day picker
+ * - time    = visitor-local time label (e.g. "9:30 AM") shown on the slot button
+ */
 async function fetchSlots() {
-  if (!HAS_API) return { slots: mockSlots(), source:'demo' }
+  if (!HAS_API) return { slots: [], source: 'demo' }
   try {
     const days = getNextBusinessDays(5)
-    const from = days[0].toISOString().slice(0,10)
-    const to   = days[days.length - 1].toISOString().slice(0,10)
-    const res  = await fetch(`${API_BASE}/api/slots?from=${from}&to=${to}`)
-    if (!res.ok) throw new Error(`HTTP ${res.status}`)
-    const data = await res.json()
-    return { slots: data.slots || [], source:'live' }
+    const results = await Promise.all(days.map(d => {
+      const date = toIsoDate(d)
+      return fetch(api(`/api/contact/availability?date=${date}`))
+        .then(async r => {
+          if (!r.ok) return { date, slots: [] }
+          const data = await r.json()
+          return { date, slots: data.slots || [] }
+        })
+        .catch(() => ({ date, slots: [] }))
+    }))
+    const flat = []
+    results.forEach(({ date: businessDate, slots }) => {
+      slots.forEach(s => {
+        flat.push({
+          slotId: s.start,
+          start: s.start,
+          end: s.end,
+          date: businessDate,
+          time: fmtLocalTime(s.start),
+          available: s.available,
+        })
+      })
+    })
+    return { slots: flat, source: 'live' }
   } catch (err) {
-    console.warn('[ContactPage] Calendar API unavailable, falling back to demo:', err.message)
-    return { slots: mockSlots(), source:'demo-fallback' }
+    console.warn('[ContactPage] Availability API unavailable:', err.message)
+    return { slots: [], source: 'demo-fallback' }
   }
 }
 
+/* ─── Booking POST ────────────────────────────────────────────────────────── */
 async function postBooking(payload) {
   if (!HAS_API) {
-    await new Promise(r => setTimeout(r, 800))
-    return { ok:true, bookingId:`demo-${Date.now()}`, slot:payload.slotId, source:'demo' }
+    await new Promise(r => setTimeout(r, 600))
+    return { ok: true, booked: true, source: 'demo' }
   }
   try {
-    const res = await fetch(`${API_BASE}/api/bookings`, {
-      method:  'POST',
-      headers: { 'Content-Type':'application/json' },
-      body:    JSON.stringify(payload),
+    const res = await fetch(api('/api/contact/book'), {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify(payload),
     })
-    if (!res.ok) throw new Error(`HTTP ${res.status}`)
-    return { ...(await res.json()), source:'live' }
+    const data = await res.json().catch(() => ({}))
+    return { ok: res.ok && Boolean(data?.ok), status: res.status, ...data }
   } catch (err) {
-    console.warn('[ContactPage] Booking POST failed, demo fallback:', err.message)
-    await new Promise(r => setTimeout(r, 500))
-    return { ok:true, bookingId:`demo-${Date.now()}`, slot:payload.slotId, source:'demo-fallback' }
+    return { ok: false, status: 0, error: { code: 'network', message: err.message } }
   }
 }
 
@@ -118,16 +150,18 @@ function useReveal() {
 }
 
 function fmtDayLabel(isoDate) {
-  const d = new Date(isoDate)
-  const dow = ['SUN','MON','TUE','WED','THU','FRI','SAT'][d.getDay()]
-  const day = d.getDate()
-  const mon = ['JAN','FEB','MAR','APR','MAY','JUN','JUL','AUG','SEP','OCT','NOV','DEC'][d.getMonth()]
+  // Parse as UTC midnight so the date components are stable regardless of visitor tz
+  const d = new Date(isoDate + 'T00:00:00Z')
+  const dow = ['SUN','MON','TUE','WED','THU','FRI','SAT'][d.getUTCDay()]
+  const day = d.getUTCDate()
+  const mon = ['JAN','FEB','MAR','APR','MAY','JUN','JUL','AUG','SEP','OCT','NOV','DEC'][d.getUTCMonth()]
   return { dow, day, mon }
 }
 
 export default function ContactPage({ navigate, openConsult }) {
   const [step, setStep] = useState(1)
   const [focus, setFocus] = useState(null)
+  const [subFocus, setSubFocus] = useState(null)
   const [details, setDetails] = useState({ name:'', email:'', company:'', role:'', headcount:'', notes:'' })
   const [slots, setSlots] = useState([])
   const [slotsLoading, setSlotsLoading] = useState(false)
@@ -138,6 +172,12 @@ export default function ContactPage({ navigate, openConsult }) {
   const [confirmed, setConfirmed] = useState(null)
   const [activeOffice, setActiveOffice] = useState(0)
   const [openFaq, setOpenFaq] = useState(null)
+
+  /* Reset sub-focus whenever main focus changes (and pre-skip when none defined) */
+  const pickFocus = (f) => {
+    setFocus(f)
+    setSubFocus(null)
+  }
 
   useReveal()
   useEffect(() => { window.scrollTo(0,0) }, [])
@@ -159,23 +199,59 @@ export default function ContactPage({ navigate, openConsult }) {
   const handleSubmitBooking = async () => {
     setSubmitting(true)
     const slot = slots.find(s => s.slotId === selectedSlot)
+    if (!slot) { setSubmitting(false); alert('Selected slot could not be found. Please pick again.'); return }
+
+    /* Compose the optional message — preserve the visitor's "notes" + the
+       "headcount" hint we collected, since those don't have dedicated backend fields. */
+    const messageParts = []
+    if (details.notes && details.notes.trim()) messageParts.push(details.notes.trim())
+    if (details.headcount && details.headcount.trim()) messageParts.push(`Team size: ${details.headcount.trim()}`)
+    const message = messageParts.join('\n\n')
+
     const payload = {
-      slotId:  selectedSlot,
-      focus:   focus?.slug,
-      focusLabel: focus?.label,
-      ...details,
+      contact: {
+        name: details.name.trim(),
+        email: details.email.trim(),
+        company: details.company.trim() || undefined,
+      },
+      enquiry: {
+        solution: focus?.label || 'Multiple / Not sure yet',
+        focusArea: subFocus?.label || undefined,
+        useCase: details.role.trim() || undefined,
+        message: message || undefined,
+      },
+      slot: {
+        date: slot.date,        // IST business date — what backend used to generate this slot
+        start: slot.start,      // exact UTC ISO start (also serves as slotId on the wire)
+      },
+      consent: true,
+      honeypot: '',
     }
+
     const result = await postBooking(payload)
     setSubmitting(false)
+
     if (result.ok) {
       setConfirmed({ ...result, slot })
       setStep(5)
-    } else {
-      alert('Booking failed — please try again or call us directly.')
+      return
     }
+
+    /* Slot was just taken by someone else — refresh availability + send back to Step 3 */
+    if (result.status === 409 || result?.error?.code === 'slot_taken') {
+      setSelectedSlot(null)
+      setSlots([])
+      setStep(3)
+      alert("Sorry — that time was just taken by another visitor. We've refreshed availability, please pick another slot.")
+      return
+    }
+
+    alert(result?.error?.message || 'Booking failed — please try again or email contact@devinstratus.com directly.')
   }
 
   const detailsValid = details.name.trim() && /\S+@\S+\.\S+/.test(details.email) && details.company.trim()
+  /* Step 1 needs a focus, and a sub-focus if the focus has any sub-options */
+  const step1Valid = Boolean(focus) && (!(CONTACT_SUB_FOCUS[focus?.slug]?.length) || Boolean(subFocus))
 
   /* Day grouping for slot picker */
   const slotsByDay = slots.reduce((acc, s) => {
@@ -377,7 +453,7 @@ export default function ContactPage({ navigate, openConsult }) {
 
               <div className="cp-focus-g" style={{ display:'grid', gridTemplateColumns:'repeat(2, 1fr)', gap:14, marginBottom:32 }}>
                 {CONTACT_FOCUS.map(f => (
-                  <button key={f.slug} onClick={() => setFocus(f)}
+                  <button key={f.slug} onClick={() => pickFocus(f)}
                     style={{
                       display:'flex', alignItems:'flex-start', gap:14, padding:'20px 22px', textAlign:'left',
                       borderRadius:16, cursor:'pointer', position:'relative', overflow:'hidden',
@@ -404,17 +480,53 @@ export default function ContactPage({ navigate, openConsult }) {
                 ))}
               </div>
 
+              {/* ── Sub-focus reveal (after a main focus is selected, if it has sub-options) ── */}
+              {focus && CONTACT_SUB_FOCUS[focus.slug] && CONTACT_SUB_FOCUS[focus.slug].length > 0 && (
+                <div className="rv" style={{ marginBottom: 32, animation: 'cpReveal .35s ease both' }}>
+                  <div style={{ fontSize: 11, fontWeight: 800, letterSpacing: '.14em', color: '#475569', marginBottom: 14, textTransform: 'uppercase' }}>
+                    Within {focus.label} — pick the closest area
+                  </div>
+                  <div className="cp-subfocus-g" style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: 10 }}>
+                    {CONTACT_SUB_FOCUS[focus.slug].map(sf => {
+                      const isOn = subFocus?.slug === sf.slug
+                      return (
+                        <button key={sf.slug} onClick={() => setSubFocus(sf)}
+                          style={{
+                            display: 'flex', alignItems: 'flex-start', gap: 11, padding: '14px 16px', textAlign: 'left',
+                            borderRadius: 12, cursor: 'pointer', position: 'relative',
+                            background: isOn ? 'linear-gradient(135deg, rgba(0,102,255,0.06), rgba(6,182,212,0.06))' : '#fff',
+                            border: isOn ? '1.5px solid #0066FF' : '1px solid #e2e8f0',
+                            boxShadow: isOn ? '0 4px 14px rgba(0,102,255,0.14)' : 'none',
+                            transition: 'all .18s',
+                          }}
+                          onMouseEnter={e => { if (!isOn) { e.currentTarget.style.borderColor = '#0066FF55' } }}
+                          onMouseLeave={e => { if (!isOn) { e.currentTarget.style.borderColor = '#e2e8f0' } }}>
+                          <div style={{ width: 18, height: 18, borderRadius: '50%', border: `1.5px solid ${isOn ? '#0066FF' : '#cbd5e1'}`, flexShrink: 0, marginTop: 2, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                            {isOn && <div style={{ width: 8, height: 8, borderRadius: '50%', background: '#0066FF' }} />}
+                          </div>
+                          <div style={{ flex: 1, minWidth: 0 }}>
+                            <div style={{ fontSize: 13.5, fontWeight: 800, color: '#0a0a14', fontFamily: "'Plus Jakarta Sans',sans-serif", marginBottom: 2 }}>{sf.label}</div>
+                            <div style={{ fontSize: 11.5, color: '#64748b', lineHeight: 1.45 }}>{sf.desc}</div>
+                          </div>
+                        </button>
+                      )
+                    })}
+                  </div>
+                  <style>{`@keyframes cpReveal { from { opacity:0; transform:translateY(8px) } to { opacity:1; transform:translateY(0) } }`}</style>
+                </div>
+              )}
+
               <div style={{ display:'flex', justifyContent:'flex-end' }}>
-                <button onClick={() => focus && setStep(2)} disabled={!focus}
+                <button onClick={() => step1Valid && setStep(2)} disabled={!step1Valid}
                   style={{
                     display:'inline-flex', alignItems:'center', gap:10, padding:'13px 26px', borderRadius:50,
-                    background: focus ? 'linear-gradient(135deg, #0066FF, #003FB3)' : '#e2e8f0',
-                    border:'none', cursor: focus ? 'pointer' : 'not-allowed',
-                    fontSize:14.5, fontWeight:700, color: focus ? '#fff' : '#94a3b8',
+                    background: step1Valid ? 'linear-gradient(135deg, #0066FF, #003FB3)' : '#e2e8f0',
+                    border:'none', cursor: step1Valid ? 'pointer' : 'not-allowed',
+                    fontSize:14.5, fontWeight:700, color: step1Valid ? '#fff' : '#94a3b8',
                     fontFamily:"'Plus Jakarta Sans',sans-serif",
-                    boxShadow: focus ? '0 8px 22px rgba(0,102,255,0.30)' : 'none',
+                    boxShadow: step1Valid ? '0 8px 22px rgba(0,102,255,0.30)' : 'none',
                   }}>
-                  Continue → <Ic n="Arrow" s={14} style={{ color: focus ? '#fff' : '#94a3b8' }}/>
+                  Continue → <Ic n="Arrow" s={14} style={{ color: step1Valid ? '#fff' : '#94a3b8' }}/>
                 </button>
               </div>
             </div>
@@ -487,7 +599,8 @@ export default function ContactPage({ navigate, openConsult }) {
               <div style={{ textAlign:'center', marginBottom:32 }}>
                 <h3 style={{ fontSize:22, fontWeight:800, color:'#0a0a14', fontFamily:"'Plus Jakarta Sans',sans-serif", marginBottom:8 }}>Pick a slot that works</h3>
                 <p style={{ fontSize:14, color:'#475569' }}>
-                  All times in <strong style={{ color:'#0a0a14' }}>{OFFICES[activeOffice].tz}</strong>.
+                  Times shown in <strong style={{ color:'#0a0a14' }}>your local time ({getLocalTzLabel()})</strong>.
+                  <span style={{ marginLeft:8, color:'#64748b' }}>· India business hours 08:30–17:30 IST</span>
                   {slotsSource === 'live' && <span style={{ marginLeft:8, color:'#0EA5E9', fontWeight:700 }}>· Live availability</span>}
                   {slotsSource === 'demo' && <span style={{ marginLeft:8, color:'#f59e0b', fontWeight:700 }}>· Demo mode</span>}
                   {slotsSource === 'demo-fallback' && <span style={{ marginLeft:8, color:'#f59e0b', fontWeight:700 }}>· API offline — showing sample availability</span>}

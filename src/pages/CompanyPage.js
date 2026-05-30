@@ -8,12 +8,12 @@ import Leader_3 from '../assets/Leader_3.jpg'
 import Leader_4 from '../assets/Leader_4.jpg'
 import Aboutus_Img from '../assets/Aboutus_Img.png'
 import Team_Img from '../assets/Team_Img.png'
-import AboutHeroAnimation from '../components/AboutHeroAnimation'
 import Global_Img from '../assets/Global_Img.png'
 import Careers_Img from '../assets/Careers_Img.png'
 import AnimatedMap from '../components/AnimatedMap'
 import AnimatedCareers from '../components/AnimatedCareers'
 import CareersHeroAnimation from '../components/CareersHeroAnimation'
+import { api } from '../config/api'
 
 function useReveal() {
   useEffect(() => {
@@ -127,19 +127,13 @@ const CERTIFICATIONS = [
 
 // OFFICES now imported from shared data — see top of file
 
-const JOBS = [
-  { title: 'Senior AI Solutions Engineer (Azure AI)', loc: 'Hyderabad / Remote', type: 'Full-time', dept: 'AI Practice', color: C.blue },
-  { title: 'Power Platform Developer', loc: 'Hyderabad / Remote', type: 'Full-time', dept: 'Technical', color: C.purple },
-  { title: 'Dynamics 365 Functional Consultant', loc: 'Hyderabad / Remote', type: 'Full-time', dept: 'Delivery', color: C.teal },
-  { title: 'Azure Integration & Orchestration Architect', loc: 'Hyderabad / Remote', type: 'Full-time', dept: 'Technical', color: C.orange },
-  { title: 'Business Development Manager', loc: 'Barrie / Hybrid', type: 'Full-time', dept: 'Sales', color: C.green },
-  { title: 'Microsoft Copilot Solution Architect', loc: 'Remote (Any)', type: 'Full-time', dept: 'AI Practice', color: C.blue },
-]
+// JOBS array removed — roles are now fetched live from /api/careers/roles
+// (powered by the client-maintained SharePoint "Careers" list). See CareersSection.
 
 // ── Shared Hero ─────────────────────────────────────────────────────────────────
 function CompanyHero({ section, navigate }) {
   const cfg = {
-    about: { color: C.blue, title: 'About DevinStratus', sub: 'Enterprise AI orchestration, built on Microsoft', img: Aboutus_Img, animatedAbout: true, alt: 'DevinStratus team at work', stat1Icon: 'Award', stat1Color: C.blue, stat1Title: 'Microsoft Partner', stat1Sub: 'Power Platform · Azure AI', stat2Icon: 'Users', stat2Color: C.teal, stat2Title: 'Canada · India', stat2Sub: 'Two-Country Team' },
+    about: { color: C.blue, title: 'About DevinStratus', sub: 'Enterprise AI orchestration, built on Microsoft', img: Aboutus_Img, alt: 'DevinStratus team at work', stat1Icon: 'Award', stat1Color: C.blue, stat1Title: 'Microsoft Partner', stat1Sub: 'Power Platform · Azure AI', stat2Icon: 'Users', stat2Color: C.teal, stat2Title: 'Canada · India', stat2Sub: 'Two-Country Team' },
     team: { color: C.purple, title: 'Meet Our Team', sub: 'A focused AI engineering team across Canada & India', img: Team_Img, alt: 'Diverse professional team collaborating', stat1Icon: 'Award', stat1Color: C.purple, stat1Title: 'Certified Experts', stat1Sub: 'Microsoft Stack', stat2Icon: 'Target', stat2Color: C.blue, stat2Title: 'AI Engineers', stat2Sub: 'Orchestration-First' },
     global: { color: C.teal, title: 'Global Offices', sub: 'Barrie · Hyderabad', animatedMap: true },
     careers: { color: C.green, title: 'Where you work matters less than when.', sub: 'Two offices · one team · 18+ hours of daily coverage', animatedCareers: true, stat1Icon: 'Globe', stat1Color: C.green, stat1Title: 'Canada · India', stat1Sub: 'Two-Office Model', stat2Icon: 'Clock', stat2Color: C.orange, stat2Title: 'Follow-the-Sun', stat2Sub: 'Always-On Delivery' },
@@ -244,37 +238,8 @@ function CompanyHero({ section, navigate }) {
           </div>
         )}
 
-        {/* RIGHT — AI Orchestration animation (About only) */}
-        {cfg.animatedAbout && (
-          <div className="company-hero-image" style={{ position: 'relative', width: '100%', height: '88%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-            <AboutHeroAnimation color={cfg.color} />
-
-            {/* Floating stat 1 — top-right (overhanging edge) */}
-            <div className="hero-float-stat hero-float-stat-tr" style={{ position: 'absolute', top: 24, right: -18, padding: '12px 16px', borderRadius: 14, background: 'rgba(255,255,255,0.98)', backdropFilter: 'blur(14px)', WebkitBackdropFilter: 'blur(14px)', border: `1px solid ${cfg.color}22`, boxShadow: '0 16px 36px rgba(0, 53, 128, 0.22)', zIndex: 3, display: 'flex', alignItems: 'center', gap: 11 }}>
-              <div style={{ width: 38, height: 38, borderRadius: 10, background: `linear-gradient(135deg, ${cfg.stat1Color}, ${C.purple})`, display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: `0 6px 14px ${cfg.stat1Color}48`, flexShrink: 0 }}>
-                <Ic n={cfg.stat1Icon} s={18} style={{ color: '#fff' }} />
-              </div>
-              <div>
-                <div style={{ fontSize: 15, fontWeight: 900, color: '#0a0a14', fontFamily: "'Plus Jakarta Sans',sans-serif", lineHeight: 1.05, letterSpacing: '-0.01em' }}>{cfg.stat1Title}</div>
-                <div style={{ fontSize: 10, color: '#64748b', marginTop: 3, fontWeight: 600, letterSpacing: '.04em' }}>{cfg.stat1Sub}</div>
-              </div>
-            </div>
-
-            {/* Floating stat 2 — bottom-left (overhanging edge) */}
-            <div className="hero-float-stat hero-float-stat-bl" style={{ position: 'absolute', bottom: 24, left: -18, padding: '12px 16px', borderRadius: 14, background: 'rgba(255,255,255,0.98)', backdropFilter: 'blur(14px)', WebkitBackdropFilter: 'blur(14px)', border: `1px solid ${cfg.color}22`, boxShadow: '0 16px 36px rgba(0, 53, 128, 0.22)', zIndex: 3, display: 'flex', alignItems: 'center', gap: 11 }}>
-              <div style={{ width: 38, height: 38, borderRadius: 10, background: `linear-gradient(135deg, ${cfg.stat2Color}, ${C.blue})`, display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: `0 6px 14px ${cfg.stat2Color}48`, flexShrink: 0 }}>
-                <Ic n={cfg.stat2Icon} s={18} style={{ color: '#fff' }} />
-              </div>
-              <div>
-                <div style={{ fontSize: 15, fontWeight: 900, color: '#0a0a14', fontFamily: "'Plus Jakarta Sans',sans-serif", lineHeight: 1.05, letterSpacing: '-0.01em' }}>{cfg.stat2Title}</div>
-                <div style={{ fontSize: 10, color: '#64748b', marginTop: 3, fontWeight: 600, letterSpacing: '.04em' }}>{cfg.stat2Sub}</div>
-              </div>
-            </div>
-          </div>
-        )}
-
-        {/* RIGHT — Image (Team) */}
-        {cfg.img && !cfg.animatedAbout && (
+        {/* RIGHT — Image */}
+        {cfg.img && (
           <div className="company-hero-image" style={{ position: 'relative', width: '100%', height: '80%' }}>
             {/* Back frame — offset top-right */}
             <div style={{ position: 'absolute', top: -14, right: -14, left: 14, bottom: 14, borderRadius: 20, background: `linear-gradient(135deg, ${cfg.color}3a, ${C.teal}3a)`, border: `1px solid ${cfg.color}25`, zIndex: 0 }} />
@@ -1163,8 +1128,34 @@ function HiringTimeline() {
 function CareersSection({ navigate }) {
   useReveal()
 
-  /* Helper: derive a brand-aligned accent color per job based on its location */
-  const getLocColor = (loc) => {
+  /* ── Live roles from the SharePoint-backed API ──
+     503 careers_not_configured (expected until the client adds the list)
+     is treated as a clean empty state, not an error. */
+  const [roles, setRoles] = useState([])
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState(null)
+
+  useEffect(() => {
+    let cancelled = false
+    fetch(api('/api/careers/roles'))
+      .then(r => r.json().then(data => ({ status: r.status, data })))
+      .then(({ status, data }) => {
+        if (cancelled) return
+        if (data?.ok && Array.isArray(data.roles)) {
+          setRoles(data.roles)
+        } else if (status === 503 || data?.error?.code === 'careers_not_configured') {
+          setRoles([])           // clean empty state — list not configured yet
+        } else {
+          setError(data?.error?.message || 'Unable to load roles right now.')
+        }
+      })
+      .catch(() => { if (!cancelled) setError('Unable to load roles right now.') })
+      .finally(() => { if (!cancelled) setLoading(false) })
+    return () => { cancelled = true }
+  }, [])
+
+  /* Helper: derive a brand-aligned accent color per role based on its location */
+  const getLocColor = (loc = '') => {
     if (/Barrie|Ontario|Canada/i.test(loc)) return C.blue
     if (/Hyderabad|India/i.test(loc)) return C.teal
     return C.purple   /* Remote / Any */
@@ -1180,7 +1171,7 @@ function CareersSection({ navigate }) {
         <div style={{ maxWidth: 1280, margin: '0 auto' }}>
           <div className="rv cs-stats-g" style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 32 }}>
             {[
-              { v: `${JOBS.length}`, l: 'Open roles',           s: 'Across delivery, sales, and AI practice' },
+              { v: loading ? '—' : `${roles.length}`, l: 'Open roles',           s: 'Across delivery, sales, and AI practice' },
               { v: '2',              l: 'Global offices',        s: 'Barrie + Hyderabad' },
               { v: '18 hrs',         l: 'Daily coverage',        s: 'Hand-off model · live overlap window' },
               { v: '100%',           l: 'Cert fees covered',     s: 'MS exams · training · re-attempts' },
@@ -1241,7 +1232,7 @@ function CareersSection({ navigate }) {
           <div id="current-openings" className="rv">
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 20, flexWrap: 'wrap', gap: 12 }}>
               <h3 style={{ fontSize: 22, fontWeight: 800, color: C.text, fontFamily: "'Plus Jakarta Sans',sans-serif", display: 'flex', alignItems: 'center', gap: 10 }}>
-                Current Openings <span style={{ padding: '4px 10px', background: `${C.blue}15`, color: C.blue, fontSize: 12, fontWeight: 800, borderRadius: 50, letterSpacing: '.04em' }}>{JOBS.length} OPEN</span>
+                Current Openings <span style={{ padding: '4px 10px', background: `${C.blue}15`, color: C.blue, fontSize: 12, fontWeight: 800, borderRadius: 50, letterSpacing: '.04em' }}>{loading ? '—' : `${roles.length} OPEN`}</span>
               </h3>
               <a href="mailto:careers@devinstratus.com" style={{ display: 'inline-flex', alignItems: 'center', gap: 6, fontSize: 13, fontWeight: 700, color: C.blue, textDecoration: 'none' }}>
                 <Ic n="Mail" s={13} style={{ color: C.blue }} /> careers@devinstratus.com
@@ -1249,39 +1240,77 @@ function CareersSection({ navigate }) {
             </div>
 
             <div style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
-              {JOBS.map((j, i) => {
-                const accent = getLocColor(j.loc)
+              {loading && (
+                <div className="rv" style={{ padding: '36px 24px', textAlign: 'center', borderRadius: 18, border: `1.5px solid ${C.border}`, background: '#fff', color: '#64748b', fontSize: 14 }}>
+                  Loading current openings…
+                </div>
+              )}
+
+              {!loading && error && (
+                <div className="rv" style={{ padding: '24px', borderRadius: 18, border: `1.5px solid #fecaca`, background: '#fef2f2', color: '#991b1b', fontSize: 14, lineHeight: 1.55 }}>
+                  {error} If this persists, please email <a href="mailto:careers@devinstratus.com" style={{ color: '#991b1b', fontWeight: 700 }}>careers@devinstratus.com</a>.
+                </div>
+              )}
+
+              {!loading && !error && roles.length === 0 && (
+                <div className="rv" style={{ padding: '36px 28px', textAlign: 'center', borderRadius: 18, border: `1.5px dashed ${C.blue}40`, background: 'linear-gradient(135deg, rgba(6,182,212,0.04), rgba(0,102,255,0.04))' }}>
+                  <div style={{ fontSize: 17, fontWeight: 800, color: C.text, fontFamily: "'Plus Jakarta Sans',sans-serif", marginBottom: 8 }}>No open roles right now</div>
+                  <div style={{ fontSize: 13.5, color: C.textM, lineHeight: 1.6, maxWidth: 460, margin: '0 auto' }}>
+                    We hire continuously for strong senior consultants. Send us your CV and we'll be in touch when a role opens that fits.
+                  </div>
+                </div>
+              )}
+
+              {!loading && !error && roles.map((j, i) => {
+                const accent = getLocColor(j.location)
+                const applyHref = j.applyUrl
+                  ? j.applyUrl
+                  : `mailto:careers@devinstratus.com?subject=${encodeURIComponent('Application: ' + j.title)}`
+                const isExternalApply = j.applyUrl && /^https?:\/\//i.test(j.applyUrl)
                 return (
-                  <div key={j.title} id={`job-${i}`} className="job-card-interactive rv" style={{ display: 'flex', flexDirection: 'column', gap: 14, padding: '22px 24px', borderRadius: 18, border: `1.5px solid ${C.border}`, background: '#fff', transition: 'all .3s cubic-bezier(0.2, 0.8, 0.2, 1)', cursor: 'pointer', animation: `fadeUp .5s ease both ${i * 80}ms`, position: 'relative', overflow: 'hidden' }}
+                  <div key={j.id || j.slug || j.title} id={`job-${j.slug || i}`} className="job-card-interactive rv" style={{ display: 'flex', flexDirection: 'column', gap: 14, padding: '22px 24px', borderRadius: 18, border: `1.5px solid ${C.border}`, background: '#fff', transition: 'all .3s cubic-bezier(0.2, 0.8, 0.2, 1)', animation: `fadeUp .5s ease both ${i * 80}ms`, position: 'relative', overflow: 'hidden' }}
                     onMouseEnter={e => { e.currentTarget.style.borderColor = accent + '55'; e.currentTarget.style.boxShadow = `0 14px 32px ${accent}22`; e.currentTarget.style.transform = 'translateY(-3px)' }}
                     onMouseLeave={e => { e.currentTarget.style.borderColor = C.border; e.currentTarget.style.boxShadow = 'none'; e.currentTarget.style.transform = 'none' }}>
 
                     <div style={{ position: 'absolute', top: 0, left: 0, right: 0, height: 3, background: `linear-gradient(90deg, ${accent}, ${accent}55)` }} />
 
                     <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: 14 }}>
-                      <div style={{ flex: 1 }}>
+                      <div style={{ flex: 1, minWidth: 0 }}>
                         <div style={{ fontSize: 17.5, fontWeight: 800, color: C.text, marginBottom: 8, fontFamily: "'Plus Jakarta Sans',sans-serif", letterSpacing: '-0.005em' }}>{j.title}</div>
+
+                        {/* Meta row 1: location, type, department */}
                         <div style={{ display: 'flex', gap: 14, fontSize: 13, color: C.textM, flexWrap: 'wrap', alignItems: 'center' }}>
-                          <span style={{ display: 'inline-flex', alignItems: 'center', gap: 5, padding: '4px 10px', borderRadius: 50, background: `${accent}12`, color: accent, fontWeight: 700, fontSize: 11.5 }}>
-                            <Ic n="Pin" s={11} style={{ color: accent }} /> {j.loc}
-                          </span>
-                          <span style={{ display: 'inline-flex', alignItems: 'center', gap: 5 }}><Ic n="Brief" s={13} /> {j.type}</span>
-                          <span style={{ display: 'inline-flex', alignItems: 'center', gap: 5, color: j.color, fontWeight: 700 }}><Ic n="Users" s={13} style={{ color: j.color }} /> {j.dept}</span>
+                          {j.location && (
+                            <span style={{ display: 'inline-flex', alignItems: 'center', gap: 5, padding: '4px 10px', borderRadius: 50, background: `${accent}12`, color: accent, fontWeight: 700, fontSize: 11.5 }}>
+                              <Ic n="Pin" s={11} style={{ color: accent }} /> {j.location}
+                            </span>
+                          )}
+                          {j.type && (<span style={{ display: 'inline-flex', alignItems: 'center', gap: 5 }}><Ic n="Brief" s={13} /> {j.type}</span>)}
+                          {j.department && (<span style={{ display: 'inline-flex', alignItems: 'center', gap: 5, color: C.blue, fontWeight: 700 }}><Ic n="Users" s={13} style={{ color: C.blue }} /> {j.department}</span>)}
                         </div>
+
+                        {/* Summary (1–2 lines, optional) */}
+                        {j.summary && (
+                          <div style={{ marginTop: 10, fontSize: 13.5, color: C.textM, lineHeight: 1.55 }}>{j.summary}</div>
+                        )}
                       </div>
-                      <a href={`mailto:careers@devinstratus.com?subject=${encodeURIComponent('Application: ' + j.title)}`}
+
+                      <a href={applyHref}
+                        {...(isExternalApply ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
                         style={{ width: 40, height: 40, borderRadius: '50%', background: `${accent}15`, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, transition: 'all .3s', textDecoration: 'none' }}
-                        title={`Apply for ${j.title}`}
-                      >
+                        title={`Apply for ${j.title}`}>
                         <Ic n="Arrow" s={14} style={{ color: accent }} />
                       </a>
                     </div>
 
+                    {/* Badge row: level / work mode / salary range / first few skills */}
                     <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
-                      <span style={{ padding: '4px 10px', background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: 6, fontSize: 11, fontWeight: 600, color: '#475569' }}>Competitive salary</span>
-                      <span style={{ padding: '4px 10px', background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: 6, fontSize: 11, fontWeight: 600, color: '#475569' }}>Remote / Hybrid</span>
-                      <span style={{ padding: '4px 10px', background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: 6, fontSize: 11, fontWeight: 600, color: '#475569' }}>Microsoft cert fees covered</span>
-                      <span style={{ padding: '4px 10px', background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: 6, fontSize: 11, fontWeight: 600, color: '#475569' }}>AI-first engineering</span>
+                      {j.level && (<span style={{ padding: '4px 10px', background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: 6, fontSize: 11, fontWeight: 600, color: '#475569' }}>{j.level}</span>)}
+                      {j.workMode && (<span style={{ padding: '4px 10px', background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: 6, fontSize: 11, fontWeight: 600, color: '#475569' }}>{j.workMode}</span>)}
+                      {j.salaryRange && (<span style={{ padding: '4px 10px', background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: 6, fontSize: 11, fontWeight: 600, color: '#475569' }}>{j.salaryRange}</span>)}
+                      {Array.isArray(j.skills) && j.skills.slice(0, 4).map(s => (
+                        <span key={s} style={{ padding: '4px 10px', background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: 6, fontSize: 11, fontWeight: 600, color: '#475569' }}>{s}</span>
+                      ))}
                     </div>
                   </div>
                 )
