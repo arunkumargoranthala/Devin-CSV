@@ -181,7 +181,7 @@ function CompanyHero({ section, navigate }) {
         <div style={{ position: 'absolute', inset: 0, backgroundImage: 'linear-gradient(rgba(0, 102, 255, 0.04) 1px, transparent 1px), linear-gradient(90deg, rgba(0, 102, 255, 0.04) 1px, transparent 1px)', backgroundSize: '48px 48px', maskImage: 'radial-gradient(ellipse at center, #000 30%, transparent 75%)', WebkitMaskImage: 'radial-gradient(ellipse at center, #000 30%, transparent 75%)', pointerEvents: 'none' }} />
       )}
 
-      <div className={cfg.animatedCareers ? 'company-hero-grid careers-hero-grid' : 'company-hero-grid'} style={{ maxWidth: 1400, margin: '0 auto', padding: '62px 24px 48px', position: 'relative', zIndex: 1, display: 'grid', gridTemplateColumns: cfg.animatedCareers ? '1fr 1fr' : ((cfg.img || cfg.animatedMap) ? '0.5fr 1.5fr' : '1fr'), gap: 40, alignItems: 'center', height: 560 }}>
+      <div className={cfg.animatedCareers ? 'company-hero-grid careers-hero-grid' : 'company-hero-grid'} style={{ maxWidth: 1400, margin: '0 auto', padding: '62px 24px 48px', position: 'relative', zIndex: 1, display: 'grid', gridTemplateColumns: cfg.animatedCareers ? '1fr 1fr' : (cfg.animatedMap ? '0.5fr 1.5fr' : (cfg.img ? '1fr 1fr' : '1fr')), gap: 48, alignItems: 'center', minHeight: 560 }}>
         {/* LEFT — content */}
         <div>
           <button onClick={() => navigate('/company/about')}
@@ -240,7 +240,7 @@ function CompanyHero({ section, navigate }) {
 
         {/* RIGHT — Image */}
         {cfg.img && (
-          <div className="company-hero-image" style={{ position: 'relative', width: '100%', height: '80%' }}>
+          <div className="company-hero-image" style={{ position: 'relative', width: '100%', height: 460 }}>
             {/* Back frame — offset top-right */}
             <div style={{ position: 'absolute', top: -14, right: -14, left: 14, bottom: 14, borderRadius: 20, background: `linear-gradient(135deg, ${cfg.color}3a, ${C.teal}3a)`, border: `1px solid ${cfg.color}25`, zIndex: 0 }} />
 
